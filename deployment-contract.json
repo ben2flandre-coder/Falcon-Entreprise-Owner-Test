@@ -1,0 +1,153 @@
+{
+  "schema": "falcon.owner-test.pages-deployment.v1",
+  "repository": "ben2flandre-coder/Falcon-Entreprise-Owner-Test",
+  "purpose": "Temporary owner-only field qualification from PC and mobile browsers.",
+  "source": {
+    "repository": "ben2flandre-coder/Falcon-Entreprise",
+    "commit": "d21cff4b42afa05e68883462862fbdcd138f1189",
+    "applicationVersion": "48.0.0-rc.1",
+    "releaseManifestSha256": "4dd85bab801f90c44d3c2f8e377e196a6be575d593abd9ac1e7afcf6104c060c",
+    "environmentProfile": "production",
+    "demoMode": false
+  },
+  "publication": {
+    "publicRelease": false,
+    "commercialRelease": false,
+    "temporaryPublicTestSite": true,
+    "realDataAllowed": false,
+    "externalAiAllowed": false,
+    "unpublishAfterOwnerTests": true
+  },
+  "evidence": {
+    "campaignIssue": 196,
+    "phaseIssue": 230,
+    "sourcePullRequest": 232,
+    "sourceArtifact": 8433983119,
+    "sourceWorkflowRun": 29659852254
+  },
+  "candidateSha256": "3682da1bf095eb1628fb737b869e9fd330f3787e9c9f03cbbcccd1c5ebb34d1f",
+  "exactRuntimeFiles": [
+    {
+      "path": "index.html",
+      "size": 791088,
+      "sha256": "ece15dbd9f5b1aecea82c5c941ee45d42ca892762b7f491729b19793be74cc79"
+    },
+    {
+      "path": "src/app/showcase-enterprise-bootstrap.js",
+      "size": 3727,
+      "sha256": "2aaa45af368a788a39b8ac8155ec213f1fee37feb361f72d5f1774da089f8305"
+    },
+    {
+      "path": "src/app/showcase-polish.css",
+      "size": 6221,
+      "sha256": "a4e7bb8366d481e41187b9ed247b740fe1ebb43a3dfc3d8aacd5f97062817d0c"
+    },
+    {
+      "path": "src/modules/commercial/commercial-onboarding-service.js",
+      "size": 2004,
+      "sha256": "903870f713154441f6614b566080ee00b9f00b00c1ecbf6af5d5d4c6efd97f0d"
+    },
+    {
+      "path": "src/modules/commercial/commercial-product-integration.js",
+      "size": 7717,
+      "sha256": "4c6f2a9f04b75dc03487fab71710676406fae9d0d1a78f7fac613d6b007aaf8f"
+    },
+    {
+      "path": "src/modules/commercial/license-entitlement-service.js",
+      "size": 2288,
+      "sha256": "7edcabcf6de5fb4ea679b0224efaedcbdec7fea65689eec2c557a6c1b1bf9eac"
+    },
+    {
+      "path": "src/modules/commercial/product-mode-controller.js",
+      "size": 1973,
+      "sha256": "1f1fc5a83fe35677b0a42d939443222bf53786bf81eaa3dfacfad114b57b06e2"
+    },
+    {
+      "path": "src/modules/criticality/criticality-engine.js",
+      "size": 10088,
+      "sha256": "176af587297d989b732fe07069c265bebc50a92a471dc9fe8e73dc5e58ae75fb"
+    },
+    {
+      "path": "src/modules/enterprise/enterprise-runtime.js",
+      "size": 19494,
+      "sha256": "338eefcde2ce85cf477d54dc31bd067bbfc7765d00063c1dab9349d387db5aa1"
+    },
+    {
+      "path": "src/modules/events/event-bus.js",
+      "size": 7916,
+      "sha256": "c349ee34dd96ecfc50622f65389645915718e35bd8023aea859f82bf4ee2638e"
+    },
+    {
+      "path": "src/modules/folders/folder-engine.js",
+      "size": 7674,
+      "sha256": "f4eeee62d4d44ecfc2fd1a10dda3b93ebe7d13f78e8de53cb31cac40fd57978d"
+    },
+    {
+      "path": "src/modules/media/media-engine.js",
+      "size": 9762,
+      "sha256": "c97e1121195e825247253d644e3149921037839dca1ad131adeb2057bd0cae0d"
+    },
+    {
+      "path": "src/modules/mission/mission-engine.js",
+      "size": 23524,
+      "sha256": "e053c567eef72b80160319b64e403c1bf8a9c3598b31d583e6598e71a8de8fa4"
+    },
+    {
+      "path": "src/modules/models/model-registry.js",
+      "size": 10192,
+      "sha256": "7653cc2c862712e35d3ce50135925210a905be3abae9533eab7522c3da28f80c"
+    },
+    {
+      "path": "src/modules/observations/observation-engine.js",
+      "size": 11808,
+      "sha256": "a9a7e218e415070f71cc62acc67ce99162b9cc369d46b3be65da6241737986c9"
+    },
+    {
+      "path": "src/modules/persistence/persistence-coordinator.js",
+      "size": 14767,
+      "sha256": "450abdf6f575d69d2244eb2bd15a7556cecb53b8a0006ecf3d47a17eb41b200c"
+    },
+    {
+      "path": "src/modules/radar/radar-engine.js",
+      "size": 20958,
+      "sha256": "9e02d490c610053d568f6be5f18d8c161335439d1fda5781e4e7f52f20d33fbd"
+    },
+    {
+      "path": "src/modules/report/report-engine.js",
+      "size": 13211,
+      "sha256": "5ee4184a5132ce0998bdbbe048d3287952e21716f4e96f92abe8f4a337555be8"
+    },
+    {
+      "path": "src/modules/security/rbac.js",
+      "size": 4905,
+      "sha256": "85cc035fe868379d3c3c9427b61c071701a11632ec57e09574da8a56253160d3"
+    },
+    {
+      "path": "src/modules/session/session-engine.js",
+      "size": 17721,
+      "sha256": "4ed42876cf00c6fe4771af58dba165a510e607254abf0b09a5caeb6e1441bd36"
+    },
+    {
+      "path": "src/modules/trust/trust-engine.js",
+      "size": 12138,
+      "sha256": "15b25f2f376107b3135c4c56e778eba6168b567538b3f0b4723cbae10897f112"
+    }
+  ],
+  "deploymentHarnessFiles": [
+    {
+      "path": ".nojekyll",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "robots.txt",
+      "size": 26,
+      "sha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
+    },
+    {
+      "path": "test-context.json",
+      "size": 329,
+      "sha256": "2183a0b1275b820fe13306a798dd1e19e518c5d6b4c25979bca9320c30dfcfba"
+    }
+  ]
+}

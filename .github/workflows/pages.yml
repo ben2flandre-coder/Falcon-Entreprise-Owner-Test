@@ -1,0 +1,70 @@
+name: Qualify and deploy owner test candidate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: owner-test-pages
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    name: Verify exact qualified runtime
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Qualify candidate provenance and contents
+        run: node scripts/qualify-candidate.mjs
+
+      - name: Check every deployed JavaScript module
+        run: find candidate/src -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Prove desktop and mobile browser boot
+        run: bash scripts/browser-smoke.sh
+
+      - name: Preserve qualification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: owner-test-pages-qualification-${{ github.sha }}
+          path: |
+            evidence/qualification.json
+            evidence/served-test-context.json
+            evidence/desktop-dom.html
+            evidence/mobile-dom.html
+            evidence/desktop.png
+            evidence/mobile.png
+            evidence/http-server.log
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload exact candidate to Pages
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: candidate
+
+  deploy:
+    name: Deploy temporary owner test site
+    needs: qualify
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

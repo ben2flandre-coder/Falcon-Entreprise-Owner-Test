@@ -1,0 +1,275 @@
+/*
+ * Falcon Enterprise — canonical Showcase polish layer.
+ *
+ * This stylesheet is applied only to the generated product entrypoint.
+ * The immutable historical Showcase baseline remains untouched.
+ */
+
+@media (max-width: 760px) {
+  .s4-prestige-report,
+  .s4-prestige-report * {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .s4-prestige-report {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .s4-cover,
+  .s4-body,
+  .s4-section,
+  .s4-cover-top,
+  .s4-cover-meta,
+  .s4-grid2,
+  .s4-grid3,
+  .s4-grid4,
+  .s4-annex,
+  .s4-signature {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .s4-cover h1,
+  .s4-cover p,
+  .s4-section h2,
+  .s4-section h3,
+  .s4-section p,
+  .s4-section li {
+    overflow-wrap: anywhere;
+  }
+
+  .s4-table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+  }
+
+  .s4-table th,
+  .s4-table td {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+  }
+}
+
+/*
+ * EI-16.1-P4 — Keep semantic tables for desktop/print, expose each body row
+ * as a labeled reading card on narrow screens.
+ */
+@media screen and (max-width: 760px) {
+  .s4-prestige-report .s4-table {
+    display: block;
+    table-layout: auto;
+    border: 0;
+    background: transparent;
+  }
+
+  .s4-prestige-report .s4-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .s4-prestige-report .s4-table tbody {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .s4-prestige-report .s4-table tbody tr {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(100, 116, 139, 0.28);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.76);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  }
+
+  .s4-prestige-report .s4-table tbody td {
+    display: grid;
+    grid-template-columns: minmax(88px, 38%) minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.18);
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .s4-prestige-report .s4-table tbody td:last-child {
+    border-bottom: 0;
+  }
+
+  .s4-prestige-report .s4-table tbody td::before {
+    color: #475569;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+    overflow-wrap: normal;
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(3) .s4-table td:nth-child(1)::before {
+    content: "Observation";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(3) .s4-table td:nth-child(2)::before {
+    content: "Famille";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(3) .s4-table td:nth-child(3)::before {
+    content: "Criticité";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(3) .s4-table td:nth-child(4)::before {
+    content: "Arbitrage";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(3) .s4-table td:nth-child(5)::before {
+    content: "Preuve terrain";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(4) .s4-table td:nth-child(1)::before {
+    content: "Action";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(4) .s4-table td:nth-child(2)::before {
+    content: "Priorité";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(4) .s4-table td:nth-child(3)::before {
+    content: "Responsable";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(4) .s4-table td:nth-child(4)::before {
+    content: "Échéance";
+  }
+
+  .s4-prestige-report .s4-section:nth-of-type(4) .s4-table td:nth-child(5)::before {
+    content: "Statut";
+  }
+}
+
+/*
+ * EI-16.1-P5 — Compact mobile hierarchy: essential dock plus the existing
+ * complete guarded drawer. Wide-screen navigation remains unchanged.
+ */
+@media screen and (max-width: 760px) {
+  nav#nav.nav {
+    display: none !important;
+  }
+
+  body:not(.falcon-menu-open) #mobileNav.mobile-bottom-nav {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)) !important;
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 8px !important;
+    height: 76px !important;
+    max-height: 76px !important;
+    gap: 6px !important;
+    padding: 8px !important;
+    border: 1px solid rgba(190, 210, 235, 0.22) !important;
+    border-radius: 22px !important;
+    background: rgba(5, 14, 28, 0.94) !important;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42) !important;
+    backdrop-filter: blur(14px) !important;
+  }
+
+  [data-theme="light"] body:not(.falcon-menu-open) #mobileNav.mobile-bottom-nav {
+    background: rgba(255, 255, 255, 0.96) !important;
+  }
+
+  #mobileNav.mobile-bottom-nav button {
+    min-width: 0 !important;
+    min-height: 56px !important;
+    height: 58px !important;
+    padding: 6px 3px !important;
+    border-radius: 16px !important;
+    font-size: 11px !important;
+    line-height: 1.1 !important;
+  }
+
+  #mobileNav.mobile-bottom-nav button .ico {
+    font-size: 18px !important;
+  }
+
+  #mobileNav.mobile-bottom-nav button .lbl {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app {
+    padding-bottom: 96px !important;
+  }
+}
+
+/*
+ * EI-16.1-P6 — Canonical semantic feedback states.
+ */
+.toast-wrap {
+  align-items: end;
+}
+
+.toast {
+  display: grid;
+  gap: 4px;
+  border-left: 5px solid var(--blue);
+  line-height: 1.4;
+}
+
+.toast strong {
+  font-size: 13px;
+  letter-spacing: 0.015em;
+}
+
+.toast-success {
+  border-left-color: var(--green);
+  background: linear-gradient(180deg, rgba(69, 212, 131, 0.16), var(--surface));
+}
+
+.toast-info {
+  border-left-color: var(--blue);
+  background: linear-gradient(180deg, rgba(79, 183, 255, 0.16), var(--surface));
+}
+
+.toast-warning {
+  border-left-color: var(--orange);
+  background: linear-gradient(180deg, rgba(255, 159, 67, 0.18), var(--surface));
+}
+
+.toast-error {
+  border-left-color: var(--red);
+  background: linear-gradient(180deg, rgba(255, 107, 122, 0.2), var(--surface));
+}
+
+@media screen and (max-width: 760px) {
+  .toast-wrap {
+    left: 10px;
+    right: 10px;
+    bottom: 100px;
+    z-index: 210;
+  }
+
+  .toast {
+    width: 100%;
+    max-width: none;
+  }
+}

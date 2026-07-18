@@ -1,0 +1,11 @@
+{
+  "schema": "falcon.owner-test.context.v1",
+  "applicationVersion": "48.0.0-rc.1",
+  "sourceCommit": "d21cff4b42afa05e68883462862fbdcd138f1189",
+  "environmentProfile": "production",
+  "demoMode": false,
+  "publicRelease": false,
+  "realDataAllowed": false,
+  "storageScope": "per-browser-per-device",
+  "evidenceIssue": 230
+}
