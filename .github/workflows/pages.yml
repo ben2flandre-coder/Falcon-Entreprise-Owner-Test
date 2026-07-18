@@ -79,7 +79,7 @@ jobs:
           "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}"
           -f state=success
           -f context=falcon/ei16-owner-test
-          -f description="Exact runtime and explicit Enterprise test activation qualified"
+          -f description="Technical gate passed; human UX and product identity remain pending"
           -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
       - name: Publish failed qualification status

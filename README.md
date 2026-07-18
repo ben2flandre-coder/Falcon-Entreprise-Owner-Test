@@ -25,6 +25,17 @@ La qualification navigateur utilise deux profils Chrome réellement isolés, un 
 
 Ce résultat automatique prouve l'intégrité du candidat, l'évaluation locale des droits et leur persistance après rechargement. Il ne prouve ni une licence cryptographique/commerciale, ni l'effectivité de chaque garde UI historique, ni l'ergonomie sur un vrai téléphone. Ces verdicts restent réservés à la session humaine.
 
+## Écarts UI connus et volontairement visibles
+
+Le runtime exact issu de `main` affiche encore, y compris en profil de production :
+
+- l'identité `Showcase Edition S1+` ;
+- la version visible `V46.5.0-SHOWCASE-V1.0` ;
+- l'action **Charger démo avancée** ;
+- le fallback de présentation **Usine Alpha — Audit sécurité opérationnelle** quand le dossier est vide.
+
+La sonde prouve que les registres du runtime Enterprise sont vides ; elle ne transforme pas pour autant cet affichage en « état vierge » UX. L'artefact CI conserve donc `uiProductIdentityPass=false`, `visualBlankStatePass=false` et `humanWorkflowPass=false`. Le sas de test ne corrige ni ne masque ces écarts : les essais réels doivent permettre de les qualifier.
+
 ## Démarrage sur chaque appareil
 
 Après le déploiement Pages, ne pas commencer directement par `index.html` :
@@ -33,8 +44,9 @@ Après le déploiement Pages, ne pas commencer directement par `index.html` :
 2. vérifier le SHA court affiché puis choisir **Activer le profil Enterprise de test** ;
 3. attendre l'état **ENTERPRISE · activation persistée** et `7/7` capacités ;
 4. choisir **Ouvrir Falcon** ;
-5. utiliser uniquement des données fictives et compléter le journal de session ;
-6. répéter l'activation sur l'autre appareil, car le stockage n'est pas synchronisé.
+5. constater et qualifier séparément les libellés Showcase, la version visible et le fallback de démonstration ;
+6. utiliser uniquement des données fictives et compléter le journal de session ;
+7. répéter l'activation sur l'autre appareil, car le stockage n'est pas synchronisé.
 
 ## Exécution
 

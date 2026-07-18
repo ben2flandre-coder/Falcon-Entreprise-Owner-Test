@@ -19,7 +19,9 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 - SHA court affiché conforme : PASS / FAIL
 - Activation persistée, profil `Administrateur`, niveau `enterprise`, capacités `7/7` : PASS / FAIL
 - Premier chargement : PASS / FAIL
-- État vierge : PASS / FAIL
+- Identité produit affichée comme Enterprise, sans badge/version Showcase résiduel : PASS / FAIL
+- État vierge visuel, sans mission exemple ni action de démonstration : PASS / FAIL
+- État vierge technique des registres Enterprise : PASS / FAIL
 - Mission, session, dossier : PASS / FAIL
 - Observation, média, criticité : PASS / FAIL
 - Radar, Trust, Cockpit : PASS / FAIL
@@ -35,6 +37,8 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 - SHA court affiché conforme : PASS / FAIL
 - Activation persistée, profil `Administrateur`, niveau `enterprise`, capacités `7/7` : PASS / FAIL
 - Premier chargement : PASS / FAIL
+- Identité produit affichée comme Enterprise, sans badge/version Showcase résiduel : PASS / FAIL
+- État vierge visuel, sans mission exemple ni action de démonstration : PASS / FAIL
 - Lisibilité et navigation tactile : PASS / FAIL
 - Création et modification : PASS / FAIL
 - Persistance après fermeture : PASS / FAIL
@@ -46,6 +50,7 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
 - Preuve automatisée vérifiée : intégrité + activation locale + persistance, sans PASS humain : OUI / NON
 - Licence commerciale ou cryptographique revendiquée : NON attendu / écart
+- Écarts UI connus reproduits : identité Showcase / version Showcase / action démo / fallback Usine Alpha
 - Bloquant :
 - Majeur :
 - Mineur :

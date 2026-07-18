@@ -135,8 +135,10 @@ for (const expectation of expectations) {
   }
 }
 
+const renderedHtml = {};
 for (const [viewport, file] of [["desktop", "desktop-dom.html"], ["mobile", "mobile-dom.html"]]) {
   const html = fs.readFileSync(path.join(evidenceRoot, file), "utf8");
+  renderedHtml[viewport] = html;
   for (const [code, pattern] of [
     ["ENTERPRISE_RUNTIME_READY", /data-falcon-enterprise-runtime="ready"/],
     ["FALCON_UI_PRESENT", /Falcon Enterprise/]
@@ -148,12 +150,27 @@ for (const [viewport, file] of [["desktop", "desktop-dom.html"], ["mobile", "mob
   }
 }
 
+const uiObservations = [
+  { code: "SHOWCASE_PRODUCT_IDENTITY_PRESENT", pattern: /Showcase Edition S1\+/ },
+  { code: "SHOWCASE_VISIBLE_VERSION_PRESENT", pattern: /V46\.5\.0-SHOWCASE-V1\.0/ },
+  { code: "DEMONSTRATION_ACTION_PRESENT", pattern: /Charger démo avancée/ },
+  { code: "SAMPLE_MISSION_FALLBACK_PRESENT", pattern: /Usine Alpha — Audit sécurité opérationnelle/ }
+].map(({ code, pattern }) => ({
+  code,
+  desktop: pattern.test(renderedHtml.desktop),
+  mobile: pattern.test(renderedHtml.mobile)
+}));
+const knownUiMismatches = uiObservations.filter((observation) => observation.desktop || observation.mobile).map((observation) => observation.code);
+const uiProductIdentityPass = !knownUiMismatches.some((code) => new Set(["SHOWCASE_PRODUCT_IDENTITY_PRESENT", "SHOWCASE_VISIBLE_VERSION_PRESENT"]).has(code));
+const visualBlankStatePass = !knownUiMismatches.some((code) => new Set(["DEMONSTRATION_ACTION_PRESENT", "SAMPLE_MISSION_FALLBACK_PRESENT"]).has(code));
+
 const ready = issues.length === 0;
 const report = {
   schema: "falcon.owner-test.browser-qualification.v2",
   sourceCommit,
-  status: ready ? "qualified" : "blocked",
+  status: ready ? "technically-qualified-for-controlled-human-test" : "blocked",
   ready,
+  readyForControlledHumanTest: ready,
   facts: {
     isolatedBrowserProfiles: 2,
     preactivationTier: "trial",
@@ -162,9 +179,13 @@ const report = {
     applicationProfile: "Administrateur",
     runtimeMode: "production",
     runtimeEmpty: true,
+    uiProductIdentityPass,
+    visualBlankStatePass,
     humanWorkflowPass: false,
     cryptographicLicenseProof: false
   },
+  knownUiMismatches,
+  uiObservations,
   checks,
   issues
 };
