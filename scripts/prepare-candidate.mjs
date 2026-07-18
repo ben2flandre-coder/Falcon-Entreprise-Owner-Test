@@ -92,6 +92,7 @@ const exactRecords = [...exactFiles].sort().map((relative) => {
 
 const harnessContents = new Map([
   [".nojekyll", ""],
+  ["probe.html", fs.readFileSync(path.join(repositoryRoot, "harness", "probe.html"), "utf8")],
   ["robots.txt", "User-agent: *\nDisallow: /\n"],
   ["test-context.json", `${JSON.stringify({
     schema: "falcon.owner-test.context.v1",

@@ -14,7 +14,7 @@ Il ne s'agit ni d'une release publique, ni d'une autorisation commerciale, ni du
 - IA externe : interdite
 - synchronisation PC/téléphone : aucune ; chaque navigateur conserve son propre stockage local
 
-Les fichiers runtime de `candidate/` sont copiés sans modification depuis l'application qualifiée. `deployment-contract.json` conserve leurs tailles et empreintes. Le workflow refuse le déploiement si un octet diffère ou si un fichier non déclaré apparaît. Il démarre également le candidat dans Chrome aux formats desktop et mobile, contrôle le bootstrap Enterprise et conserve les DOM et captures comme preuves.
+Les fichiers runtime de `candidate/` sont copiés sans modification depuis l'application qualifiée. `deployment-contract.json` conserve leurs tailles et empreintes. Le workflow refuse le déploiement si un octet diffère ou si un fichier non déclaré apparaît. Il démarre également le candidat dans Chrome aux formats desktop et mobile, contrôle le bootstrap Enterprise et conserve les DOM et captures comme preuves. Une sonde en iframe observe l'application exacte et exige un runtime en mode `production` avec des registres métier vierges ; elle n'attribue aucun PASS ergonomique au téléphone réel.
 
 ## Exécution
 

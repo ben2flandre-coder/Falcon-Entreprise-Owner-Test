@@ -57,6 +57,7 @@ jobs:
             evidence/served-test-context.json
             evidence/desktop-dom.html
             evidence/mobile-dom.html
+            evidence/probe-dom.html
             evidence/desktop.png
             evidence/mobile.png
             evidence/http-server.log

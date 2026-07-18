@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Falcon Enterprise — sonde EI-16.4</title>
+  <style>
+    body{font-family:system-ui,sans-serif;margin:0;background:#071321;color:#eaf4ff}
+    iframe{width:100%;height:70vh;border:0;background:white}
+    pre{white-space:pre-wrap;padding:1rem;margin:0;font-size:12px}
+  </style>
+</head>
+<body>
+  <iframe id="candidate" src="./index.html" title="Candidat Falcon Enterprise exact"></iframe>
+  <pre id="result">Sonde en attente du runtime Enterprise…</pre>
+  <script>
+    (() => {
+      const frame = document.querySelector("#candidate");
+      const result = document.querySelector("#result");
+      let attempts = 0;
+
+      function capture() {
+        attempts += 1;
+        const api = frame.contentWindow?.FalconEnterprise;
+        if (!api && attempts < 80) {
+          setTimeout(capture, 100);
+          return;
+        }
+        if (!api) {
+          document.documentElement.dataset.falconProbeReady = "false";
+          result.textContent = JSON.stringify({ ready: false, reason: "enterprise-runtime-unavailable" }, null, 2);
+          return;
+        }
+
+        const snapshot = api.snapshot();
+        const counts = {
+          missions: snapshot.runtime?.missions?.missionCount ?? null,
+          sessions: snapshot.runtime?.sessions?.sessionCount ?? null,
+          folders: snapshot.runtime?.folders?.folderCount ?? null,
+          observations: snapshot.runtime?.observations?.observationCount ?? null,
+          media: snapshot.runtime?.media?.mediaCount ?? null,
+          reports: snapshot.runtime?.reports?.reportCount ?? null
+        };
+        const runtimeEmpty = Object.values(counts).every((value) => value === 0);
+        const facts = {
+          schema: "falcon.owner-test.browser-probe.v1",
+          ready: true,
+          mode: snapshot.mode,
+          profile: snapshot.profile,
+          runtimeVersion: snapshot.version,
+          runtimeEmpty,
+          counts,
+          license: snapshot.license ?? null
+        };
+
+        document.documentElement.dataset.falconProbeReady = "true";
+        document.documentElement.dataset.falconMode = String(snapshot.mode ?? "unknown");
+        document.documentElement.dataset.falconRuntimeEmpty = String(runtimeEmpty);
+        window.__falconOwnerTestProbe = Object.freeze(facts);
+        result.textContent = JSON.stringify(facts, null, 2);
+      }
+
+      frame.addEventListener("load", capture, { once: true });
+    })();
+  </script>
+</body>
+</html>
