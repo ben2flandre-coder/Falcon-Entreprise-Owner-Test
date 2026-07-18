@@ -25,7 +25,26 @@
     "sourceArtifact": 8433983119,
     "sourceWorkflowRun": 29659852254
   },
-  "candidateSha256": "195028a100fa8ca001c3f9a4b4383d3d0c5e27c1297f346ebbe8a7ca55c918cf",
+  "testActivation": {
+    "path": "owner-test-activation.json",
+    "schema": "falcon.owner-test.browser-activation.v1",
+    "licenseId": "falcon-ei16-owner-test-d21cff4b",
+    "tier": "enterprise",
+    "applicationProfile": "Administrateur",
+    "expectedCapabilities": [
+      "observe",
+      "analyse",
+      "arbitrate",
+      "report",
+      "export",
+      "admin",
+      "audit"
+    ],
+    "proofScope": "local-entitlement-evaluation-and-persistence",
+    "humanWorkflowPass": false,
+    "cryptographicLicenseProof": false
+  },
+  "candidateSha256": "3bd29718ee3e8bbb71e72b01480a6b943eabf7523bf63174a4c453727068e105",
   "exactRuntimeFiles": [
     {
       "path": "index.html",
@@ -140,9 +159,19 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
+      "path": "activate.html",
+      "size": 13516,
+      "sha256": "5f0bea44c669369e9c8e5e01c219b8cb0a650ddd00c6d484685225587227dfeb"
+    },
+    {
+      "path": "owner-test-activation.json",
+      "size": 925,
+      "sha256": "940f0a5b9f84d3155ad19e0d1c33e77df42d8fa920ed6f998b0aec8527316ab5"
+    },
+    {
       "path": "probe.html",
-      "size": 2573,
-      "sha256": "fbde5a69889113bff2582fb747d42e5bf1c2de019cd49864800b9e33aa904963"
+      "size": 5897,
+      "sha256": "6aec64ad87d18949ae44f9e1cc46d5ae7fb6afcb18b13171818bc632273a414d"
     },
     {
       "path": "robots.txt",
@@ -151,8 +180,8 @@
     },
     {
       "path": "test-context.json",
-      "size": 329,
-      "sha256": "2183a0b1275b820fe13306a798dd1e19e518c5d6b4c25979bca9320c30dfcfba"
+      "size": 478,
+      "sha256": "3b8da554e8139239f45f03e2ef66a1e065c6e9348c7b6907585f43fd1f995cad"
     }
   ]
 }

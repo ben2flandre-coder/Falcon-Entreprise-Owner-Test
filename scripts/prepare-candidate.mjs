@@ -90,8 +90,18 @@ const exactRecords = [...exactFiles].sort().map((relative) => {
   return Object.freeze({ path: relative, size: bytes.length, sha256: sha256(bytes) });
 });
 
+const activationText = fs.readFileSync(path.join(repositoryRoot, "harness", "owner-test-activation.json"), "utf8");
+const activation = JSON.parse(activationText);
+if (activation.schema !== "falcon.owner-test.browser-activation.v1") throw new Error("Unexpected owner-test activation schema.");
+if (activation.sourceCommit !== EXPECTED_SOURCE_COMMIT) throw new Error("Owner-test activation is bound to another source commit.");
+if (activation.commercialRelease !== false || activation.containsSecret !== false) throw new Error("Owner-test activation scope is unsafe.");
+if (activation.license?.tier !== "enterprise" || activation.license?.status !== "active") throw new Error("Owner-test activation must request an active Enterprise test tier.");
+if (activation.applicationProfile !== activation.license?.userProfile) throw new Error("Owner-test application and license profiles differ.");
+
 const harnessContents = new Map([
   [".nojekyll", ""],
+  ["activate.html", fs.readFileSync(path.join(repositoryRoot, "harness", "activate.html"), "utf8")],
+  ["owner-test-activation.json", activationText],
   ["probe.html", fs.readFileSync(path.join(repositoryRoot, "harness", "probe.html"), "utf8")],
   ["robots.txt", "User-agent: *\nDisallow: /\n"],
   ["test-context.json", `${JSON.stringify({
@@ -103,6 +113,10 @@ const harnessContents = new Map([
     publicRelease: false,
     realDataAllowed: false,
     storageScope: "per-browser-per-device",
+    activationEntrypoint: "activate.html",
+    defaultLicenseTier: "trial",
+    requiredTestLicenseTier: "enterprise",
+    humanWorkflowPass: false,
     evidenceIssue: 230
   }, null, 2)}\n`]
 ]);
@@ -141,6 +155,17 @@ const contract = {
     sourcePullRequest: 232,
     sourceArtifact: 8433983119,
     sourceWorkflowRun: 29659852254
+  },
+  testActivation: {
+    path: "owner-test-activation.json",
+    schema: activation.schema,
+    licenseId: activation.license.licenseId,
+    tier: activation.license.tier,
+    applicationProfile: activation.applicationProfile,
+    expectedCapabilities: activation.expectedCapabilities,
+    proofScope: "local-entitlement-evaluation-and-persistence",
+    humanWorkflowPass: false,
+    cryptographicLicenseProof: false
   },
   candidateSha256,
   exactRuntimeFiles: exactRecords,

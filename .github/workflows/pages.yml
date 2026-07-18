@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   qualify:
-    name: Verify exact qualified runtime
+    name: Verify exact runtime and explicit Enterprise test activation
     runs-on: ubuntu-latest
     steps:
       - name: Publish pending qualification status
@@ -44,7 +44,7 @@ jobs:
       - name: Check every deployed JavaScript module
         run: find candidate/src -type f -name '*.js' -print0 | xargs -0 -n1 node --check
 
-      - name: Prove desktop and mobile browser boot
+      - name: Prove trial baseline, Enterprise activation and desktop/mobile reload
         run: bash scripts/browser-smoke.sh
 
       - name: Preserve qualification evidence
@@ -54,10 +54,16 @@ jobs:
           name: owner-test-pages-qualification-${{ github.sha }}
           path: |
             evidence/qualification.json
+            evidence/browser-qualification.json
             evidence/served-test-context.json
+            evidence/desktop-preactivation-probe-dom.html
+            evidence/desktop-activation-dom.html
+            evidence/desktop-postactivation-probe-dom.html
             evidence/desktop-dom.html
+            evidence/mobile-preactivation-probe-dom.html
+            evidence/mobile-activation-dom.html
+            evidence/mobile-postactivation-probe-dom.html
             evidence/mobile-dom.html
-            evidence/probe-dom.html
             evidence/desktop.png
             evidence/mobile.png
             evidence/http-server.log
@@ -73,7 +79,7 @@ jobs:
           "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}"
           -f state=success
           -f context=falcon/ei16-owner-test
-          -f description="Exact candidate and desktop/mobile boot qualified"
+          -f description="Exact runtime and explicit Enterprise test activation qualified"
           -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
       - name: Publish failed qualification status

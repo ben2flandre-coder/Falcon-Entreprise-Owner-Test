@@ -15,6 +15,9 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
 - Système / version :
 - Navigateur / version :
+- Ouverture de `/activate.html` : PASS / FAIL
+- SHA court affiché conforme : PASS / FAIL
+- Activation persistée, profil `Administrateur`, niveau `enterprise`, capacités `7/7` : PASS / FAIL
 - Premier chargement : PASS / FAIL
 - État vierge : PASS / FAIL
 - Mission, session, dossier : PASS / FAIL
@@ -28,6 +31,9 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
 - Modèle / système :
 - Navigateur / version :
+- Ouverture de `/activate.html` : PASS / FAIL
+- SHA court affiché conforme : PASS / FAIL
+- Activation persistée, profil `Administrateur`, niveau `enterprise`, capacités `7/7` : PASS / FAIL
 - Premier chargement : PASS / FAIL
 - Lisibilité et navigation tactile : PASS / FAIL
 - Création et modification : PASS / FAIL
@@ -38,6 +44,8 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
 ## Verdict
 
+- Preuve automatisée vérifiée : intégrité + activation locale + persistance, sans PASS humain : OUI / NON
+- Licence commerciale ou cryptographique revendiquée : NON attendu / écart
 - Bloquant :
 - Majeur :
 - Mineur :

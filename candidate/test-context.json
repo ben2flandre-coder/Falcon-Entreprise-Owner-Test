@@ -7,5 +7,9 @@
   "publicRelease": false,
   "realDataAllowed": false,
   "storageScope": "per-browser-per-device",
+  "activationEntrypoint": "activate.html",
+  "defaultLicenseTier": "trial",
+  "requiredTestLicenseTier": "enterprise",
+  "humanWorkflowPass": false,
   "evidenceIssue": 230
 }

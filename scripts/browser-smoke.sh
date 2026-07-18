@@ -28,28 +28,37 @@ common=(
   --no-sandbox
   --disable-gpu
   --hide-scrollbars
-  --virtual-time-budget=8000
+  --no-first-run
+  --virtual-time-budget=12000
 )
 
-"$chrome" "${common[@]}" --window-size=1440,1000 \
-  --dump-dom http://127.0.0.1:4173/index.html >"$evidence/desktop-dom.html"
-"$chrome" "${common[@]}" --window-size=1440,1000 \
-  --screenshot="$evidence/desktop.png" http://127.0.0.1:4173/index.html >/dev/null
+desktop_profile="$(mktemp -d)"
+mobile_profile="$(mktemp -d)"
 
-"$chrome" "${common[@]}" --window-size=390,844 \
-  --dump-dom http://127.0.0.1:4173/index.html >"$evidence/mobile-dom.html"
-"$chrome" "${common[@]}" --window-size=390,844 \
-  --screenshot="$evidence/mobile.png" http://127.0.0.1:4173/index.html >/dev/null
+qualify_viewport() {
+  local viewport="$1"
+  local window_size="$2"
+  local profile="$3"
 
-"$chrome" "${common[@]}" --window-size=1440,1000 \
-  --dump-dom http://127.0.0.1:4173/probe.html >"$evidence/probe-dom.html"
+  "$chrome" "${common[@]}" --user-data-dir="$profile" --window-size="$window_size" \
+    --dump-dom "http://127.0.0.1:4173/probe.html?expected=trial" >"$evidence/${viewport}-preactivation-probe-dom.html"
 
-grep -q 'data-falcon-enterprise-runtime="ready"' "$evidence/desktop-dom.html"
-grep -q 'data-falcon-enterprise-runtime="ready"' "$evidence/mobile-dom.html"
-grep -q 'data-falcon-probe-ready="true"' "$evidence/probe-dom.html"
-grep -q 'data-falcon-mode="production"' "$evidence/probe-dom.html"
-grep -q 'data-falcon-runtime-empty="true"' "$evidence/probe-dom.html"
-grep -q 'Falcon Enterprise' "$evidence/desktop-dom.html"
-grep -q 'Falcon Enterprise' "$evidence/mobile-dom.html"
+  "$chrome" "${common[@]}" --user-data-dir="$profile" --window-size="$window_size" \
+    --dump-dom "http://127.0.0.1:4173/activate.html?automation=1&expectBefore=trial" >"$evidence/${viewport}-activation-dom.html"
 
-printf '%s\n' 'owner-test-browser-smoke: PASS'
+  "$chrome" "${common[@]}" --user-data-dir="$profile" --window-size="$window_size" \
+    --dump-dom "http://127.0.0.1:4173/probe.html?expected=enterprise" >"$evidence/${viewport}-postactivation-probe-dom.html"
+
+  "$chrome" "${common[@]}" --user-data-dir="$profile" --window-size="$window_size" \
+    --dump-dom http://127.0.0.1:4173/index.html >"$evidence/${viewport}-dom.html"
+
+  "$chrome" "${common[@]}" --user-data-dir="$profile" --window-size="$window_size" \
+    --screenshot="$evidence/${viewport}.png" http://127.0.0.1:4173/index.html >/dev/null
+}
+
+qualify_viewport desktop 1440,1000 "$desktop_profile"
+qualify_viewport mobile 390,844 "$mobile_profile"
+
+node "$root/scripts/assert-browser-evidence.mjs"
+
+printf '%s\n' 'owner-test-browser-smoke: PASS — clean trial, explicit Enterprise activation, persisted Enterprise reload, desktop/mobile render'
