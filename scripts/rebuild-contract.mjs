@@ -7,6 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const candidateRoot = path.join(root, "candidate");
 const contractPath = path.join(root, "deployment-contract.json");
 const pinPath = path.join(root, "qualification-pin.json");
+const qualifierPath = path.join(root, "scripts", "qualify-candidate.mjs");
 const SOURCE_COMMIT = "2c3a0945650514a88fc7050187e6e6ea1c5f2775";
 const SOURCE_PR = 234;
 
@@ -44,6 +45,14 @@ const pin = {
   generatedFromCandidate: true
 };
 
+let qualifier = fs.readFileSync(qualifierPath, "utf8");
+qualifier = qualifier
+  .replace(/const EXPECTED_SOURCE_COMMIT = "[a-f0-9]{40}";/, `const EXPECTED_SOURCE_COMMIT = "${SOURCE_COMMIT}";`)
+  .replace(/const EXPECTED_EXACT_RUNTIME_DIGEST = "[a-f0-9]{64}";/, `const EXPECTED_EXACT_RUNTIME_DIGEST = "${runtimeDigest}";`)
+  .replace(/contract\.exactRuntimeFiles\?\.length === \d+/, `contract.exactRuntimeFiles?.length === ${contract.exactRuntimeFiles.length}`)
+  .replace(/contains \d+ files\./, `contains ${contract.exactRuntimeFiles.length} files.`);
+
 fs.writeFileSync(contractPath, `${JSON.stringify(contract, null, 2)}\n`);
 fs.writeFileSync(pinPath, `${JSON.stringify(pin, null, 2)}\n`);
+fs.writeFileSync(qualifierPath, qualifier);
 console.log(JSON.stringify({ sourceCommit: SOURCE_COMMIT, runtimeFiles: contract.exactRuntimeFiles.length, runtimeDigest, candidateSha256: contract.candidateSha256 }, null, 2));
