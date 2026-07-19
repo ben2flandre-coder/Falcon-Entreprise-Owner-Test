@@ -2,62 +2,54 @@
 
 Ce dépôt contient uniquement le candidat navigateur nécessaire aux essais contrôlés EI-16.4 du propriétaire produit.
 
+La source canonique et l’objectif principal restent exclusivement `ben2flandre-coder/Falcon-Entreprise`. Ce dépôt est un banc d’essai temporaire : aucune correction produit ne doit y être développée directement. Tout écart constaté doit être corrigé dans la source canonique, puis réinjecté ici par reconstruction depuis un SHA fusionné et qualifié.
+
 Il ne s'agit ni d'une release publique, ni d'une autorisation commerciale, ni du dépôt source complet. Le déploiement Pages est temporaire et doit être retiré après les essais.
 
-## Candidat
+## Candidat en reconstruction
 
 - application : `48.0.0-rc.1`
-- source : `ben2flandre-coder/Falcon-Entreprise@d21cff4b42afa05e68883462862fbdcd138f1189`
-- phase : EI-16.4
-- issue de preuve : `ben2flandre-coder/Falcon-Entreprise#230`
+- source cible : `ben2flandre-coder/Falcon-Entreprise@2c3a0945650514a88fc7050187e6e6ea1c5f2775`
+- origine : PR source #234 fusionnée
+- phase : EI-16.4-P1-R1
+- issue de preuve : `ben2flandre-coder/Falcon-Entreprise#233`
 - données réelles : interdites
 - IA externe : interdite
 - synchronisation PC/téléphone : aucune ; chaque navigateur conserve son propre stockage local
 
-Les 21 fichiers runtime de `candidate/` sont copiés sans modification depuis l'application qualifiée. `deployment-contract.json` conserve leurs tailles et empreintes. Le workflow refuse le déploiement si un octet diffère ou si un fichier non déclaré apparaît.
+Le candidat précédent fondé sur `d21cff4b42afa05e68883462862fbdcd138f1189` est obsolète. Il ne doit plus être utilisé pour rendre un verdict sur l’état actuel de Falcon Enterprise.
 
-La qualification navigateur utilise deux profils Chrome réellement isolés, un desktop et un mobile. Pour chacun, elle exige successivement :
+## Capacités à pousser
 
-1. un navigateur vierge en niveau local `trial` ;
-2. une activation Enterprise explicite via `FalconSecurityManager.switchProfile()` et `FalconEnterprise.commercial.saveLicense()` — aucune écriture directe dans le stockage ;
-3. un nouveau chargement du runtime en mode `production`, profil `Administrateur`, niveau `enterprise`, sept capacités attendues et registres métier vierges ;
-4. le rendu de l'interface et la conservation des DOM et captures comme preuves.
+La prochaine campagne doit tester, hors démonstration puis avec scénarios avancés contrôlés :
 
-Ce résultat automatique prouve l'intégrité du candidat, l'évaluation locale des droits et leur persistance après rechargement. Il ne prouve ni une licence cryptographique/commerciale, ni l'effectivité de chaque garde UI historique, ni l'ergonomie sur un vrai téléphone. Ces verdicts restent réservés à la session humaine.
+1. création d’un dossier vierge et reprise exacte après fermeture ;
+2. import/export JSON, sauvegarde, restauration et rollback ;
+3. observations, médias, criticité, Radar, Trust et Decision Cockpit ;
+4. rapport Prestige sur desktop et mobile ;
+5. profils, autorisations, entitlements et restrictions ;
+6. thème Jour/Nuit, navigation mobile, safe areas et tableaux ;
+7. volumes élevés, données incomplètes et scénarios dégradés ;
+8. parcours démonstration isolés, sans contamination du parcours production.
 
-## Écarts UI connus et volontairement visibles
+## Doctrine de qualification
 
-Le runtime exact issu de `main` affiche encore, y compris en profil de production :
+- le SHA source exact doit figurer dans chaque preuve ;
+- une gate technique verte ne vaut pas validation humaine ;
+- aucune correction produit directe dans ce dépôt ;
+- les défauts sont ouverts et corrigés dans `Falcon-Entreprise` ;
+- le candidat est ensuite reconstruit depuis `main` ;
+- Pages est retiré à la fin de la fenêtre de test.
 
-- l'identité `Showcase Edition S1+` ;
-- la version visible `V46.5.0-SHOWCASE-V1.0` ;
-- l'action **Charger démo avancée** ;
-- le fallback de présentation **Usine Alpha — Audit sécurité opérationnelle** quand le dossier est vide.
+## Exécution attendue
 
-La sonde prouve que les registres du runtime Enterprise sont vides ; elle ne transforme pas pour autant cet affichage en « état vierge » UX. L'artefact CI conserve donc `uiProductIdentityPass=false`, `visualBlankStatePass=false` et `humanWorkflowPass=false`. Le sas de test ne corrige ni ne masque ces écarts : les essais réels doivent permettre de les qualifier.
-
-## Démarrage sur chaque appareil
-
-Après le déploiement Pages, ne pas commencer directement par `index.html` :
-
-1. ouvrir l'URL Pages terminée par `/activate.html` ;
-2. vérifier le SHA court affiché puis choisir **Activer le profil Enterprise de test** ;
-3. attendre l'état **ENTERPRISE · activation persistée** et `7/7` capacités ;
-4. choisir **Ouvrir Falcon** ;
-5. constater et qualifier séparément les libellés Showcase, la version visible et le fallback de démonstration ;
-6. utiliser uniquement des données fictives et compléter le journal de session ;
-7. répéter l'activation sur l'autre appareil, car le stockage n'est pas synchronisé.
-
-## Exécution
-
-1. laisser le dépôt privé pendant la préparation ;
-2. exécuter `node scripts/qualify-candidate.mjs` ;
-3. rendre le dépôt public uniquement pour la fenêtre de test si le plan GitHub l'exige ;
-4. sélectionner **Settings → Pages → Source: GitHub Actions** ;
-5. lancer manuellement **Qualify and deploy owner test candidate** ;
-6. ouvrir `/activate.html`, activer, puis tester sur PC et téléphone avec des données fictives ;
-7. compléter `OWNER-TEST-SESSION.md` hors des données métier ;
-8. dépublier Pages puis repasser le dépôt en privé.
+1. reconstruire le candidat depuis `Falcon-Entreprise@2c3a0945650514a88fc7050187e6e6ea1c5f2775` ;
+2. recalculer `deployment-contract.json` et toutes les empreintes ;
+3. qualifier le candidat localement et dans GitHub Actions ;
+4. publier Pages uniquement après qualification verte ;
+5. exécuter les tests PC et mobile avec données fictives ;
+6. consolider les retours dans l’issue source #233 ;
+7. dépublier Pages après la campagne.
 
 ## Limite de confidentialité
 
