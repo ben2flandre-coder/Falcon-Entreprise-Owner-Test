@@ -1,0 +1,7 @@
+{
+  "schema": "falcon.owner-test.qualification-pin.v1",
+  "sourceCommit": "2c3a0945650514a88fc7050187e6e6ea1c5f2775",
+  "exactRuntimeFileCount": 22,
+  "exactRuntimeDigest": "pending-ci-recalculation",
+  "generatedFromCandidate": false
+}

@@ -1,0 +1,51 @@
+name: Rebuild Owner-Test Contract
+
+on:
+  push:
+    branches:
+      - agent/rebuild-from-main-2c3a094
+    paths:
+      - "candidate/**"
+      - "scripts/rebuild-contract.mjs"
+      - "deployment-contract.json"
+      - "qualification-pin.json"
+      - "scripts/qualify-candidate.mjs"
+      - ".github/workflows/rebuild-owner-test-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild-and-qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout rebuild branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/rebuild-from-main-2c3a094
+          fetch-depth: 0
+
+      - name: Configure Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Recalculate contract and qualification pins
+        run: node scripts/rebuild-contract.mjs
+
+      - name: Qualify reconstructed candidate
+        run: node scripts/qualify-candidate.mjs
+
+      - name: Commit deterministic contract updates
+        run: |
+          if git diff --quiet; then
+            echo "Contract already synchronized."
+            exit 0
+          fi
+          git config user.name "falcon-enterprise-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add deployment-contract.json qualification-pin.json scripts/qualify-candidate.mjs evidence/qualification.json
+          git commit -m "EI-16.4 Owner-Test — recalculer contrat et preuves"
+          git push origin HEAD:agent/rebuild-from-main-2c3a094

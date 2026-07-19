@@ -1,3 +1,4 @@
+import "./owner-product-polish.js";
 import { can as profileCan } from "../modules/security/rbac.js";
 import { createCommercialOnboardingService } from "../modules/commercial/commercial-onboarding-service.js";
 import { createCommercialProductIntegration } from "../modules/commercial/commercial-product-integration.js";

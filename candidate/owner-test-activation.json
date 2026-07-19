@@ -1,13 +1,13 @@
 {
   "schema": "falcon.owner-test.browser-activation.v1",
   "purpose": "Explicit, local and non-commercial activation for EI-16.4 owner tests only.",
-  "sourceCommit": "d21cff4b42afa05e68883462862fbdcd138f1189",
+  "sourceCommit": "2c3a0945650514a88fc7050187e6e6ea1c5f2775",
   "commercialRelease": false,
   "containsSecret": false,
   "storageScope": "per-browser-per-device",
   "applicationProfile": "Administrateur",
   "license": {
-    "licenseId": "falcon-ei16-owner-test-d21cff4b",
+    "licenseId": "falcon-ei16-owner-test-2c3a0945",
     "tier": "enterprise",
     "status": "active",
     "expiresAt": null,
