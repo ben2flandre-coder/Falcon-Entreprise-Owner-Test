@@ -43,8 +43,8 @@ function persistTheme(theme) {
 function applyTheme(theme) {
   const normalized = normalizeTheme(theme) || "dark";
   const root = document?.documentElement;
-  if (root?.dataset) root.dataset.theme = normalized;
-  if (root?.style) root.style.colorScheme = normalized;
+  if (root?.dataset?.theme !== normalized) root.dataset.theme = normalized;
+  if (root?.style?.colorScheme !== normalized) root.style.colorScheme = normalized;
   persistTheme(normalized);
   return normalized;
 }
@@ -72,37 +72,54 @@ function isolateDemonstrationActions(root = document) {
   if (typeof root?.querySelectorAll !== "function") return;
   for (const button of root.querySelectorAll("button")) {
     const label = button.textContent?.trim() || "";
-    if (/^Charger démo avancée$/i.test(label)) {
-      button.hidden = true;
-      button.setAttribute?.("aria-hidden", "true");
-      button.tabIndex = -1;
-      if (button.dataset) button.dataset.falconDemoAction = "isolated";
-    }
+    if (!/^Charger démo avancée$/i.test(label)) continue;
+    if (!button.hidden) button.hidden = true;
+    if (button.getAttribute?.("aria-hidden") !== "true") button.setAttribute?.("aria-hidden", "true");
+    if (button.tabIndex !== -1) button.tabIndex = -1;
+    if (button.dataset?.falconDemoAction !== "isolated") button.dataset.falconDemoAction = "isolated";
   }
 }
 
+let applyingIdentity = false;
 function applyProductIdentity() {
-  if (typeof document === "undefined") return;
-  document.title = "Falcon Enterprise";
-  if (document.documentElement?.dataset) document.documentElement.dataset.falconProduct = "enterprise";
-  replaceVisibleText();
-  isolateDemonstrationActions();
+  if (typeof document === "undefined" || applyingIdentity) return;
+  applyingIdentity = true;
+  try {
+    if (document.title !== "Falcon Enterprise") document.title = "Falcon Enterprise";
+    if (document.documentElement?.dataset?.falconProduct !== "enterprise") {
+      document.documentElement.dataset.falconProduct = "enterprise";
+    }
+    replaceVisibleText();
+    isolateDemonstrationActions();
+  } finally {
+    applyingIdentity = false;
+  }
 }
 
 const initialTheme = applyTheme(readPreferredTheme());
 
 function observeRuntimeChanges() {
-  if (typeof MutationObserver === "function" && document?.documentElement) {
+  if (typeof MutationObserver === "function" && document?.body) {
+    let scheduled = false;
     const observer = new MutationObserver(() => {
+      if (scheduled) return;
+      scheduled = true;
+      queueMicrotask(() => {
+        scheduled = false;
+        applyProductIdentity();
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (typeof MutationObserver === "function" && document?.documentElement) {
+    const themeObserver = new MutationObserver(() => {
       const current = normalizeTheme(document.documentElement.dataset?.theme);
       if (current) persistTheme(current);
-      applyProductIdentity();
     });
-    observer.observe(document.documentElement, {
+    themeObserver.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["data-theme"],
-      childList: true,
-      subtree: true
+      attributeFilter: ["data-theme"]
     });
   }
 
