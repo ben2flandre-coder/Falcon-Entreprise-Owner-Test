@@ -49,6 +49,23 @@ function applyTheme(theme) {
   return normalized;
 }
 
+function toggleTheme() {
+  const current = normalizeTheme(document?.documentElement?.dataset?.theme) || readPreferredTheme();
+  const next = current === "light" ? "dark" : "light";
+  applyTheme(next);
+  try {
+    const raw = localStorage.getItem("falcon_radar_360_v36_state");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      parsed.ui = { ...(parsed.ui || {}), theme: next };
+      parsed.theme = next;
+      localStorage.setItem("falcon_radar_360_v36_state", JSON.stringify(parsed));
+    }
+  } catch (_error) {}
+  window.dispatchEvent?.(new CustomEvent("falcon:theme:changed", { detail: { theme: next } }));
+  return next;
+}
+
 function clearLegacyProductState() {
   if (!OWNER_TEST_FRESH) return;
   try {
@@ -118,7 +135,7 @@ function applyProductIdentity() {
 }
 
 clearLegacyProductState();
-const initialTheme = applyTheme(readPreferredTheme());
+applyTheme(readPreferredTheme());
 
 function observeRuntimeChanges() {
   if (typeof MutationObserver === "function" && document?.body) {
@@ -142,8 +159,11 @@ function observeRuntimeChanges() {
   }
   if (typeof document?.addEventListener === "function") {
     document.addEventListener("click", (event) => {
-      if (!event.target?.closest?.(".theme-btn")) return;
-      queueMicrotask(() => applyTheme(document.documentElement?.dataset?.theme || initialTheme));
+      const control = event.target?.closest?.(".theme-btn,[data-theme-toggle],[aria-label*='thème' i],[title*='thème' i]");
+      if (!control) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      toggleTheme();
     }, true);
   }
 }
@@ -167,6 +187,7 @@ export const FalconOwnerProductPolish = Object.freeze({
   themeKey: THEME_KEY,
   readPreferredTheme,
   applyTheme,
+  toggleTheme,
   applyProductIdentity,
   clearLegacyProductState,
   openCanonicalHome
