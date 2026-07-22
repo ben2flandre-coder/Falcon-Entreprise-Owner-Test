@@ -6,7 +6,10 @@ const LEGACY_THEME_KEYS = Object.freeze([
   "falconTheme",
   "theme"
 ]);
-const OWNER_TEST_FRESH = typeof location !== "undefined" && new URLSearchParams(location.search).get("ownerTest") === "fresh";
+const OWNER_TEST_FRESH = typeof window !== "undefined" && window.self === window.top && (
+  new URLSearchParams(location.search).get("ownerTest") === "fresh" ||
+  sessionStorage.getItem("falcon_owner_fresh_entry_v1") !== "done"
+);
 
 function normalizeTheme(value) {
   return value === "light" || value === "dark" ? value : null;
