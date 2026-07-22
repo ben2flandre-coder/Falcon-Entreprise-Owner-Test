@@ -38,7 +38,7 @@
   <script>
     (() => {
       const REQUIRED_SCHEMA = "falcon.owner-test.browser-activation.v1";
-      const EXPECTED_SOURCE = "d21cff4b42afa05e68883462862fbdcd138f1189";
+      const EXPECTED_SOURCE = "dd741fbbea8b4f459cb5af64dc6dafcc62f65b60";
       const EXPECTED_RUNTIME_VERSION = "V48.0.0-dev";
       const frame = document.querySelector("#candidate");
       const activateButton = document.querySelector("#activate");
@@ -53,172 +53,16 @@
       const expectedBefore = params.get("expectBefore");
       let contract = null;
       let api = null;
-
       const sameList = (left, right) => JSON.stringify(left) === JSON.stringify(right);
-      const runtimeCounts = (snapshot) => ({
-        missions: snapshot.runtime?.missions?.missionCount ?? null,
-        sessions: snapshot.runtime?.sessions?.sessionCount ?? null,
-        folders: snapshot.runtime?.folders?.folderCount ?? null,
-        observations: snapshot.runtime?.observations?.observationCount ?? null,
-        media: snapshot.runtime?.media?.mediaCount ?? null,
-        reports: snapshot.runtime?.reports?.reportCount ?? null
-      });
-
-      function setFailure(code, detail) {
-        document.documentElement.dataset.falconActivationReady = "false";
-        document.documentElement.dataset.falconActivationVerified = "false";
-        document.documentElement.dataset.falconActivationFailure = code;
-        activateButton.disabled = true;
-        launch.hidden = true;
-        state.textContent = `BLOQUÉ · ${code}`;
-        result.textContent = JSON.stringify({ ready: false, code, detail: String(detail ?? "") }, null, 2);
-      }
-
-      function waitForApi(limit = 120) {
-        return new Promise((resolve, reject) => {
-          let attempts = 0;
-          const poll = () => {
-            attempts += 1;
-            const candidateApi = frame.contentWindow?.FalconEnterprise;
-            if (candidateApi) return resolve(candidateApi);
-            if (attempts >= limit) return reject(new Error("enterprise-runtime-unavailable"));
-            setTimeout(poll, 100);
-          };
-          poll();
-        });
-      }
-
-      async function loadContract() {
-        const [activationResponse, contextResponse] = await Promise.all([
-          fetch("./owner-test-activation.json", { cache: "no-store" }),
-          fetch("./test-context.json", { cache: "no-store" })
-        ]);
-        if (!activationResponse.ok || !contextResponse.ok) throw new Error("activation-contract-unavailable");
-        const activation = await activationResponse.json();
-        const context = await contextResponse.json();
-        const issues = [];
-        if (activation.schema !== REQUIRED_SCHEMA) issues.push("ACTIVATION_SCHEMA");
-        if (activation.sourceCommit !== EXPECTED_SOURCE || context.sourceCommit !== EXPECTED_SOURCE) issues.push("SOURCE_COMMIT");
-        if (activation.commercialRelease !== false || activation.containsSecret !== false) issues.push("ACTIVATION_SCOPE");
-        if (activation.license?.tier !== "enterprise" || activation.license?.status !== "active") issues.push("ENTERPRISE_LICENSE");
-        if (activation.license?.userProfile !== activation.applicationProfile) issues.push("PROFILE_ALIGNMENT");
-        if (!sameList(activation.expectedCapabilities, ["observe","analyse","arbitrate","report","export","admin","audit"])) issues.push("CAPABILITY_CONTRACT");
-        if (issues.length) throw new Error(issues.join(","));
-        return activation;
-      }
-
-      function verify(snapshot) {
-        const counts = runtimeCounts(snapshot);
-        const runtimeEmpty = Object.values(counts).every((value) => value === 0);
-        const issues = [];
-        if (snapshot.version !== EXPECTED_RUNTIME_VERSION) issues.push("RUNTIME_VERSION");
-        if (snapshot.mode !== "production") issues.push("MODE_NOT_PRODUCTION");
-        if (snapshot.profile !== contract.applicationProfile) issues.push("APPLICATION_PROFILE");
-        if (snapshot.license?.licenseId !== contract.license.licenseId) issues.push("LICENSE_ID");
-        if (snapshot.license?.tier !== "enterprise") issues.push("LICENSE_TIER");
-        if (snapshot.license?.userProfile !== contract.applicationProfile) issues.push("LICENSE_PROFILE");
-        if (snapshot.license?.allowed !== true || snapshot.license?.decision !== "granted") issues.push("LICENSE_DECISION");
-        if (!sameList(snapshot.license?.capabilities, contract.expectedCapabilities)) issues.push("LICENSE_CAPABILITIES");
-        return { issues, counts, runtimeEmpty };
-      }
-
-      function publishVerified(beforeTier, snapshot, verification) {
-        document.documentElement.dataset.falconActivationReady = "true";
-        document.documentElement.dataset.falconActivationVerified = "true";
-        document.documentElement.dataset.falconLicenseBefore = beforeTier;
-        document.documentElement.dataset.falconLicenseAfter = snapshot.license.tier;
-        document.documentElement.dataset.falconLicenseId = snapshot.license.licenseId;
-        document.documentElement.dataset.falconCapabilityCount = String(snapshot.license.capabilities.length);
-        document.documentElement.dataset.falconApplicationProfile = snapshot.profile;
-        document.documentElement.dataset.falconMode = snapshot.mode;
-        document.documentElement.dataset.falconRuntimeEmpty = String(verification.runtimeEmpty);
-        document.documentElement.dataset.falconSourceCommit = contract.sourceCommit;
-        state.textContent = "ENTERPRISE · activation persistée";
-        profile.textContent = snapshot.profile;
-        capabilities.textContent = `${snapshot.license.capabilities.length}/7 · ${snapshot.license.capabilities.join(", ")}`;
-        activateButton.disabled = false;
-        activateButton.textContent = "Réactiver proprement le profil de test";
-        launch.hidden = false;
-        result.textContent = JSON.stringify({
-          schema: "falcon.owner-test.browser-activation-result.v1",
-          ready: true,
-          sourceCommit: contract.sourceCommit,
-          beforeTier,
-          after: {
-            mode: snapshot.mode,
-            applicationProfile: snapshot.profile,
-            runtimeVersion: snapshot.version,
-            runtimeEmpty: verification.runtimeEmpty,
-            counts: verification.counts,
-            license: snapshot.license
-          },
-          proofScope: "local-entitlement-evaluation-and-persistence",
-          humanWorkflowPass: false,
-          cryptographicLicenseProof: false
-        }, null, 2);
-      }
-
-      async function activate() {
-        try {
-          activateButton.disabled = true;
-          launch.hidden = true;
-          const before = api.snapshot();
-          const beforeTier = before.license?.tier ?? "unknown";
-          document.documentElement.dataset.falconLicenseBefore = beforeTier;
-          if (expectedBefore && beforeTier !== expectedBefore) throw new Error(`UNEXPECTED_LICENSE_BEFORE:${beforeTier}`);
-
-          const security = frame.contentWindow?.FalconSecurityManager;
-          if (typeof security?.switchProfile !== "function") throw new Error("SECURITY_MANAGER_UNAVAILABLE");
-          if (security.switchProfile(contract.applicationProfile) !== true) throw new Error("APPLICATION_PROFILE_ACTIVATION_FAILED");
-
-          api.commercial.returnToProduction({ actor: "ei16-owner-test", reason: "explicit-owner-test-activation" });
-          const saved = api.commercial.saveLicense(contract.license);
-          if (saved.persisted !== true || saved.evaluation?.decision !== "granted") throw new Error("LICENSE_PERSISTENCE_FAILED");
-          if (!sameList(saved.evaluation.capabilities, contract.expectedCapabilities)) throw new Error("LICENSE_CAPABILITY_MISMATCH");
-
-          const loaded = new Promise((resolve) => frame.addEventListener("load", resolve, { once: true }));
-          frame.src = `./index.html?owner-test-reload=${Date.now()}`;
-          await loaded;
-          api = await waitForApi();
-          const after = api.snapshot();
-          const verification = verify(after);
-          if (verification.issues.length) throw new Error(verification.issues.join(","));
-          publishVerified(beforeTier, after, verification);
-        } catch (error) {
-          setFailure("ACTIVATION_FAILED", error instanceof Error ? error.message : error);
-        }
-      }
-
-      async function initialize() {
-        try {
-          contract = await loadContract();
-          source.textContent = `${contract.sourceCommit.slice(0, 12)} · sans secret`;
-          api = await waitForApi();
-          const snapshot = api.snapshot();
-          const currentTier = snapshot.license?.tier ?? "unknown";
-          document.documentElement.dataset.falconActivationReady = "true";
-          document.documentElement.dataset.falconLicenseBefore = currentTier;
-          state.textContent = `${currentTier.toUpperCase()} · non qualifié pour EI-16.4`;
-          profile.textContent = snapshot.profile ?? "inconnu";
-          capabilities.textContent = `${snapshot.license?.capabilities?.length ?? 0}/7`;
-          activateButton.disabled = false;
-          result.textContent = JSON.stringify({
-            ready: false,
-            observedTier: currentTier,
-            requiredAction: "explicit-enterprise-test-activation",
-            humanWorkflowPass: false
-          }, null, 2);
-
-          const existing = verify(snapshot);
-          if (existing.issues.length === 0) publishVerified(currentTier, snapshot, existing);
-          if (automation) await activate();
-        } catch (error) {
-          setFailure("INITIALIZATION_FAILED", error instanceof Error ? error.message : error);
-        }
-      }
-
-      activateButton.addEventListener("click", activate);
-      initialize();
+      const runtimeCounts = (snapshot) => ({ missions: snapshot.runtime?.missions?.missionCount ?? null, sessions: snapshot.runtime?.sessions?.sessionCount ?? null, folders: snapshot.runtime?.folders?.folderCount ?? null, observations: snapshot.runtime?.observations?.observationCount ?? null, media: snapshot.runtime?.media?.mediaCount ?? null, reports: snapshot.runtime?.reports?.reportCount ?? null });
+      function setFailure(code, detail) { document.documentElement.dataset.falconActivationReady = "false"; document.documentElement.dataset.falconActivationVerified = "false"; document.documentElement.dataset.falconActivationFailure = code; activateButton.disabled = true; launch.hidden = true; state.textContent = `BLOQUÉ · ${code}`; result.textContent = JSON.stringify({ ready: false, code, detail: String(detail ?? "") }, null, 2); }
+      function waitForApi(limit = 120) { return new Promise((resolve, reject) => { let attempts = 0; const poll = () => { attempts += 1; const candidateApi = frame.contentWindow?.FalconEnterprise; if (candidateApi) return resolve(candidateApi); if (attempts >= limit) return reject(new Error("enterprise-runtime-unavailable")); setTimeout(poll, 100); }; poll(); }); }
+      async function loadContract() { const [activationResponse, contextResponse] = await Promise.all([fetch("./owner-test-activation.json", { cache: "no-store" }), fetch("./test-context.json", { cache: "no-store" })]); if (!activationResponse.ok || !contextResponse.ok) throw new Error("activation-contract-unavailable"); const activation = await activationResponse.json(); const context = await contextResponse.json(); const issues = []; if (activation.schema !== REQUIRED_SCHEMA) issues.push("ACTIVATION_SCHEMA"); if (activation.sourceCommit !== EXPECTED_SOURCE || context.sourceCommit !== EXPECTED_SOURCE) issues.push("SOURCE_COMMIT"); if (activation.commercialRelease !== false || activation.containsSecret !== false) issues.push("ACTIVATION_SCOPE"); if (activation.license?.tier !== "enterprise" || activation.license?.status !== "active") issues.push("ENTERPRISE_LICENSE"); if (activation.license?.userProfile !== activation.applicationProfile) issues.push("PROFILE_ALIGNMENT"); if (!sameList(activation.expectedCapabilities, ["observe","analyse","arbitrate","report","export","admin","audit"])) issues.push("CAPABILITY_CONTRACT"); if (issues.length) throw new Error(issues.join(",")); return activation; }
+      function verify(snapshot) { const counts = runtimeCounts(snapshot); const runtimeEmpty = Object.values(counts).every((value) => value === 0); const issues = []; if (snapshot.version !== EXPECTED_RUNTIME_VERSION) issues.push("RUNTIME_VERSION"); if (snapshot.mode !== "production") issues.push("MODE_NOT_PRODUCTION"); if (snapshot.profile !== contract.applicationProfile) issues.push("APPLICATION_PROFILE"); if (snapshot.license?.licenseId !== contract.license.licenseId) issues.push("LICENSE_ID"); if (snapshot.license?.tier !== "enterprise") issues.push("LICENSE_TIER"); if (snapshot.license?.userProfile !== contract.applicationProfile) issues.push("LICENSE_PROFILE"); if (snapshot.license?.allowed !== true || snapshot.license?.decision !== "granted") issues.push("LICENSE_DECISION"); if (!sameList(snapshot.license?.capabilities, contract.expectedCapabilities)) issues.push("LICENSE_CAPABILITIES"); return { issues, counts, runtimeEmpty }; }
+      function publishVerified(beforeTier, snapshot, verification) { document.documentElement.dataset.falconActivationReady = "true"; document.documentElement.dataset.falconActivationVerified = "true"; document.documentElement.dataset.falconLicenseBefore = beforeTier; document.documentElement.dataset.falconLicenseAfter = snapshot.license.tier; document.documentElement.dataset.falconLicenseId = snapshot.license.licenseId; document.documentElement.dataset.falconCapabilityCount = String(snapshot.license.capabilities.length); document.documentElement.dataset.falconApplicationProfile = snapshot.profile; document.documentElement.dataset.falconMode = snapshot.mode; document.documentElement.dataset.falconRuntimeEmpty = String(verification.runtimeEmpty); document.documentElement.dataset.falconSourceCommit = contract.sourceCommit; state.textContent = "ENTERPRISE · activation persistée"; profile.textContent = snapshot.profile; capabilities.textContent = `${snapshot.license.capabilities.length}/7 · ${snapshot.license.capabilities.join(", ")}`; activateButton.disabled = false; activateButton.textContent = "Réactiver proprement le profil de test"; launch.hidden = false; result.textContent = JSON.stringify({ schema: "falcon.owner-test.browser-activation-result.v1", ready: true, sourceCommit: contract.sourceCommit, beforeTier, after: { mode: snapshot.mode, applicationProfile: snapshot.profile, runtimeVersion: snapshot.version, runtimeEmpty: verification.runtimeEmpty, counts: verification.counts, license: snapshot.license }, proofScope: "local-entitlement-evaluation-and-persistence", humanWorkflowPass: false, cryptographicLicenseProof: false }, null, 2); }
+      async function activate() { try { activateButton.disabled = true; launch.hidden = true; const before = api.snapshot(); const beforeTier = before.license?.tier ?? "unknown"; document.documentElement.dataset.falconLicenseBefore = beforeTier; if (expectedBefore && beforeTier !== expectedBefore) throw new Error(`UNEXPECTED_LICENSE_BEFORE:${beforeTier}`); const security = frame.contentWindow?.FalconSecurityManager; if (typeof security?.switchProfile !== "function") throw new Error("SECURITY_MANAGER_UNAVAILABLE"); if (security.switchProfile(contract.applicationProfile) !== true) throw new Error("APPLICATION_PROFILE_ACTIVATION_FAILED"); api.commercial.returnToProduction({ actor: "ei16-owner-test", reason: "explicit-owner-test-activation" }); const saved = api.commercial.saveLicense(contract.license); if (saved.persisted !== true || saved.evaluation?.decision !== "granted") throw new Error("LICENSE_PERSISTENCE_FAILED"); if (!sameList(saved.evaluation.capabilities, contract.expectedCapabilities)) throw new Error("LICENSE_CAPABILITY_MISMATCH"); const loaded = new Promise((resolve) => frame.addEventListener("load", resolve, { once: true })); frame.src = `./index.html?owner-test-reload=${Date.now()}`; await loaded; api = await waitForApi(); const after = api.snapshot(); const verification = verify(after); if (verification.issues.length) throw new Error(verification.issues.join(",")); publishVerified(beforeTier, after, verification); } catch (error) { setFailure("ACTIVATION_FAILED", error instanceof Error ? error.message : error); } }
+      async function initialize() { try { contract = await loadContract(); source.textContent = `${contract.sourceCommit.slice(0, 12)} · sans secret`; api = await waitForApi(); const snapshot = api.snapshot(); const currentTier = snapshot.license?.tier ?? "unknown"; document.documentElement.dataset.falconActivationReady = "true"; document.documentElement.dataset.falconLicenseBefore = currentTier; state.textContent = `${currentTier.toUpperCase()} · non qualifié pour EI-16.4`; profile.textContent = snapshot.profile ?? "inconnu"; capabilities.textContent = `${snapshot.license?.capabilities?.length ?? 0}/7`; activateButton.disabled = false; result.textContent = JSON.stringify({ ready: false, observedTier: currentTier, requiredAction: "explicit-enterprise-test-activation", humanWorkflowPass: false }, null, 2); const existing = verify(snapshot); if (existing.issues.length === 0) publishVerified(currentTier, snapshot, existing); if (automation) await activate(); } catch (error) { setFailure("INITIALIZATION_FAILED", error instanceof Error ? error.message : error); } }
+      activateButton.addEventListener("click", activate); initialize();
     })();
   </script>
 </body>
