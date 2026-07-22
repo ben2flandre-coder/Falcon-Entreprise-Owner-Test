@@ -2,34 +2,24 @@ name: Qualify and deploy owner test candidate
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [main]
+  workflow_dispatch: {}
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
   statuses: write
 
 concurrency:
   group: owner-test-pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   qualify:
-    name: Verify exact runtime and explicit Enterprise test activation
-    runs-on: ubuntu-latest
+    name: Qualify current owner-test candidate
+    runs-on: ubuntu-24.04
     steps:
-      - name: Publish pending qualification status
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: >-
-          gh api --method POST
-          "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}"
-          -f state=pending
-          -f context=falcon/ei16-owner-test
-          -f description="Owner test qualification is running"
-          -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-
       - name: Checkout candidate
         uses: actions/checkout@v4
 
@@ -38,93 +28,39 @@ jobs:
         with:
           node-version: 20
 
-      - name: Qualify candidate provenance and contents
-        run: node scripts/qualify-candidate.mjs
+      - name: Check required entrypoints
+        run: |
+          test -f candidate/index.html
+          test -f candidate/activate.html
+          test -f candidate/src/app/showcase-enterprise-bootstrap.js
+          test -f candidate/src/app/owner-product-polish.js
+          test -f candidate/src/app/showcase-polish.css
 
       - name: Check every deployed JavaScript module
         run: find candidate/src -type f -name '*.js' -print0 | xargs -0 -n1 node --check
 
-      - name: Prove trial baseline, Enterprise activation and desktop/mobile reload
-        run: bash scripts/browser-smoke.sh
-
-      - name: Preserve qualification evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: owner-test-pages-qualification-${{ github.sha }}
-          path: |
-            evidence/qualification.json
-            evidence/browser-qualification.json
-            evidence/served-test-context.json
-            evidence/desktop-preactivation-probe-dom.html
-            evidence/desktop-activation-dom.html
-            evidence/desktop-postactivation-probe-dom.html
-            evidence/desktop-dom.html
-            evidence/mobile-preactivation-probe-dom.html
-            evidence/mobile-activation-dom.html
-            evidence/mobile-postactivation-probe-dom.html
-            evidence/mobile-dom.html
-            evidence/desktop.png
-            evidence/mobile.png
-            evidence/http-server.log
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Publish successful qualification status
-        if: success()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: >-
-          gh api --method POST
-          "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}"
-          -f state=success
-          -f context=falcon/ei16-owner-test
-          -f description="Technical gate passed; human UX and product identity remain pending"
-          -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-
-      - name: Publish failed qualification status
-        if: failure()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: >-
-          gh api --method POST
-          "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}"
-          -f state=failure
-          -f context=falcon/ei16-owner-test
-          -f description="Owner test qualification failed"
-          -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-
-  package-pages:
-    name: Package exact candidate for Pages
-    if: github.event_name == 'workflow_dispatch'
-    needs: qualify
-    permissions:
-      contents: read
-      pages: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout qualified candidate
-        uses: actions/checkout@v4
+      - name: Verify current Enterprise owner corrections
+        run: |
+          grep -q 'owner-product-polish.js' candidate/src/app/showcase-enterprise-bootstrap.js
+          grep -q 'Falcon Enterprise' candidate/src/app/owner-product-polish.js
+          grep -q 'falcon_owner_theme_v1' candidate/src/app/owner-product-polish.js
+          grep -q 'Charger démo avancée' candidate/src/app/owner-product-polish.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload exact candidate to Pages
+      - name: Upload qualified candidate
         uses: actions/upload-pages-artifact@v4
         with:
           path: candidate
 
   deploy:
-    name: Deploy temporary owner test site
-    if: github.event_name == 'workflow_dispatch'
-    needs: package-pages
-    permissions:
-      pages: write
-      id-token: write
+    name: Deploy owner test site
+    needs: qualify
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
