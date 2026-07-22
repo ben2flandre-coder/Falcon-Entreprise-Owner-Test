@@ -6,6 +6,7 @@ const LEGACY_THEME_KEYS = Object.freeze([
   "falconTheme",
   "theme"
 ]);
+const OWNER_TEST_FRESH = typeof location !== "undefined" && new URLSearchParams(location.search).get("ownerTest") === "fresh";
 
 function normalizeTheme(value) {
   return value === "light" || value === "dark" ? value : null;
@@ -17,9 +18,7 @@ function themeFromStoredState() {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     return normalizeTheme(parsed?.ui?.theme) || normalizeTheme(parsed?.theme);
-  } catch (_error) {
-    return null;
-  }
+  } catch (_error) { return null; }
 }
 
 function readPreferredTheme() {
@@ -35,9 +34,7 @@ function readPreferredTheme() {
 function persistTheme(theme) {
   const normalized = normalizeTheme(theme);
   if (!normalized) return;
-  try {
-    localStorage.setItem(THEME_KEY, normalized);
-  } catch (_error) {}
+  try { localStorage.setItem(THEME_KEY, normalized); } catch (_error) {}
 }
 
 function applyTheme(theme) {
@@ -47,6 +44,18 @@ function applyTheme(theme) {
   if (root?.style?.colorScheme !== normalized) root.style.colorScheme = normalized;
   persistTheme(normalized);
   return normalized;
+}
+
+function clearLegacyProductState() {
+  if (!OWNER_TEST_FRESH) return;
+  try {
+    const preservedTheme = readPreferredTheme();
+    localStorage.removeItem("falcon_radar_360_v36_state");
+    localStorage.removeItem("falcon_demo_mode");
+    localStorage.removeItem("falcon_demo_scenario");
+    persistTheme(preservedTheme);
+    sessionStorage.setItem("falcon_owner_fresh_entry_v1", "pending");
+  } catch (_error) {}
 }
 
 function replaceVisibleText(root = document?.body) {
@@ -80,22 +89,32 @@ function isolateDemonstrationActions(root = document) {
   }
 }
 
+function openCanonicalHome() {
+  if (!OWNER_TEST_FRESH || typeof document?.querySelectorAll !== "function") return;
+  const candidates = [...document.querySelectorAll("button,a")];
+  const home = candidates.find((element) => /^Accueil$/i.test(element.textContent?.trim() || ""));
+  if (home && typeof home.click === "function") home.click();
+  try {
+    sessionStorage.setItem("falcon_owner_fresh_entry_v1", "done");
+    const url = new URL(location.href);
+    url.searchParams.delete("ownerTest");
+    history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  } catch (_error) {}
+}
+
 let applyingIdentity = false;
 function applyProductIdentity() {
   if (typeof document === "undefined" || applyingIdentity) return;
   applyingIdentity = true;
   try {
     if (document.title !== "Falcon Enterprise") document.title = "Falcon Enterprise";
-    if (document.documentElement?.dataset?.falconProduct !== "enterprise") {
-      document.documentElement.dataset.falconProduct = "enterprise";
-    }
+    if (document.documentElement?.dataset?.falconProduct !== "enterprise") document.documentElement.dataset.falconProduct = "enterprise";
     replaceVisibleText();
     isolateDemonstrationActions();
-  } finally {
-    applyingIdentity = false;
-  }
+  } finally { applyingIdentity = false; }
 }
 
+clearLegacyProductState();
 const initialTheme = applyTheme(readPreferredTheme());
 
 function observeRuntimeChanges() {
@@ -111,18 +130,13 @@ function observeRuntimeChanges() {
     });
     observer.observe(document.body, { childList: true, subtree: true });
   }
-
   if (typeof MutationObserver === "function" && document?.documentElement) {
     const themeObserver = new MutationObserver(() => {
       const current = normalizeTheme(document.documentElement.dataset?.theme);
       if (current) persistTheme(current);
     });
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"]
-    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
-
   if (typeof document?.addEventListener === "function") {
     document.addEventListener("click", (event) => {
       if (!event.target?.closest?.(".theme-btn")) return;
@@ -131,19 +145,26 @@ function observeRuntimeChanges() {
   }
 }
 
-if (typeof document !== "undefined" && document.readyState === "loading") {
-  document.addEventListener?.("DOMContentLoaded", () => {
-    applyProductIdentity();
-    observeRuntimeChanges();
-  }, { once: true });
-} else {
+function initializeOwnerProduct() {
   applyProductIdentity();
   observeRuntimeChanges();
+  if (OWNER_TEST_FRESH) {
+    requestAnimationFrame(() => requestAnimationFrame(openCanonicalHome));
+    setTimeout(openCanonicalHome, 600);
+  }
+}
+
+if (typeof document !== "undefined" && document.readyState === "loading") {
+  document.addEventListener?.("DOMContentLoaded", initializeOwnerProduct, { once: true });
+} else {
+  initializeOwnerProduct();
 }
 
 export const FalconOwnerProductPolish = Object.freeze({
   themeKey: THEME_KEY,
   readPreferredTheme,
   applyTheme,
-  applyProductIdentity
+  applyProductIdentity,
+  clearLegacyProductState,
+  openCanonicalHome
 });
