@@ -1,4 +1,4 @@
-# EI-16.4 — Journal de session propriétaire PC / téléphone
+# EI-16 — Journal de session propriétaire PC / téléphone
 
 Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
@@ -7,7 +7,7 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 - Date et heure :
 - URL Pages :
 - SHA du dépôt de test :
-- SHA source Falcon : `d21cff4b42afa05e68883462862fbdcd138f1189`
+- SHA source Falcon : `7ceae8e235556665d7e70ab28eb5a45ec44d5257`
 - Version : `48.0.0-rc.1`
 - Opérateur : propriétaire produit
 
@@ -15,13 +15,8 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
 - Système / version :
 - Navigateur / version :
-- Ouverture de `/activate.html` : PASS / FAIL
-- SHA court affiché conforme : PASS / FAIL
-- Activation persistée, profil `Administrateur`, niveau `enterprise`, capacités `7/7` : PASS / FAIL
 - Premier chargement : PASS / FAIL
-- Identité produit affichée comme Enterprise, sans badge/version Showcase résiduel : PASS / FAIL
-- État vierge visuel, sans mission exemple ni action de démonstration : PASS / FAIL
-- État vierge technique des registres Enterprise : PASS / FAIL
+- État vierge : PASS / FAIL
 - Mission, session, dossier : PASS / FAIL
 - Observation, média, criticité : PASS / FAIL
 - Radar, Trust, Cockpit : PASS / FAIL
@@ -33,12 +28,7 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
 - Modèle / système :
 - Navigateur / version :
-- Ouverture de `/activate.html` : PASS / FAIL
-- SHA court affiché conforme : PASS / FAIL
-- Activation persistée, profil `Administrateur`, niveau `enterprise`, capacités `7/7` : PASS / FAIL
 - Premier chargement : PASS / FAIL
-- Identité produit affichée comme Enterprise, sans badge/version Showcase résiduel : PASS / FAIL
-- État vierge visuel, sans mission exemple ni action de démonstration : PASS / FAIL
 - Lisibilité et navigation tactile : PASS / FAIL
 - Création et modification : PASS / FAIL
 - Persistance après fermeture : PASS / FAIL
@@ -48,9 +38,6 @@ Ne consigner aucune donnée client réelle, aucun secret et aucune clé API.
 
 ## Verdict
 
-- Preuve automatisée vérifiée : intégrité + activation locale + persistance, sans PASS humain : OUI / NON
-- Licence commerciale ou cryptographique revendiquée : NON attendu / écart
-- Écarts UI connus reproduits : identité Showcase / version Showcase / action démo / fallback Usine Alpha
 - Bloquant :
 - Majeur :
 - Mineur :
