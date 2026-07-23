@@ -49,7 +49,40 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-24.04
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  publish-status:
+    name: Publish owner test qualification status
+    if: always()
+    needs: [qualify, deploy]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Publish final Pages status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUALIFY_RESULT: ${{ needs.qualify.result }}
+          DEPLOY_RESULT: ${{ needs.deploy.result }}
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          actions_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          if [ "${QUALIFY_RESULT}" = "success" ] && [ "${DEPLOY_RESULT}" = "success" ]; then
+            state="success"
+            description="Owner candidate qualified and deployed"
+            target_url="${PAGE_URL:-${actions_url}}"
+          else
+            state="failure"
+            description="Owner qualification or deployment failed"
+            target_url="${actions_url}"
+          fi
+
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state="${state}" \
+            -f context="falcon/owner-test-pages" \
+            -f description="${description}" \
+            -f target_url="${target_url}"
