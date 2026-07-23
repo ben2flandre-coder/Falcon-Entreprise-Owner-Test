@@ -5977,7 +5977,79 @@ function saveContext(validate){
   const commit=(reason="")=>{
     const old=JSON.stringify(state.context);
     const status=validate?(state.context.status==="validé"?"revalidé":"validé"):"brouillon";
-    state.context={...state.context,activity:getVal("ctx_activity"),environment:getVal("ctx_env"),dominantRisks:getMulti("ctx_risks"),maturity:getVal("ctx_maturity"),cons�}�o+^����םtions=state.actions.filter(a=>a.observationId!==id);state.activeObservationId=state.observations[0]?.id||null;log("OBS_DELETE",{id});save();}})}
+    state.context={...state.context,activity:getVal("ctx_activity"),environment:getVal("ctx_env"),dominantRisks:getMulti("ctx_risks"),maturity:getVal("ctx_maturity"),constraints:getVal("ctx_constraints"),status,validatedAt:validate?new Date().toISOString():state.context.validatedAt,modifiedAt:new Date().toISOString(),modifyReason:reason||""};
+    state.companyProfile={...activeCompanyProfile(),sector:getVal("cp_sector"),workforce:getVal("cp_workforce"),riskMaturity:getVal("cp_maturity"),multiSite:getVal("cp_multisite"),subcontracting:getVal("cp_subcontract"),publicExposure:getVal("cp_public"),temporaryWorkers:getVal("cp_temp"),nightWork:getVal("cp_night"),remoteWork:getVal("cp_remote"),maintenance:getVal("cp_maintenance"),highRiskWork:getVal("cp_highrisk"),preventionPriorities:getMulti("cp_priorities"),criticalConstraints:getVal("cp_constraints")};
+    Object.assign(state.client,{sector:state.companyProfile.sector,workforce:state.companyProfile.workforce,multiSite:state.companyProfile.multiSite,subcontracting:state.companyProfile.subcontracting,publicAccess:state.companyProfile.publicExposure});
+    state.context.history.push({date:new Date().toISOString(),action:validate?"CONTEXT_VALIDATE":"CONTEXT_SAVE",reason:reason||"",old});
+    log(validate?"CONTEXT_VALIDATE":"CONTEXT_SAVE");toast(validate?"Contexte validé.":"Contexte enregistré.","ok");save();
+  };
+  if(needsReason)openModal({title:"Motif de modification / revalidation",content:"Le contexte était déjà validé. Tracez la raison de cette modification pour conserver une preuve exploitable.",inputLabel:"Motif",inputDefault:"Mise à jour du périmètre",confirmText:"Enregistrer",onConfirm:commit});
+  else commit("");
+}
+function prefillRisk(risk){state.activeObservationId=null;state.ui.prefillFamily=risk;save()}
+function newObservation(){state.activeObservationId=null;save();}
+function saveObservation(){
+  if(!canEditDossier("modifier une observation"))return;
+  if(!validateRequired("obs_zone","Zone"))return; 
+  if(!validateRequired("obs_constat","Constat"))return;
+  if(getVal("obs_constat").length<30){
+    setMsg("obs_constat","Constat trop court pour une preuve terrain défendable.",true);
+    toast("Constat terrain trop court : détaillez le réel observé.","warn");
+    return;
+  }
+  const media=collectObservationMediaV42();
+  const data={
+    zone:getVal("obs_zone"),
+    family:getVal("obs_family"),
+    danger:getVal("obs_danger"),
+    signal:getVal("obs_signal"),
+    constat:getVal("obs_constat"),
+    photoRef:media.photoRef||"",
+    photoName:media.photoName||"",
+    photoAnnotation:media.photoAnnotation||"",
+    photoMarkers:media.photoMarkers||"",
+    voiceNote:media.voiceNote||"",
+    voiceSummary:media.voiceSummary||"",
+    mediaAiSynthesis:media.mediaAiSynthesis||"",
+    mediaUpdatedAt:media.mediaUpdatedAt||new Date().toISOString()
+  };
+  state.ui.prefillFamily="";
+  if(state.activeObservationId){
+    const o=activeObs();
+    Object.assign(o,data,{updatedAt:new Date().toISOString()});
+    upsertMediaLibraryForObservationV42(o);
+    log("OBS_UPDATE",{id:o.id,media:mediaSummaryForLogV42(o)});
+  }
+  else{
+    const o={id:uid("obs"),createdAt:new Date().toISOString(),...data};
+    state.observations.push(o);
+    state.activeObservationId=o.id;
+    upsertMediaLibraryForObservationV42(o);
+    state.ui.mediaDraftV42=null;
+    log("OBS_CREATE",{id:o.id,media:mediaSummaryForLogV42(o)});
+  }
+  toast("Observation enregistrée.","ok");
+  save();
+}
+function renderObservationsList(){
+  return state.observations.map(o=>{
+    const media=observationMediaStatusV42(o);
+    return `<div class="item">
+      <div class="row" style="justify-content:space-between">
+        <strong>${obsNumber(o)} — ${esc(o.zone)}</strong>
+        <span class="tag ${state.activeObservationId===o.id?"green":"neutral"}">${state.activeObservationId===o.id?"actif":"dossier"}</span>
+      </div>
+      <div class="small">${esc(o.family)} • ${esc(o.constat)}</div>
+      ${media?`<div class="media-badges">${media}</div>`:""}
+      <div class="row" style="margin-top:8px">
+        <button class="btn ghost" onclick="state.activeObservationId='${o.id}';save()">Activer / modifier</button>
+        <button class="btn danger" onclick="deleteObservation('${o.id}')">Supprimer</button>
+      </div>
+    </div>`;
+  }).join("")||"<div class='small'>Aucune observation.</div>";
+}
+function deleteObservation(id){
+  if(!canEditDossier("supprimer une observation"))return;openModal({title:"Supprimer l’observation",content:"Cette action supprimera aussi les analyses, décisions et actions liées. Continuer ?",confirmText:"Supprimer",onConfirm:()=>{state.observations=state.observations.filter(o=>o.id!==id);const aIds=state.analyses.filter(a=>a.observationId===id).map(a=>a.id);state.analyses=state.analyses.filter(a=>a.observationId!==id);state.decisions=state.decisions.filter(d=>!aIds.includes(d.analysisId));state.actions=state.actions.filter(a=>a.observationId!==id);state.activeObservationId=state.observations[0]?.id||null;log("OBS_DELETE",{id});save();}})}
 function saveAnalysis(){
   if(!canEditDossier("modifier une analyse"))return;
   const obs=activeObs(); if(!obs){toast("Observation requise.","warn");return}
