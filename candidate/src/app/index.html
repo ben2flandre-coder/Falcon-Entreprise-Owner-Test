@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Falcon Enterprise</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./mission.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">Falcon Enterprise</p>
+      <h1>Enterprise Integrated Build</h1>
+      <p class="lead">Point d’entrée V48 en cours d’intégration contrôlée.</p>
+      <div id="build-meta" class="meta"></div>
+    </section>
+
+    <nav id="app-navigation" class="app-navigation" aria-label="Navigation Falcon Enterprise"></nav>
+    <div id="navigation-feedback" class="navigation-feedback" aria-live="polite"></div>
+
+    <div data-route-panel="overview">
+      <section class="panel">
+        <h2>Capacités</h2>
+        <div id="capabilities" class="grid"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Extraction 003</p>
+            <h2>Navigation Engine</h2>
+            <p class="section-copy">Registre de routes, garde-fous et transitions anti-réentrance, sans dépendance au stockage ni au rendu.</p>
+          </div>
+          <div id="navigation-status" class="status-pill">Initialisation</div>
+        </div>
+        <div id="navigation-summary" class="navigation-summary"></div>
+        <div class="navigation-log-wrap">
+          <h3>Journal des transitions</h3>
+          <div id="navigation-log" class="navigation-log"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel" data-route-panel="missions" hidden>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Extraction 004</p>
+          <h2>Mission Engine</h2>
+          <p class="section-copy">Registre de missions persistant, isolé entre production et démonstration, avec cycle de vie et révisions optimistes.</p>
+        </div>
+        <div id="mission-status" class="status-pill">Initialisation</div>
+      </div>
+
+      <div id="mission-summary" class="mission-summary"></div>
+
+      <div class="mission-form">
+        <label>
+          <span>Nom de la mission</span>
+          <input id="mission-name" type="text" maxlength="160" placeholder="Audit QHSE — site pilote">
+        </label>
+        <label>
+          <span>Client</span>
+          <input id="mission-client" type="text" maxlength="160" placeholder="Organisation">
+        </label>
+        <label class="mission-scope-field">
+          <span>Périmètre</span>
+          <textarea id="mission-scope" maxlength="1000" rows="3" placeholder="Unités, activités ou processus concernés"></textarea>
+        </label>
+        <div class="button-row">
+          <button id="mission-create" type="button">Créer et activer</button>
+        </div>
+      </div>
+
+      <div id="mission-feedback" class="mission-feedback" aria-live="polite"></div>
+      <div id="mission-list" class="mission-list"></div>
+    </section>
+
+    <section class="panel" data-route-panel="administration" hidden>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">EI-15.4</p>
+          <h2>Configuration initiale</h2>
+          <p class="section-copy">Raccordement local de l’organisation, de l’administrateur, du client initial et du contact support.</p>
+        </div>
+        <div id="onboarding-status" class="status-pill">Initialisation</div>
+      </div>
+
+      <div id="onboarding-summary" class="navigation-summary"></div>
+
+      <div class="mission-form">
+        <label>
+          <span>Organisation</span>
+          <input id="onboarding-organisation" type="text" maxlength="160" placeholder="Organisation">
+        </label>
+        <label>
+          <span>Administrateur</span>
+          <input id="onboarding-administrator" type="text" maxlength="160" placeholder="Nom de l’administrateur">
+        </label>
+        <label>
+          <span>Client initial</span>
+          <input id="onboarding-client" type="text" maxlength="160" placeholder="Client pilote">
+        </label>
+        <label>
+          <span>Contact support</span>
+          <input id="onboarding-support" type="email" maxlength="254" placeholder="support@organisation.fr">
+        </label>
+        <div class="button-row">
+          <button id="onboarding-save" type="button">Enregistrer la configuration</button>
+        </div>
+      </div>
+
+      <div id="onboarding-feedback" class="navigation-feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" data-route-panel="security" hidden>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Extraction 001</p>
+          <h2>Contrôle d’accès RBAC</h2>
+        </div>
+        <label class="profile-control">
+          <span>Profil actif</span>
+          <select id="profile-select"></select>
+        </label>
+      </div>
+      <div id="profile-summary" class="security-summary"></div>
+      <div id="permission-checks" class="permission-grid"></div>
+    </section>
+
+    <section class="panel" data-route-panel="storage" hidden>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Extraction 002</p>
+          <h2>Storage Engine local-first</h2>
+          <p class="section-copy">Banc d’essai isolé : aucune donnée historique Falcon n’est lue, importée ou migrée.</p>
+        </div>
+        <div id="storage-status" class="status-pill">Initialisation</div>
+      </div>
+
+      <div id="storage-summary" class="storage-summary"></div>
+
+      <div class="storage-controls">
+        <label>
+          <span>Valeur de test</span>
+          <input id="storage-value" type="text" value="Falcon V48" maxlength="160">
+        </label>
+        <div class="button-row">
+          <button id="storage-write" type="button">Écrire</button>
+          <button id="storage-read" type="button" class="secondary">Lire</button>
+          <button id="storage-remove" type="button" class="danger">Supprimer</button>
+        </div>
+      </div>
+
+      <div id="storage-result" class="storage-result" aria-live="polite"></div>
+
+      <div class="storage-log-wrap">
+        <h3>Journal d’accès</h3>
+        <div id="storage-log" class="storage-log"></div>
+      </div>
+    </section>
+
+    <section class="panel warning" data-route-panel="baseline" hidden>
+      <p class="eyebrow">Référence immuable</p>
+      <h2>Baseline applicative V46.8.0</h2>
+      <p>Le monolithe Falcon historique reste la référence fonctionnelle pendant son import et sa modularisation progressive.</p>
+      <p class="section-copy">Cette vue ne charge, n’exécute et ne modifie aucun code de la baseline.</p>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

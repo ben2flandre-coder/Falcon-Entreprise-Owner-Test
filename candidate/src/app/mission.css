@@ -1,0 +1,147 @@
+.mission-summary,
+.mission-list {
+  display: grid;
+  gap: 12px;
+}
+
+.mission-summary {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 16px 0;
+}
+
+.mission-card,
+.mission-row {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.mission-card {
+  border-left: 4px solid var(--accent);
+}
+
+.mission-card span,
+.mission-identity span {
+  color: var(--muted);
+}
+
+.mission-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.mission-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.mission-form label span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.mission-form input,
+.mission-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #0a1830;
+  color: var(--text);
+  font: inherit;
+  resize: vertical;
+}
+
+.mission-scope-field,
+.mission-form .button-row {
+  grid-column: 1 / -1;
+}
+
+.mission-feedback {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.mission-feedback.success { color: var(--success); }
+.mission-feedback.warning { color: var(--warning); }
+.mission-feedback.error { color: var(--danger); }
+
+.mission-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.mission-row.status-active { border-left: 4px solid var(--success); }
+.mission-row.status-paused { border-left: 4px solid var(--warning); }
+.mission-row.status-completed { border-left: 4px solid var(--accent); }
+.mission-row.status-archived { border-left: 4px solid var(--muted); opacity: 0.8; }
+
+.mission-identity {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.mission-state {
+  font-size: 0.85rem;
+}
+
+.mission-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.mission-actions button,
+.mission-form .button-row button {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 12px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 750;
+}
+
+.mission-actions button.primary,
+.mission-form .button-row button {
+  border-color: transparent;
+  background: var(--accent);
+  color: #061827;
+}
+
+.mission-actions button.danger {
+  color: var(--danger);
+  border-color: rgba(255, 107, 122, 0.45);
+}
+
+@media (max-width: 720px) {
+  .mission-form {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-scope-field,
+  .mission-form .button-row {
+    grid-column: auto;
+  }
+
+  .mission-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-actions {
+    justify-content: flex-start;
+  }
+}

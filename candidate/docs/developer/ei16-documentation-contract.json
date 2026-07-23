@@ -1,0 +1,140 @@
+{
+  "schema": "falcon.ei16.documentation-contract.v1",
+  "phase": "EI-16.3",
+  "product": "Falcon Enterprise",
+  "version": "48.0.0-rc.1",
+  "baseline": "e45a0dfa7d6988acf668da91a5cb14e5e76c5e28",
+  "issue": 228,
+  "documents": {
+    "ownerHandbook": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+    "fieldTestProtocol": "docs/operator/FALCON-V1-FIELD-TEST-PROTOCOL.md",
+    "defectTemplate": "docs/operator/FALCON-V1-DEFECT-REPORT-TEMPLATE.md",
+    "maintenanceHandbook": "docs/developer/FALCON-V1-MAINTENANCE-HANDBOOK.md",
+    "traceabilityMatrix": "docs/developer/EI-16.3-DOCUMENTATION-TRACEABILITY.md"
+  },
+  "requirements": [
+    {
+      "id": "DOC-01",
+      "title": "Guide de démarrage propriétaire",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["release/release-spec.json", "tests/clean-install-qualifier-smoke.mjs"]
+    },
+    {
+      "id": "DOC-02",
+      "title": "Procédure d'installation propre",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["scripts/release/build-candidate.mjs", "tests/clean-install-qualifier-smoke.mjs"]
+    },
+    {
+      "id": "DOC-03",
+      "title": "Procédure de lancement et d'arrêt",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/startup/startup-orchestrator.js", "tests/startup-orchestrator-smoke.mjs"]
+    },
+    {
+      "id": "DOC-04",
+      "title": "Modes vierge et démonstration",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/configuration/environment-configuration.js", "tests/environment-configuration-smoke.mjs"]
+    },
+    {
+      "id": "DOC-05",
+      "title": "Missions et sessions",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/mission/mission-engine.js", "src/modules/session/session-engine.js", "tests/mission-integration-smoke.mjs"]
+    },
+    {
+      "id": "DOC-06",
+      "title": "Dossiers, observations, médias et criticité",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/folders/folder-engine.js", "src/modules/observations/observation-engine.js", "src/modules/media/media-engine.js", "src/modules/criticality/criticality-engine.js"]
+    },
+    {
+      "id": "DOC-07",
+      "title": "Radar, Trust et Decision Cockpit",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/radar/radar-engine.js", "src/modules/trust/trust-engine.js", "src/app/cockpit/decision-cockpit.js"]
+    },
+    {
+      "id": "DOC-08",
+      "title": "Rapports et exports",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/report/report-engine.js", "src/modules/export/export-engine.js", "tests/report-renderer-smoke.mjs", "tests/export-engine-smoke.mjs"]
+    },
+    {
+      "id": "DOC-09",
+      "title": "Sauvegarde et restauration",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/recovery/backup-recovery-coordinator.js", "tests/backup-recovery-coordinator-smoke.mjs"]
+    },
+    {
+      "id": "DOC-10",
+      "title": "Profils et permissions",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["src/modules/security/rbac.js", "tests/rbac-smoke.mjs"]
+    },
+    {
+      "id": "DOC-11",
+      "title": "Système de licence",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html", "release/release-spec.json"]
+    },
+    {
+      "id": "DOC-12",
+      "title": "Limites connues",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "evidence": ["release/release-spec.json", "release/pilot-readiness-spec.json"]
+    },
+    {
+      "id": "DOC-13",
+      "title": "Signalement d'anomalie",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-DEFECT-REPORT-TEMPLATE.md",
+      "evidence": ["release/pilot-readiness-spec.json"]
+    },
+    {
+      "id": "DOC-14",
+      "title": "Protocole d'essais terrain",
+      "status": "documented",
+      "document": "docs/operator/FALCON-V1-FIELD-TEST-PROTOCOL.md",
+      "evidence": ["release/pilot-readiness-spec.json", "tests/ei16-robustness-matrix-smoke.mjs"]
+    },
+    {
+      "id": "DOC-15",
+      "title": "Matrice de traçabilité fonctionnelle",
+      "status": "documented",
+      "document": "docs/developer/EI-16.3-DOCUMENTATION-TRACEABILITY.md",
+      "evidence": ["tests/ei16-documentation-pack-smoke.mjs"]
+    },
+    {
+      "id": "DOC-16",
+      "title": "Historique de version et baseline",
+      "status": "documented",
+      "document": "docs/developer/FALCON-V1-MAINTENANCE-HANDBOOK.md",
+      "evidence": ["package.json", "release/release-spec.json", "scripts/release/build-candidate.mjs"]
+    },
+    {
+      "id": "DOC-17",
+      "title": "Maintenance technique minimale",
+      "status": "documented",
+      "document": "docs/developer/FALCON-V1-MAINTENANCE-HANDBOOK.md",
+      "evidence": ["scripts/quality/code-health-audit.mjs", "scripts/release/build-candidate.mjs", ".github/workflows/ei16-documentation-pack.yml"]
+    }
+  ],
+  "phaseBoundaries": {
+    "ei16_4": "Packaging, configuration and proprietary license delivery",
+    "ei16_5": "Cross-model AI audits"
+  }
+}

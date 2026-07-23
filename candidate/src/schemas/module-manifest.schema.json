@@ -1,0 +1,8 @@
+{
+  "name": "module-name",
+  "version": "1.0.0",
+  "publisher": "Vendor",
+  "requires": ["core"],
+  "permissions": [],
+  "license": "enterprise"
+}

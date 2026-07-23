@@ -1,0 +1,23 @@
+{
+  "schema": "falcon.release.spec.v1",
+  "product": "Falcon Enterprise",
+  "version": "48.0.0-rc.1",
+  "channel": "release-candidate",
+  "environmentProfile": "production",
+  "demoMode": false,
+  "engineeringGate": "green",
+  "features": {
+    "externalAI": false,
+    "dynamicEvaluation": false
+  },
+  "artifact": {
+    "name": "falcon-enterprise-web",
+    "type": "directory",
+    "entrypoint": "index.html",
+    "baselineEntrypoint": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html"
+  },
+  "compatibility": {
+    "dataPolicy": "migration-required-on-breaking-change",
+    "minimumNode": "20"
+  }
+}

@@ -1,0 +1,64 @@
+:root { --falcon-cockpit-gap: clamp(0.75rem, 2vw, 1.5rem); --falcon-cockpit-radius: 1rem; --falcon-cockpit-border: color-mix(in srgb, currentColor 18%, transparent); --falcon-cockpit-surface: color-mix(in srgb, Canvas 94%, currentColor 6%); }
+.falcon-decision-cockpit { container-type: inline-size; display: grid; gap: var(--falcon-cockpit-gap); max-width: 96rem; margin-inline: auto; padding: clamp(1rem, 3vw, 2rem); }
+.falcon-cockpit-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.falcon-cockpit-eyebrow { margin: 0 0 0.25rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.72; }
+.falcon-cockpit-header h1, .falcon-cockpit-section__title, .falcon-cockpit-panel h2, .falcon-executive-card h2, .falcon-dashboard-section h2, .falcon-timeline h2, .falcon-evidence-panel h2, .falcon-decision-graph h2, .falcon-arbitration-center h2 { margin-block: 0; }
+.falcon-cockpit-state { margin: 0; padding: 0.55rem 0.8rem; border: 1px solid var(--falcon-cockpit-border); border-radius: 999px; font-size: 0.84rem; font-weight: 700; white-space: nowrap; }
+.falcon-cockpit-state[data-state="degraded"] { border-style: dashed; } .falcon-cockpit-state[data-state="empty"] { opacity: 0.72; }
+.falcon-cockpit-nav { display: flex; gap: 0.5rem; overflow-x: auto; padding-block: 0.25rem; scrollbar-width: thin; }
+.falcon-cockpit-nav a { flex: 0 0 auto; padding: 0.55rem 0.8rem; border-radius: 999px; color: inherit; text-decoration: none; background: var(--falcon-cockpit-surface); }
+.falcon-cockpit-nav a:focus-visible, .falcon-executive-card__link:focus-visible, .falcon-evidence-item summary:focus-visible, .falcon-graph-relations summary:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+.falcon-cockpit-section { display: grid; gap: 0.75rem; } .falcon-cockpit-section__lead, .falcon-dashboard-section__lead, .falcon-timeline__lead, .falcon-evidence-panel__lead, .falcon-decision-graph__lead, .falcon-arbitration-center__lead { max-width: 72ch; margin: 0; opacity: 0.8; }
+.falcon-cockpit-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--falcon-cockpit-gap); }
+.falcon-executive-card, .falcon-cockpit-panel, .falcon-cockpit-error, .falcon-dashboard-section, .falcon-timeline, .falcon-evidence-panel, .falcon-decision-graph, .falcon-arbitration-center { min-width: 0; padding: clamp(1rem, 2cqi, 1.4rem); border: 1px solid var(--falcon-cockpit-border); border-radius: var(--falcon-cockpit-radius); background: var(--falcon-cockpit-surface); }
+.falcon-executive-card[data-status="attention"] { border-width: 2px; } .falcon-executive-card[data-status="neutral"] { opacity: 0.78; }
+.falcon-executive-card__value { margin: 0.65rem 0 0.35rem; font-size: clamp(1.35rem, 4cqi, 2.4rem); font-weight: 800; line-height: 1; }
+.falcon-executive-card__description { margin: 0; line-height: 1.45; opacity: 0.76; } .falcon-executive-card__link { display: inline-block; margin-top: 1rem; color: inherit; font-weight: 700; }
+.falcon-cockpit-workspace { display: grid; grid-template-columns: minmax(0, 3fr) minmax(16rem, 1fr); gap: var(--falcon-cockpit-gap); align-items: start; }
+.falcon-executive-dashboard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--falcon-cockpit-gap); }
+.falcon-dashboard-section { display: grid; gap: 0.85rem; } .falcon-dashboard-facts { display: grid; grid-template-columns: minmax(8rem, 1fr) minmax(0, 1.4fr); gap: 0.45rem 1rem; margin: 0; }
+.falcon-dashboard-facts dt { font-weight: 700; opacity: 0.72; } .falcon-dashboard-facts dd { margin: 0; overflow-wrap: anywhere; }
+.falcon-alert-list { display: grid; gap: 0.65rem; margin: 0; padding-left: 1.25rem; } .falcon-alert-item h3, .falcon-alert-item p { margin-block: 0; } .falcon-alert-item p { margin-top: 0.25rem; opacity: 0.78; }
+.falcon-dashboard-warning { margin: 0; padding: 0.75rem; border: 1px dashed currentColor; border-radius: 0.75rem; }
+.falcon-timeline { display: grid; gap: 0.85rem; } .falcon-timeline__list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.falcon-timeline__item { position: relative; display: grid; gap: 0.25rem; padding: 0 0 1.25rem 1.5rem; border-left: 2px solid var(--falcon-cockpit-border); }
+.falcon-timeline__item::before { content: ""; position: absolute; top: 0.35rem; left: -0.42rem; width: 0.7rem; height: 0.7rem; border: 2px solid currentColor; border-radius: 50%; background: Canvas; }
+.falcon-timeline__item:last-child { padding-bottom: 0; } .falcon-timeline__meta { margin: 0; font-size: 0.82rem; font-weight: 700; opacity: 0.72; }
+.falcon-timeline__item h3, .falcon-timeline__item p { margin-block: 0; } .falcon-timeline__item > p:last-child { opacity: 0.82; }
+.falcon-evidence-panel { display: grid; gap: 0.9rem; } .falcon-evidence-list { display: grid; gap: 0.75rem; }
+.falcon-evidence-item { border: 1px solid var(--falcon-cockpit-border); border-radius: 0.8rem; overflow: clip; }
+.falcon-evidence-item summary { display: grid; gap: 0.25rem; padding: 0.9rem 1rem; cursor: pointer; font-weight: 700; }
+.falcon-evidence-item summary span:last-child { font-size: 0.82rem; font-weight: 600; opacity: 0.72; }
+.falcon-evidence-item__body { display: grid; gap: 0.75rem; padding: 0 1rem 1rem; }
+.falcon-evidence-item__body p, .falcon-evidence-item__body h3 { margin-block: 0; }
+.falcon-evidence-item__context { font-size: 0.88rem; opacity: 0.78; }
+.falcon-evidence-media { display: grid; gap: 0.5rem; margin: 0; padding-left: 1.2rem; }
+.falcon-evidence-media li { display: grid; gap: 0.15rem; } .falcon-evidence-media span { font-size: 0.82rem; opacity: 0.72; }
+.falcon-evidence-panel__notice { margin: 0; padding: 0.75rem; border: 1px dashed currentColor; border-radius: 0.75rem; }
+.falcon-decision-graph { display: grid; gap: 0.9rem; overflow: hidden; }
+.falcon-graph-layers { display: grid; grid-template-columns: repeat(4, minmax(12rem, 1fr)); gap: 0.75rem; overflow-x: auto; padding-bottom: 0.4rem; }
+.falcon-graph-layer { position: relative; display: grid; align-content: start; gap: 0.6rem; min-width: 12rem; }
+.falcon-graph-layer:not(:last-child)::after { content: "→"; position: absolute; top: 0.1rem; right: -0.6rem; font-weight: 800; opacity: 0.55; }
+.falcon-graph-layer > h3 { margin: 0; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.72; }
+.falcon-graph-layer__nodes { display: grid; gap: 0.55rem; }
+.falcon-graph-node { display: grid; gap: 0.25rem; padding: 0.75rem; border: 1px solid var(--falcon-cockpit-border); border-radius: 0.75rem; background: Canvas; }
+.falcon-graph-node h3, .falcon-graph-node p { margin: 0; }
+.falcon-graph-node__type { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.65; }
+.falcon-graph-node > p:last-child { font-size: 0.82rem; opacity: 0.76; }
+.falcon-graph-node[data-type="alert"] { border-width: 2px; }
+.falcon-graph-relations { border-top: 1px solid var(--falcon-cockpit-border); padding-top: 0.75rem; }
+.falcon-graph-relations summary { cursor: pointer; font-weight: 700; }
+.falcon-graph-relations ul { display: grid; gap: 0.35rem; }
+.falcon-arbitration-center { display: grid; gap: 0.9rem; }
+.falcon-arbitration-center__doctrine { margin: 0; padding: 0.75rem 1rem; border-left: 4px solid currentColor; font-weight: 700; }
+.falcon-arbitration-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.falcon-arbitration-panel { min-width: 0; padding: 1rem; border: 1px solid var(--falcon-cockpit-border); border-radius: 0.8rem; background: Canvas; }
+.falcon-arbitration-panel[data-tone="attention"], .falcon-arbitration-panel[data-tone="decision"] { border-width: 2px; }
+.falcon-arbitration-panel h3 { margin-top: 0; }
+.falcon-arbitration-list { display: grid; gap: 0.7rem; margin: 0; padding-left: 1.15rem; }
+.falcon-arbitration-list li p { margin: 0.2rem 0 0; opacity: 0.78; }
+.falcon-arbitration-list__empty { opacity: 0.7; }
+@container (max-width: 900px) { .falcon-cockpit-workspace { grid-template-columns: 1fr; } }
+@container (max-width: 760px) { .falcon-cockpit-grid, .falcon-executive-dashboard, .falcon-arbitration-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (max-width: 480px) { .falcon-decision-cockpit { padding: 0.75rem; } .falcon-cockpit-header { display: grid; } .falcon-cockpit-state { white-space: normal; } .falcon-cockpit-grid, .falcon-executive-dashboard, .falcon-arbitration-grid { grid-template-columns: 1fr; } .falcon-dashboard-facts { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .falcon-decision-cockpit *, .falcon-decision-cockpit *::before, .falcon-decision-cockpit *::after { scroll-behavior: auto !important; } }

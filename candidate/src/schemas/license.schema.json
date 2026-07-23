@@ -1,0 +1,9 @@
+{
+  "licenseId": "FALCON-ENT-0001",
+  "holder": "Organisation",
+  "modules": ["core"],
+  "seats": 1,
+  "expiresAt": null,
+  "status": "active",
+  "signature": ""
+}

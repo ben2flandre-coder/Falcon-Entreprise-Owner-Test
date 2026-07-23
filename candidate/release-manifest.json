@@ -1,0 +1,601 @@
+{
+  "schema": "falcon.release.manifest.v2",
+  "product": "Falcon Enterprise",
+  "version": "48.0.0-rc.1",
+  "channel": "release-candidate",
+  "sourceCommit": "7ceae8e235556665d7e70ab28eb5a45ec44d5257",
+  "environmentProfile": "production",
+  "demoMode": false,
+  "engineeringGate": "green",
+  "features": {
+    "externalAI": false,
+    "dynamicEvaluation": false
+  },
+  "artifact": {
+    "name": "falcon-enterprise-web",
+    "type": "directory",
+    "entrypoint": "index.html",
+    "baselineEntrypoint": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html"
+  },
+  "compatibility": {
+    "dataPolicy": "migration-required-on-breaking-change",
+    "minimumNode": "20"
+  },
+  "inventorySchema": "falcon.release.inventory.v1",
+  "files": [
+    {
+      "path": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html",
+      "size": 784705,
+      "sha256": "2716055372b53b4bc5b28d191700bdbf784590b2ac1899a53fd0e5f293f07103"
+    },
+    {
+      "path": "docs/developer/EI-16.3-DOCUMENTATION-TRACEABILITY.md",
+      "size": 3270,
+      "sha256": "aea2cd6500079e1f0450df45b25ee57145738287c53035d2e9291962692e1ef2"
+    },
+    {
+      "path": "docs/developer/FALCON-V1-MAINTENANCE-HANDBOOK.md",
+      "size": 10112,
+      "sha256": "d05333abecc24fff7a965c61c4998a67e2c73e5b015a1e65f80e94411e1a00d5"
+    },
+    {
+      "path": "docs/developer/ei16-documentation-contract.json",
+      "size": 5703,
+      "sha256": "382730992a2b4dc109e99ca3beaeac9977c0d2f4584ab1cc2ca8a5d4cac69fb8"
+    },
+    {
+      "path": "docs/developer/release-candidate.md",
+      "size": 1097,
+      "sha256": "bf4ec79c58a2306174ae136275bf55de5b84ad9f4ddf5262b99ede6b51b633e5"
+    },
+    {
+      "path": "docs/operator/FALCON-V1-DEFECT-REPORT-TEMPLATE.md",
+      "size": 2721,
+      "sha256": "675fa63dcd7a3d2785702b38dc29effd20cbe0e372aea290fadcaa639a0746bc"
+    },
+    {
+      "path": "docs/operator/FALCON-V1-FIELD-TEST-PROTOCOL.md",
+      "size": 6411,
+      "sha256": "f9c72f6578281e8ba250d4153de127b19f21a019d2640656a068f0f8a3a98fd7"
+    },
+    {
+      "path": "docs/operator/FALCON-V1-INTERNAL-OWNER-RUNBOOK.md",
+      "size": 7318,
+      "sha256": "cf3b0b11a334fd32743eb93268d1be43387d6b7df2051fe86699edda1fad8a2b"
+    },
+    {
+      "path": "docs/operator/FALCON-V1-OWNER-HANDBOOK.md",
+      "size": 13627,
+      "sha256": "0586d955c9e6fb1a7ae2cdce1456550bd3fb9d8b0ac8f2f2ca4e115cc3eb9104"
+    },
+    {
+      "path": "docs/operator/clean-installation-qualification.md",
+      "size": 605,
+      "sha256": "fa881bb3017b3c39200c0f6015e6121c39fbf8b58116cf024d899e0b269b4bb6"
+    },
+    {
+      "path": "docs/operator/deployment-checklist.md",
+      "size": 728,
+      "sha256": "53888be0306dfcbcf73b1cb2cc461668c5b7616e939a5fd987bce3153f7c5b6f"
+    },
+    {
+      "path": "docs/operator/installation.md",
+      "size": 747,
+      "sha256": "f274346f577ce03c6b0f8aba3781fc145dd5f4db6a160eeab80a9010a6377465"
+    },
+    {
+      "path": "docs/operator/product-language-contract.md",
+      "size": 1390,
+      "sha256": "c07c0908237e037b19d95e1b0dceefe5d2a9fd0f1ef26719bd8b88f0dfb84138"
+    },
+    {
+      "path": "docs/operator/rollback.md",
+      "size": 728,
+      "sha256": "a97dbce9b73de1be0d4436a624849854c4ea40ed5cf07af6693389b02d9b08ef"
+    },
+    {
+      "path": "docs/operator/update.md",
+      "size": 731,
+      "sha256": "1d17e02668e680bd2605bc56bc0b5556f83aeeb81fcce30229b8650976d24fcc"
+    },
+    {
+      "path": "index.html",
+      "size": 791170,
+      "sha256": "451fe2a551cd3c299e6f861e1a1c581a3159fb85ef8627a10e3bcdb4b5689f1b",
+      "generatedFrom": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html",
+      "enterpriseBootstrap": "src/app/showcase-enterprise-bootstrap.js",
+      "enterpriseStylesheet": "src/app/showcase-polish.css"
+    },
+    {
+      "path": "package.json",
+      "size": 13821,
+      "sha256": "74d556184103f068f54892427271578c24a9d2b62320a7a19706081a6b6022f1"
+    },
+    {
+      "path": "release/release-spec.json",
+      "size": 616,
+      "sha256": "e05e91a836f6bbac148edba2c695088a87a3ad1d989b0538639b480c708f71af"
+    },
+    {
+      "path": "script.js",
+      "size": 694201,
+      "sha256": "97ec7be2deb1b4645c9c323b54a5673e8ae1233f21b94b122aa2a1c2715ff8db",
+      "hardenedFrom": "script.js"
+    },
+    {
+      "path": "src/README.md",
+      "size": 236,
+      "sha256": "fdc0d81d273f48e54e5debf16e52447a684bd2f6fad8864cf877b9f1e3f59eea"
+    },
+    {
+      "path": "src/app/ai-transfer-sync-polish.js",
+      "size": 26186,
+      "sha256": "5246d5dfe6442b0b0c065ec933f3c6c4dafd37399ad028bf9e500d32e398e0b3"
+    },
+    {
+      "path": "src/app/app.js",
+      "size": 4727,
+      "sha256": "990c4cef7ecfa291a6994925cbf51c1b3442b31f3d2a87d758192ad98c92e018"
+    },
+    {
+      "path": "src/app/cockpit/arbitration-center.js",
+      "size": 6716,
+      "sha256": "40f8a0e079bcb276ce693e3d0ff103c57b57f3d660517516bb8220d22e1f24e4"
+    },
+    {
+      "path": "src/app/cockpit/cockpit-incremental-renderer.js",
+      "size": 4115,
+      "sha256": "8b6a285232faf6313921d399033c85fb5318deb0f7c3199c18c628d17433f590"
+    },
+    {
+      "path": "src/app/cockpit/cockpit-shell.js",
+      "size": 6208,
+      "sha256": "52d5d2338b7b5407dfc8b0d881c4e4ea3ffdb2951d8ef7f64963e99fa69d97fd"
+    },
+    {
+      "path": "src/app/cockpit/cockpit.css",
+      "size": 8756,
+      "sha256": "8fa3f89a31c5bd267c54450798ee8216104fc0ada8801f15a5f2f54333279d43"
+    },
+    {
+      "path": "src/app/cockpit/decision-cockpit.js",
+      "size": 6564,
+      "sha256": "db45b22710b4941c36f3e5a49465654191d01f1284697833e3f2817c5594b381"
+    },
+    {
+      "path": "src/app/cockpit/decision-graph.js",
+      "size": 7017,
+      "sha256": "5d4044af5fd2d7f418e27fc4aa5d59ae6b8514e04a46748604bd47fd7abcc75f"
+    },
+    {
+      "path": "src/app/cockpit/decision-timeline.js",
+      "size": 4770,
+      "sha256": "11f014b146e52f8a46eee88dc225e46b392070d243cdeb8d03dedcbae471b743"
+    },
+    {
+      "path": "src/app/cockpit/evidence-panel.js",
+      "size": 4566,
+      "sha256": "6c078b0ae20dcb4f815ccb2b73df9f2f055c56faac27cd6edd4ad4bad978659f"
+    },
+    {
+      "path": "src/app/cockpit/executive-card.js",
+      "size": 994,
+      "sha256": "53e55f5b270085737a573622cceb3b4521b9139a57ddf4b300bfa6b6c62948f3"
+    },
+    {
+      "path": "src/app/cockpit/executive-dashboard.js",
+      "size": 4250,
+      "sha256": "65f4e623d0804a2d6d8c5659445b1d2823151ff6663820a3b49aeb72b67daece"
+    },
+    {
+      "path": "src/app/controllers/mission-panel.js",
+      "size": 8979,
+      "sha256": "f82318fac84501aa81e9435d841f1064d22843d9cb2d207a9ce781491e982f2b"
+    },
+    {
+      "path": "src/app/controllers/navigation-shell.js",
+      "size": 6745,
+      "sha256": "33c8152571d7356ae5184e06384f835070b2a2c4eea173e5a085f391ebee04c2"
+    },
+    {
+      "path": "src/app/controllers/onboarding-panel.js",
+      "size": 2657,
+      "sha256": "fe2afdeee23166340ed8cd2f016e74fa36c62a5a8e5b415686bd5612d6776782"
+    },
+    {
+      "path": "src/app/controllers/rbac-panel.js",
+      "size": 2604,
+      "sha256": "f2b7c1983bc87c666d7548e13e4894b4a73ad6688b00cd280ab2bca3579078c2"
+    },
+    {
+      "path": "src/app/controllers/storage-panel.js",
+      "size": 3840,
+      "sha256": "0ae77a6a6ab170bb939131755276b53f826a385bebee1880c1bc380ae0d97e7c"
+    },
+    {
+      "path": "src/app/folder-workspace-polish.js",
+      "size": 14329,
+      "sha256": "cb038a1710aa25b1910bab3da224207de39851ceb3fcbfdd90710d0e847057a6"
+    },
+    {
+      "path": "src/app/index.html",
+      "size": 6790,
+      "sha256": "74715c046f0fe053d3b85761aa2b89bc7dd3666a6d5f9e67189baaffa9e11d6e"
+    },
+    {
+      "path": "src/app/mission.css",
+      "size": 2761,
+      "sha256": "e3d7a81238d6bf01337bd796a1e3a356908b493430db7c3037339dbd6e372c17"
+    },
+    {
+      "path": "src/app/owner-product-polish.js",
+      "size": 7913,
+      "sha256": "4f5758b332746fbd1c317a853eaf0e478a45d4a8b4eb331a194f420e2bd0e7e0"
+    },
+    {
+      "path": "src/app/persistence-media-polish.js",
+      "size": 18337,
+      "sha256": "b9b604a06d9b8268f97f2399a58a20ce2108ce54491b6747fdaa386916bc0db6"
+    },
+    {
+      "path": "src/app/report-delivery-help-polish.js",
+      "size": 11927,
+      "sha256": "a5f22ea60f0f4163db47e8227983e837b53a4d0fd7d98e553beb30bceeb8be49"
+    },
+    {
+      "path": "src/app/showcase-enterprise-bootstrap.js",
+      "size": 3924,
+      "sha256": "6d66a75ef8b9b2fd8851b975c8da4cf0e56411e736515777f4ae40b12511d784"
+    },
+    {
+      "path": "src/app/showcase-polish.css",
+      "size": 16736,
+      "sha256": "a584db203f16d8e6a63d7de5f985390e75891fd7c42691d4694987746709c9ed"
+    },
+    {
+      "path": "src/app/styles.css",
+      "size": 6225,
+      "sha256": "c3dce9a9254b8cb394dfae0db794c97f3b799cbe4c9eba709cb386e7b25a1e87"
+    },
+    {
+      "path": "src/core/capabilities.js",
+      "size": 789,
+      "sha256": "402cc80e0b07255dcccde85a5f79d5a10153b3a4ddba37284f881e64f5daca0a"
+    },
+    {
+      "path": "src/core/version.js",
+      "size": 253,
+      "sha256": "c4d08cade4272b1a277ab98262bddad80ca1eae047b3fa34fe22407bb73e686e"
+    },
+    {
+      "path": "src/legacy/baseline/BASELINE.json",
+      "size": 1097,
+      "sha256": "b6110524903d0fef9802216abe1ddca1dabab12d04c6f31a1c455bcc2353e3c4"
+    },
+    {
+      "path": "src/legacy/baseline/README.md",
+      "size": 852,
+      "sha256": "898a94f9f347b82a6a0ea51692ceba762410fe79ac6f456624feb2e098115def"
+    },
+    {
+      "path": "src/modules/ai/ai-connection-policy.js",
+      "size": 7535,
+      "sha256": "56ce51a7f32872e7914a52c4f70ca51febef6d42911c34019b26e0bb9a3b265c"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-capabilities.js",
+      "size": 775,
+      "sha256": "8b0ee19d93d322a6c10ca9d6646bf90df9389a8bf6c5bdfa2f361026710ca8a7"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-contracts.js",
+      "size": 3230,
+      "sha256": "881ae0abf29f00873c71420d3e62aa406d42af92e3155ed2c1f26787fcc49872"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-diagnostics-recovery.js",
+      "size": 3997,
+      "sha256": "118dd9ec02343d488aaff4feddc789d6831c9adb852e807200d19c9c413f8609"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-observability.js",
+      "size": 2885,
+      "sha256": "fddcdbfbc193982f76958da8cdb3aa6bf8dd4fc5ce473e8a18a3edae086d6cad"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-operations-center.js",
+      "size": 7215,
+      "sha256": "8313738a9b8418ffd5a6772c959f5b06b0d121929b63ad7a9bae4a7d17a829de"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-operations-journal.js",
+      "size": 5036,
+      "sha256": "c65474d8b42593e06d29aa4b73644ead7a9a27bbb9f28f1e43e9f0dd0257af76"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-operations-overview.js",
+      "size": 2785,
+      "sha256": "1ecff11ed3b18434d221d98ead717ac718c82e0e9c903fa648b0b9ade3fd1f6f"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-performance-monitor.js",
+      "size": 4119,
+      "sha256": "904feaae549be584c3197d6cde3d0079a2fe92cae14d389486b11ef308c6f52a"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-query-service.js",
+      "size": 5175,
+      "sha256": "559eadccb661186dc146545d164bfa68fd981cc241da2cbfe178badab830958a"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-refresh-contract.js",
+      "size": 2399,
+      "sha256": "d4a884705cdea466742160ccdaf021556e25b8fd8637c29d40817ba6d375457c"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-release-readiness.js",
+      "size": 2730,
+      "sha256": "e5f5ac818ace7d14ea73f9f37c161dc35bd30e4ebe17d0c4ca8584ca8049fadd"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-runtime-health-monitor.js",
+      "size": 4673,
+      "sha256": "8ed3c3954437605f86e0931d13387aa5d2f7d1883796f7aa0cad494feb4871fd"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-runtime-inspector.js",
+      "size": 3057,
+      "sha256": "060a1e71899e27b99c46deaa98ffd3172dad3731d9373e1e0a56be3f005b3f33"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-supervision-snapshot.js",
+      "size": 3988,
+      "sha256": "b3258a1e605626da704000fb386d30d6178a21bb58784af283be53c94250b56f"
+    },
+    {
+      "path": "src/modules/cockpit/cockpit-sync-controller.js",
+      "size": 3958,
+      "sha256": "0e4fbb56d442e1e2fe6772665c5a8dc8e9c602840f3e92a4262138b51db27442"
+    },
+    {
+      "path": "src/modules/commercial/commercial-onboarding-service.js",
+      "size": 2004,
+      "sha256": "903870f713154441f6614b566080ee00b9f00b00c1ecbf6af5d5d4c6efd97f0d"
+    },
+    {
+      "path": "src/modules/commercial/commercial-product-integration.js",
+      "size": 7717,
+      "sha256": "4c6f2a9f04b75dc03487fab71710676406fae9d0d1a78f7fac613d6b007aaf8f"
+    },
+    {
+      "path": "src/modules/commercial/commercial-v1-readiness.js",
+      "size": 2617,
+      "sha256": "b2e82c9c4d2cd25742372577e0ef8ab7552a431d5dabfbbae5282383a179c10d"
+    },
+    {
+      "path": "src/modules/commercial/license-entitlement-service.js",
+      "size": 2288,
+      "sha256": "7edcabcf6de5fb4ea679b0224efaedcbdec7fea65689eec2c557a6c1b1bf9eac"
+    },
+    {
+      "path": "src/modules/commercial/product-mode-controller.js",
+      "size": 1973,
+      "sha256": "1f1fc5a83fe35677b0a42d939443222bf53786bf81eaa3dfacfad114b57b06e2"
+    },
+    {
+      "path": "src/modules/configuration/environment-configuration.js",
+      "size": 3667,
+      "sha256": "2f0c79378acd56763ecb1b8caa79c87f1ae8366e633d00f8a4650cda869f2ae0"
+    },
+    {
+      "path": "src/modules/criticality/criticality-engine.js",
+      "size": 10088,
+      "sha256": "176af587297d989b732fe07069c265bebc50a92a471dc9fe8e73dc5e58ae75fb"
+    },
+    {
+      "path": "src/modules/enterprise/enterprise-report-rendering.js",
+      "size": 740,
+      "sha256": "b1dd514cfecb5b45dc2d52812a56ebf95fd091f18746e3831402e04aa09eeb8c"
+    },
+    {
+      "path": "src/modules/enterprise/enterprise-runtime.js",
+      "size": 19494,
+      "sha256": "338eefcde2ce85cf477d54dc31bd067bbfc7765d00063c1dab9349d387db5aa1"
+    },
+    {
+      "path": "src/modules/events/event-bus.js",
+      "size": 7916,
+      "sha256": "c349ee34dd96ecfc50622f65389645915718e35bd8023aea859f82bf4ee2638e"
+    },
+    {
+      "path": "src/modules/export/export-engine.js",
+      "size": 8274,
+      "sha256": "9f5fd0c5b638c1ec03040ff462b2152ed4bd0aae05a44de4b9407f1e7d54cbaf"
+    },
+    {
+      "path": "src/modules/export/report-delivery-policy.js",
+      "size": 3992,
+      "sha256": "8eb77a26775bdfd9a3b5f88c41d79cd2c83a748ba517e5f0cdfb0e968691669d"
+    },
+    {
+      "path": "src/modules/folders/falcon-workspace.js",
+      "size": 9127,
+      "sha256": "9ff7cc1c17d3554798703e6be71635aada977ee57d73708e4a2a31f07939e628"
+    },
+    {
+      "path": "src/modules/folders/folder-engine.js",
+      "size": 7674,
+      "sha256": "f4eeee62d4d44ecfc2fd1a10dda3b93ebe7d13f78e8de53cb31cac40fd57978d"
+    },
+    {
+      "path": "src/modules/help/help-center-content.js",
+      "size": 3730,
+      "sha256": "41430bf441ec12a00fb2d36c808d9e41ba118b69ce4ee700471597d53dbe4e6b"
+    },
+    {
+      "path": "src/modules/licensing/commercial-offer-catalog.js",
+      "size": 4294,
+      "sha256": "e97251aa0c00b6d22cb9b320c0daae9c05e8dcaf9eedf669396a8e73d486e0c3"
+    },
+    {
+      "path": "src/modules/licensing/commercial-package-profile.js",
+      "size": 4877,
+      "sha256": "a63bc63e5ea63b69189b2bc9e21f2166ce8c3c249ccfeeac4a0d797bbfd51c14"
+    },
+    {
+      "path": "src/modules/licensing/commercial-readiness-bundle.js",
+      "size": 3768,
+      "sha256": "c307e010a9c42011edb967395f6aad731ad9237ba343e4dae23ad1274fad1799"
+    },
+    {
+      "path": "src/modules/licensing/entitlement-profile-binding.js",
+      "size": 2710,
+      "sha256": "2a1cd06aab6705e661187109c7a1741ecb53010be40804b6dfd48e98c3724ad3"
+    },
+    {
+      "path": "src/modules/licensing/license-foundation.js",
+      "size": 4789,
+      "sha256": "552661188e9b181573df67b6157de543ba0b86432e451931a7623b13e3ecc200"
+    },
+    {
+      "path": "src/modules/licensing/license-manifest.js",
+      "size": 3059,
+      "sha256": "7ebfa996936fe68daed4314d691cbe31adc49f3c376b3e805ee3e6409b1fe799"
+    },
+    {
+      "path": "src/modules/licensing/product-edition-configuration.js",
+      "size": 3260,
+      "sha256": "fc1094fa9b302e151dd3e5dd60ddf9c498838c690d19f427e2a861b09caf220c"
+    },
+    {
+      "path": "src/modules/media/media-destination-policy.js",
+      "size": 5052,
+      "sha256": "469c23808ad3133d58642794b0548f1f8b91f4acca0235fc6248ec82db43ae27"
+    },
+    {
+      "path": "src/modules/media/media-engine.js",
+      "size": 9762,
+      "sha256": "c97e1121195e825247253d644e3149921037839dca1ad131adeb2057bd0cae0d"
+    },
+    {
+      "path": "src/modules/mission/mission-engine.js",
+      "size": 23524,
+      "sha256": "e053c567eef72b80160319b64e403c1bf8a9c3598b31d583e6598e71a8de8fa4"
+    },
+    {
+      "path": "src/modules/models/model-registry.js",
+      "size": 10192,
+      "sha256": "7653cc2c862712e35d3ce50135925210a905be3abae9533eab7522c3da28f80c"
+    },
+    {
+      "path": "src/modules/navigation/navigation-engine.js",
+      "size": 13074,
+      "sha256": "a749669496e38d8532e1d0e6995e46f379222717f9b857922c7fb43b011f053f"
+    },
+    {
+      "path": "src/modules/observations/observation-engine.js",
+      "size": 11808,
+      "sha256": "a9a7e218e415070f71cc62acc67ce99162b9cc369d46b3be65da6241737986c9"
+    },
+    {
+      "path": "src/modules/persistence/complete-profile-vault.js",
+      "size": 9362,
+      "sha256": "9353446f625e7594b63794c95eb14dfa62805dfa264bb19bac852de6532094a2"
+    },
+    {
+      "path": "src/modules/persistence/persistence-coordinator.js",
+      "size": 14767,
+      "sha256": "450abdf6f575d69d2244eb2bd15a7556cecb53b8a0006ecf3d47a17eb41b200c"
+    },
+    {
+      "path": "src/modules/radar/radar-engine.js",
+      "size": 20958,
+      "sha256": "9e02d490c610053d568f6be5f18d8c161335439d1fda5781e4e7f52f20d33fbd"
+    },
+    {
+      "path": "src/modules/recovery/backup-recovery-coordinator.js",
+      "size": 8689,
+      "sha256": "9836d3ab920dcdd1ab1943e30a0f8be9113ec98a21c4094dbd96bb36b7d54fbe"
+    },
+    {
+      "path": "src/modules/release/clean-install-qualifier.js",
+      "size": 4840,
+      "sha256": "64eaa5f3c76a58a5da054fd2c88026bd08a0ef783ba93986e622929199bce486"
+    },
+    {
+      "path": "src/modules/release/rc-lifecycle-qualifier.js",
+      "size": 3348,
+      "sha256": "e0e680451d6f0ecedbefd436a4af53b2a82251b1b2d7cffe2be7b97b0f03dec9"
+    },
+    {
+      "path": "src/modules/release/rc-promotion-decision.js",
+      "size": 3723,
+      "sha256": "a554fbb3e2518f6394da266e6187e89cab513097af6a3ca2dfac0f19bf6df078"
+    },
+    {
+      "path": "src/modules/release/release-package-validator.js",
+      "size": 3220,
+      "sha256": "dbd636922aa042045b184f40e2f302fcfbf2f31100f541acd8b850b70fee24f7"
+    },
+    {
+      "path": "src/modules/render/report-renderer.js",
+      "size": 8016,
+      "sha256": "48e8b20c2dbae71fab612305abd862712b4f63c2f82ab9f7371b40d9b93d9b88"
+    },
+    {
+      "path": "src/modules/report/report-engine.js",
+      "size": 13211,
+      "sha256": "5ee4184a5132ce0998bdbbe048d3287952e21716f4e96f92abe8f4a337555be8"
+    },
+    {
+      "path": "src/modules/security/operational-security-guard.js",
+      "size": 5640,
+      "sha256": "6c13e133e2ddf576a572682334383983a046abbf341b763d74cc9a936d26b1bc"
+    },
+    {
+      "path": "src/modules/security/rbac.js",
+      "size": 4905,
+      "sha256": "85cc035fe868379d3c3c9427b61c071701a11632ec57e09574da8a56253160d3"
+    },
+    {
+      "path": "src/modules/session/session-engine.js",
+      "size": 17721,
+      "sha256": "4ed42876cf00c6fe4771af58dba165a510e607254abf0b09a5caeb6e1441bd36"
+    },
+    {
+      "path": "src/modules/startup/startup-orchestrator.js",
+      "size": 6336,
+      "sha256": "a6fe91e9588bf7a1acdc853695a10f69434534c743309388472b34c598ea5e24"
+    },
+    {
+      "path": "src/modules/storage/storage-engine.js",
+      "size": 11036,
+      "sha256": "05c92c3aba549a77204d7c20f81da10ee28763dd802d75bf4d3caa685496b61b"
+    },
+    {
+      "path": "src/modules/sync/offline-operation-queue.js",
+      "size": 7308,
+      "sha256": "e0a57f7de58128e920051f0f4cd0b73372ead90e3cc456d6b43d9c11457fe318"
+    },
+    {
+      "path": "src/modules/transfer/portable-falcon-package.js",
+      "size": 11573,
+      "sha256": "2e5589cc827575aa114730066b7f30e3e21b1ca9a01e8789e3129a8b452ddaee"
+    },
+    {
+      "path": "src/modules/trust/trust-engine.js",
+      "size": 12138,
+      "sha256": "15b25f2f376107b3135c4c56e778eba6168b567538b3f0b4723cbae10897f112"
+    },
+    {
+      "path": "src/schemas/license.schema.json",
+      "size": 164,
+      "sha256": "a09de61f51c4d22ea068ddb0fc45e1a7ffc4cd3199d41219847be491d9a8b405"
+    },
+    {
+      "path": "src/schemas/module-manifest.schema.json",
+      "size": 147,
+      "sha256": "8d58437d102e6fb16cbdb89febeacb43739256f7f139609956671aa3a104dd1e"
+    }
+  ]
+}

@@ -1149,10 +1149,10 @@ body.falcon-menu-open .v412-mobile-drawer.open{
   
 <section class="panel"><div class="section-title"><h2>Centre décisionnel exécutif</h2></div>
 <div class="grid4">
-<div class="card"><div class="kpi">94%</div><div>Maturité</div></div>
-<div class="card"><div class="kpi">18</div><div>Actions prioritaires</div></div>
-<div class="card"><div class="kpi">6</div><div>Risques critiques</div></div>
-<div class="card"><div class="kpi">+12%</div><div>Tendance conformité</div></div>
+<div class="card"><div class="kpi">—</div><div>Maturité à qualifier</div></div>
+<div class="card"><div class="kpi">—</div><div>Actions à établir</div></div>
+<div class="card"><div class="kpi">—</div><div>Risques à qualifier</div></div>
+<div class="card"><div class="kpi">—</div><div>Tendance à calculer</div></div>
 </div></section>
 <div class="footer">Falcon Radar 360 — Aide à la décision en prévention des risques professionnels</div>
 </div>
@@ -3970,7 +3970,7 @@ function companySignalsForContext(profile=activeCompanyProfile(), obs=null, anal
   if(wf>=11 && state.prevention.cse!=="oui")add("yellow","Effectif ≥ 11 : CSE non déclaré","Clarifier représentation du personnel et modalités de dialogue social sur les décisions santé-sécurité.","réglementaire");
   if(wf>=50 && state.prevention.cssct!=="oui")add("yellow","Effectif ≥ 50 : CSSCT non déclarée","Vérifier la structuration santé-sécurité et les modalités de consultation selon l'organisation réelle.","réglementaire");
   if(state.prevention.spst!=="oui")add("yellow","SPST non déclaré","Le lien santé au travail doit être clarifié avant arbitrage sur situations sensibles.","réglementaire");
-  if(profile.riskMaturity==="faible" && score>=55)add("orange","Maturité prévention faible + risque significatif","Privilégier mesures simples, visibles, pilotables et vérifier l’appropriation terrain.","décision");
+  if(profile.riskMaturity==="faible" && score>=55)add("orange","Maturité à qualifier prévention faible + risque significatif","Privilégier mesures simples, visibles, pilotables et vérifier l’appropriation terrain.","décision");
   if(score>=75 && profile.subcontracting==="oui")add("red","Risque élevé en coactivité","Ne pas se limiter à une action interne : tracer coordination, responsabilités, information des intervenants et mesures conservatoires.","critique");
   if(score>=75 && profile.multiSite==="oui")add("orange","Risque élevé en environnement multi-site","Identifier si l’écart est isolé ou systémique ; prévoir déploiement harmonisé si nécessaire.","systémique");
   if(score>=70 && state.prevention.cssct==="oui")add("orange","Décision critique avec CSSCT déclarée","Prévoir information/consultation interne si la mesure impacte organisation, équipements ou conditions de travail.","dialogue social");
@@ -3981,7 +3981,7 @@ function companySignalsForContext(profile=activeCompanyProfile(), obs=null, anal
 }
 function companyProfileSummary(){
   const p=activeCompanyProfile(), c=companyComplexityIndex(p);
-  return `<div class="panel company-impact"><h3>Lecture entreprise Falcon</h3><div class="row"><span class="profile-chip ${c.label!=="standard"?"hot":"ok"}">Complexité : ${esc(c.label)} (${c.points})</span><span class="profile-chip">Secteur : ${esc(p.sector||"NR")}</span><span class="profile-chip">Effectif : ${esc(p.workforce||"NR")}</span><span class="profile-chip">Maturité : ${esc(p.riskMaturity||"NR")}</span></div><p class="small" style="margin-top:10px">Cette lecture n’automatise pas la décision : elle active des points de vigilance proportionnés au contexte d’exploitation.</p></div>`;
+  return `<div class="panel company-impact"><h3>Lecture entreprise Falcon</h3><div class="row"><span class="profile-chip ${c.label!=="standard"?"hot":"ok"}">Complexité : ${esc(c.label)} (${c.points})</span><span class="profile-chip">Secteur : ${esc(p.sector||"NR")}</span><span class="profile-chip">Effectif : ${esc(p.workforce||"NR")}</span><span class="profile-chip">Maturité à qualifier : ${esc(p.riskMaturity||"NR")}</span></div><p class="small" style="margin-top:10px">Cette lecture n’automatise pas la décision : elle active des points de vigilance proportionnés au contexte d’exploitation.</p></div>`;
 }
 function renderCompanyImpactPanel(obs=null){
   const a=obs?analysisFor(obs.id):null;
@@ -4434,7 +4434,7 @@ function prepublicationLabel(score){
 function releaseChecklistItems(){
   const r=releaseControlState();
   const items=[
-    [computeDeploymentReadiness()>=65,"Maturité pré-déploiement suffisante"],
+    [computeDeploymentReadiness()>=65,"Maturité à qualifier pré-déploiement suffisante"],
     [r.testStatus==="tests validés","Tests fonctionnels déclarés validés"],
     [r.auditStatus==="audit prêt","Audit / revue externe préparé"],
     [r.diffusionStatus!=="public","Diffusion limitée et contrôlée"],
@@ -5458,7 +5458,7 @@ function renderDataGovernancePanel(){
   const snap=privacySnapshot();
   const score=governanceScore();
   const tag=score>=80?"green":score>=55?"yellow":"orange";
-  return `<div class="panel data-card"><div class="section-title"><div><h3>Sécurité et gouvernance des données</h3><div class="small">Posture locale et souveraine : les données restent dans le navigateur tant que l’utilisateur n’exporte pas le dossier. Falcon rend les points de vigilance visibles, sans promettre un cloud qui n’existe pas.</div></div><span class="tag ${tag}">Maturité données ${score}/100</span></div>
+  return `<div class="panel data-card"><div class="section-title"><div><h3>Sécurité et gouvernance des données</h3><div class="small">Posture locale et souveraine : les données restent dans le navigateur tant que l’utilisateur n’exporte pas le dossier. Falcon rend les points de vigilance visibles, sans promettre un cloud qui n’existe pas.</div></div><span class="tag ${tag}">Maturité à qualifier données ${score}/100</span></div>
   <div class="privacy-matrix">
     <div class="card"><span class="privacy-pill">Mode</span><p>${esc(g.dataMode==="local-first"?"local et souverain":g.dataMode)}</p></div>
     <div class="card"><span class="privacy-pill">Stockage</span><p>${esc(g.cloudStorage)}</p></div>
@@ -5875,7 +5875,7 @@ function renderActionPlanByHorizon(){
 }
 function renderReportCompanyProfile(){
   const p=activeCompanyProfile(), c=companyComplexityIndex(p);
-  return `<p><strong>Secteur :</strong> ${esc(p.sector||"NR")} • <strong>Effectif :</strong> ${esc(p.workforce||"NR")} • <strong>Complexité Falcon :</strong> ${esc(c.label)} (${c.points}) • <strong>Maturité :</strong> ${esc(p.riskMaturity||"NR")}</p><p>Multi-site : ${esc(p.multiSite)} • Sous-traitance : ${esc(p.subcontracting)} • Tiers/public : ${esc(p.publicExposure)} • Intérim/nouveaux entrants : ${esc(p.temporaryWorkers)} • Horaires atypiques : ${esc(p.nightWork)} • Maintenance : ${esc(p.maintenance)} • Travaux dangereux : ${esc(p.highRiskWork)}</p><p><strong>Contraintes structurelles :</strong> ${esc(p.criticalConstraints||"Non renseignées")}</p>`;
+  return `<p><strong>Secteur :</strong> ${esc(p.sector||"NR")} • <strong>Effectif :</strong> ${esc(p.workforce||"NR")} • <strong>Complexité Falcon :</strong> ${esc(c.label)} (${c.points}) • <strong>Maturité à qualifier :</strong> ${esc(p.riskMaturity||"NR")}</p><p>Multi-site : ${esc(p.multiSite)} • Sous-traitance : ${esc(p.subcontracting)} • Tiers/public : ${esc(p.publicExposure)} • Intérim/nouveaux entrants : ${esc(p.temporaryWorkers)} • Horaires atypiques : ${esc(p.nightWork)} • Maintenance : ${esc(p.maintenance)} • Travaux dangereux : ${esc(p.highRiskWork)}</p><p><strong>Contraintes structurelles :</strong> ${esc(p.criticalConstraints||"Non renseignées")}</p>`;
 }
 function renderReportCompanyImpactForObs(o,a){
   const sig=companySignalsForContext(activeCompanyProfile(),o,a);
@@ -5977,79 +5977,7 @@ function saveContext(validate){
   const commit=(reason="")=>{
     const old=JSON.stringify(state.context);
     const status=validate?(state.context.status==="validé"?"revalidé":"validé"):"brouillon";
-    state.context={...state.context,activity:getVal("ctx_activity"),environment:getVal("ctx_env"),dominantRisks:getMulti("ctx_risks"),maturity:getVal("ctx_maturity"),constraints:getVal("ctx_constraints"),status,validatedAt:validate?new Date().toISOString():state.context.validatedAt,modifiedAt:new Date().toISOString(),modifyReason:reason||""};
-    state.companyProfile={...activeCompanyProfile(),sector:getVal("cp_sector"),workforce:getVal("cp_workforce"),riskMaturity:getVal("cp_maturity"),multiSite:getVal("cp_multisite"),subcontracting:getVal("cp_subcontract"),publicExposure:getVal("cp_public"),temporaryWorkers:getVal("cp_temp"),nightWork:getVal("cp_night"),remoteWork:getVal("cp_remote"),maintenance:getVal("cp_maintenance"),highRiskWork:getVal("cp_highrisk"),preventionPriorities:getMulti("cp_priorities"),criticalConstraints:getVal("cp_constraints")};
-    Object.assign(state.client,{sector:state.companyProfile.sector,workforce:state.companyProfile.workforce,multiSite:state.companyProfile.multiSite,subcontracting:state.companyProfile.subcontracting,publicAccess:state.companyProfile.publicExposure});
-    state.context.history.push({date:new Date().toISOString(),action:validate?"CONTEXT_VALIDATE":"CONTEXT_SAVE",reason:reason||"",old});
-    log(validate?"CONTEXT_VALIDATE":"CONTEXT_SAVE");toast(validate?"Contexte validé.":"Contexte enregistré.","ok");save();
-  };
-  if(needsReason)openModal({title:"Motif de modification / revalidation",content:"Le contexte était déjà validé. Tracez la raison de cette modification pour conserver une preuve exploitable.",inputLabel:"Motif",inputDefault:"Mise à jour du périmètre",confirmText:"Enregistrer",onConfirm:commit});
-  else commit("");
-}
-function prefillRisk(risk){state.activeObservationId=null;state.ui.prefillFamily=risk;save()}
-function newObservation(){state.activeObservationId=null;save();}
-function saveObservation(){
-  if(!canEditDossier("modifier une observation"))return;
-  if(!validateRequired("obs_zone","Zone"))return; 
-  if(!validateRequired("obs_constat","Constat"))return;
-  if(getVal("obs_constat").length<30){
-    setMsg("obs_constat","Constat trop court pour une preuve terrain défendable.",true);
-    toast("Constat terrain trop court : détaillez le réel observé.","warn");
-    return;
-  }
-  const media=collectObservationMediaV42();
-  const data={
-    zone:getVal("obs_zone"),
-    family:getVal("obs_family"),
-    danger:getVal("obs_danger"),
-    signal:getVal("obs_signal"),
-    constat:getVal("obs_constat"),
-    photoRef:media.photoRef||"",
-    photoName:media.photoName||"",
-    photoAnnotation:media.photoAnnotation||"",
-    photoMarkers:media.photoMarkers||"",
-    voiceNote:media.voiceNote||"",
-    voiceSummary:media.voiceSummary||"",
-    mediaAiSynthesis:media.mediaAiSynthesis||"",
-    mediaUpdatedAt:media.mediaUpdatedAt||new Date().toISOString()
-  };
-  state.ui.prefillFamily="";
-  if(state.activeObservationId){
-    const o=activeObs();
-    Object.assign(o,data,{updatedAt:new Date().toISOString()});
-    upsertMediaLibraryForObservationV42(o);
-    log("OBS_UPDATE",{id:o.id,media:mediaSummaryForLogV42(o)});
-  }
-  else{
-    const o={id:uid("obs"),createdAt:new Date().toISOString(),...data};
-    state.observations.push(o);
-    state.activeObservationId=o.id;
-    upsertMediaLibraryForObservationV42(o);
-    state.ui.mediaDraftV42=null;
-    log("OBS_CREATE",{id:o.id,media:mediaSummaryForLogV42(o)});
-  }
-  toast("Observation enregistrée.","ok");
-  save();
-}
-function renderObservationsList(){
-  return state.observations.map(o=>{
-    const media=observationMediaStatusV42(o);
-    return `<div class="item">
-      <div class="row" style="justify-content:space-between">
-        <strong>${obsNumber(o)} — ${esc(o.zone)}</strong>
-        <span class="tag ${state.activeObservationId===o.id?"green":"neutral"}">${state.activeObservationId===o.id?"actif":"dossier"}</span>
-      </div>
-      <div class="small">${esc(o.family)} • ${esc(o.constat)}</div>
-      ${media?`<div class="media-badges">${media}</div>`:""}
-      <div class="row" style="margin-top:8px">
-        <button class="btn ghost" onclick="state.activeObservationId='${o.id}';save()">Activer / modifier</button>
-        <button class="btn danger" onclick="deleteObservation('${o.id}')">Supprimer</button>
-      </div>
-    </div>`;
-  }).join("")||"<div class='small'>Aucune observation.</div>";
-}
-function deleteObservation(id){
-  if(!canEditDossier("supprimer une observation"))return;openModal({title:"Supprimer l’observation",content:"Cette action supprimera aussi les analyses, décisions et actions liées. Continuer ?",confirmText:"Supprimer",onConfirm:()=>{state.observations=state.observations.filter(o=>o.id!==id);const aIds=state.analyses.filter(a=>a.observationId===id).map(a=>a.id);state.analyses=state.analyses.filter(a=>a.observationId!==id);state.decisions=state.decisions.filter(d=>!aIds.includes(d.analysisId));state.actions=state.actions.filter(a=>a.observationId!==id);state.activeObservationId=state.observations[0]?.id||null;log("OBS_DELETE",{id});save();}})}
+    state.context={...state.context,activity:getVal("ctx_activity"),environment:getVal("ctx_env"),dominantRisks:getMulti("ctx_risks"),maturity:getVal("ctx_maturity"),cons�}�o+^����םtions=state.actions.filter(a=>a.observationId!==id);state.activeObservationId=state.observations[0]?.id||null;log("OBS_DELETE",{id});save();}})}
 function saveAnalysis(){
   if(!canEditDossier("modifier une analyse"))return;
   const obs=activeObs(); if(!obs){toast("Observation requise.","warn");return}

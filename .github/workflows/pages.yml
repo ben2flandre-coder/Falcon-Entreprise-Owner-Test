@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   qualify:
-    name: Qualify current owner-test candidate
+    name: Qualify final R6 owner candidate
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout candidate
@@ -28,28 +28,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Check required entrypoints
-        run: |
-          test -f candidate/index.html
-          test -f candidate/activate.html
-          test -f candidate/owner-test-activation.json
-          test -f candidate/test-context.json
-          test -f candidate/src/app/showcase-enterprise-bootstrap.js
-          test -f candidate/src/app/owner-product-polish.js
-          test -f candidate/src/app/showcase-polish.css
+      - name: Verify source-bound candidate
+        run: node scripts/qualify-candidate.mjs
 
       - name: Check every deployed JavaScript module
         run: find candidate/src -type f -name '*.js' -print0 | xargs -0 -n1 node --check
-
-      - name: Verify current Enterprise owner corrections and provenance
-        run: |
-          grep -q 'owner-product-polish.js' candidate/src/app/showcase-enterprise-bootstrap.js
-          grep -q 'Falcon Enterprise' candidate/src/app/owner-product-polish.js
-          grep -q 'falcon_owner_theme_v1' candidate/src/app/owner-product-polish.js
-          grep -q 'Charger démo avancée' candidate/src/app/owner-product-polish.js
-          grep -q 'dd741fbbea8b4f459cb5af64dc6dafcc62f65b60' candidate/activate.html
-          grep -q 'dd741fbbea8b4f459cb5af64dc6dafcc62f65b60' candidate/owner-test-activation.json
-          grep -q 'dd741fbbea8b4f459cb5af64dc6dafcc62f65b60' candidate/test-context.json
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

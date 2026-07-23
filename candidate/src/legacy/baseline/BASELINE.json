@@ -1,0 +1,29 @@
+{
+  "status": "locked-reference",
+  "sourceVersion": "46.8.0",
+  "repository": {
+    "branch": "main",
+    "sourcePath": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html",
+    "sourceBlobSha": "2e7ea289bcc221867a83a45bb2ec7bf598c0e466",
+    "scriptPath": "script.js",
+    "scriptBlobSha": "4b999515aba5e5dde8cf7727043af776ee5c89f9"
+  },
+  "sourceFile": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html",
+  "sourceSizeBytes": 784623,
+  "sourceLines": 11252,
+  "sha256": "0017f9b67cc3c0e7d8a0e51c6442e079f379ec0edb8401ee060146ae77364057",
+  "companionScript": {
+    "file": "script.js",
+    "classification": "historical-extraction-artifact",
+    "standaloneJavaScript": false,
+    "sizeBytes": 694199,
+    "lines": 9962,
+    "sha256": "92a58bad1c59f8d7a39e9ff4901e97a902d932f2e8dfbb984ed3c30c7cd381da",
+    "note": "Contains embedded HTML script delimiters and must not be executed as a standalone JavaScript file."
+  },
+  "policy": {
+    "modify": false,
+    "refactorInPlace": false,
+    "purpose": "functional regression reference during V48 modular integration"
+  }
+}

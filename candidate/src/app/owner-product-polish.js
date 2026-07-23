@@ -6,10 +6,7 @@ const LEGACY_THEME_KEYS = Object.freeze([
   "falconTheme",
   "theme"
 ]);
-const OWNER_TEST_FRESH = typeof window !== "undefined" && window.self === window.top && (
-  new URLSearchParams(location.search).get("ownerTest") === "fresh" ||
-  sessionStorage.getItem("falcon_owner_fresh_entry_v1") !== "done"
-);
+const OWNER_TEST_FRESH = typeof location !== "undefined" && new URLSearchParams(location.search).get("ownerTest") === "fresh";
 
 function normalizeTheme(value) {
   return value === "light" || value === "dark" ? value : null;
@@ -21,7 +18,9 @@ function themeFromStoredState() {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     return normalizeTheme(parsed?.ui?.theme) || normalizeTheme(parsed?.theme);
-  } catch (_error) { return null; }
+  } catch (_error) {
+    return null;
+  }
 }
 
 function readPreferredTheme() {
@@ -109,6 +108,28 @@ function isolateDemonstrationActions(root = document) {
   }
 }
 
+function hardenResponsiveControls(root = document) {
+  if (typeof root?.querySelectorAll !== "function") return;
+
+  for (const control of root.querySelectorAll("select.dossier-status-v431")) {
+    if (!control.getAttribute("aria-label") && !control.labels?.length) {
+      control.setAttribute("aria-label", "Statut du dossier");
+    }
+  }
+
+  for (const control of root.querySelectorAll(".obs-switcher select")) {
+    if (!control.getAttribute("aria-label") && !control.labels?.length) {
+      control.setAttribute("aria-label", "Observation active");
+    }
+  }
+
+  for (const control of root.querySelectorAll(".help-btn")) {
+    if (control.getAttribute("aria-label")) continue;
+    const title = control.getAttribute("title")?.trim();
+    control.setAttribute("aria-label", title || "Aide contextuelle");
+  }
+}
+
 function openCanonicalHome() {
   if (!OWNER_TEST_FRESH || typeof document?.querySelectorAll !== "function") return;
   const candidates = [...document.querySelectorAll("button,a")];
@@ -131,11 +152,14 @@ function applyProductIdentity() {
     if (document.documentElement?.dataset?.falconProduct !== "enterprise") document.documentElement.dataset.falconProduct = "enterprise";
     replaceVisibleText();
     isolateDemonstrationActions();
-  } finally { applyingIdentity = false; }
+    hardenResponsiveControls();
+  } finally {
+    applyingIdentity = false;
+  }
 }
 
 clearLegacyProductState();
-applyTheme(readPreferredTheme());
+const initialTheme = applyTheme(readPreferredTheme());
 
 function observeRuntimeChanges() {
   if (typeof MutationObserver === "function" && document?.body) {
@@ -150,6 +174,7 @@ function observeRuntimeChanges() {
     });
     observer.observe(document.body, { childList: true, subtree: true });
   }
+
   if (typeof MutationObserver === "function" && document?.documentElement) {
     const themeObserver = new MutationObserver(() => {
       const current = normalizeTheme(document.documentElement.dataset?.theme);
@@ -157,6 +182,7 @@ function observeRuntimeChanges() {
     });
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
+
   if (typeof document?.addEventListener === "function") {
     document.addEventListener("click", (event) => {
       const control = event.target?.closest?.(".theme-btn,[data-theme-toggle],[aria-label*='thème' i],[title*='thème' i]");
@@ -189,6 +215,7 @@ export const FalconOwnerProductPolish = Object.freeze({
   applyTheme,
   toggleTheme,
   applyProductIdentity,
+  hardenResponsiveControls,
   clearLegacyProductState,
   openCanonicalHome
 });
