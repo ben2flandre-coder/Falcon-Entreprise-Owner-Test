@@ -1,13 +1,19 @@
 {
-  "schema": "falcon.owner-test.browser-activation.v1",
-  "purpose": "Activation locale, explicite et non commerciale réservée aux essais propriétaire de Falcon Enterprise.",
-  "sourceCommit": "7ceae8e235556665d7e70ab28eb5a45ec44d5257",
+  "schema": "falcon.owner-test.browser-activation.v2",
+  "purpose": "Activation locale, explicite et non commerciale réservée aux essais propriétaire de Falcon Radar 360 — Entreprise.",
+  "qualifiedSourceCommit": "bc80a503ba98398a036059d8e4b7603f672f582b",
+  "mergedMainCommit": "bb9186870da98d1c57db219d1bbae8ef3c12d827",
+  "pullRequest": 245,
+  "campaignIssue": 196,
+  "packageManifestSha256": "b70f3dae4737debe35819d04f7ef3ca4f605ed4658a5397419a04fcc69ec2e52",
   "commercialRelease": false,
   "containsSecret": false,
   "storageScope": "per-browser-per-device",
   "applicationProfile": "Administrateur",
+  "fictionalDataOnly": true,
+  "humanReceptionRequired": true,
   "license": {
-    "licenseId": "falcon-ei16-owner-test-7ceae8e2",
+    "licenseId": "falcon-ei16-r7-owner-bb918687",
     "tier": "enterprise",
     "status": "active",
     "expiresAt": null,
@@ -17,14 +23,15 @@
     "observe",
     "analyse",
     "arbitrate",
+    "act",
     "report",
     "export",
     "admin",
     "audit"
   ],
   "limitations": [
-    "Ce contrat ne contient aucun secret et n'accorde aucun droit commercial.",
-    "Il prouve l'évaluation et la persistance locales des droits, pas une licence cryptographique.",
-    "Il ne remplace pas la qualification humaine des parcours PC, tablette et mobile."
+    "Ce contrat ne contient aucun secret et n’accorde aucun droit commercial.",
+    "Utiliser exclusivement des données fictives pendant la recette.",
+    "La qualification automatique ne remplace pas les constats humains PC, tablette et mobile."
   ]
 }
