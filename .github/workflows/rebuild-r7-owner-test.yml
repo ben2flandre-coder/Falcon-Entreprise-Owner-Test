@@ -22,7 +22,7 @@ jobs:
       QUALIFIED_SOURCE_SHA: bc80a503ba98398a036059d8e4b7603f672f582b
       MERGED_MAIN_SHA: bb9186870da98d1c57db219d1bbae8ef3c12d827
       ARTIFACT_SHA256: 59f06496b2d3e755a15b27b68cbda989cf911d068739156651dae9518e64f22d
-      ARTIFACT_URL: https://sdmntprnortheu.oaiusercontent.com/files/00000000-6680-81f4-ae8d-54f1c8c11939/raw?se=2026-07-24T16%3A43%3A47Z&sp=r&sv=2026-02-06&sr=b&scid=ab94cf65-dee0-5258-a1f6-0e7c7b43e85f&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-24T16%3A14%3A24Z&ske=2026-07-26T16%3A14%3A24Z&sks=b&skv=2026-02-06&sig=iD1v4xx9nRjjzd6y84PUoinKtMs5YkwLDmHbO05bscw%3D
+      ARTIFACT_URL: https://sdmntprnortheu.oaiusercontent.com/files/00000000-6ec0-81f4-b765-248230f843d4/raw?se=2026-07-24T16%3A52%3A48Z&sp=r&sv=2026-02-06&sr=b&scid=b2f0692f-5844-56cf-ab17-2ac89cfa64aa&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-24T16%3A14%3A24Z&ske=2026-07-26T16%3A14%3A24Z&sks=b&skv=2026-02-06&sig=jFQuzLd8zeVMepK77MteLQhVuLaA6RaM2tIBYKxAd0Y%3D
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,43 +49,27 @@ jobs:
           const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
           manifest.sourceCommit = process.env.QUALIFIED_SOURCE_SHA;
           manifest.mergedMainCommit = process.env.MERGED_MAIN_SHA;
-          manifest.ownerReception = {
-            campaign: 'EI-16 R7',
-            pullRequest: 245,
-            issue: 196,
-            qualifiedWorkflows: 32,
-            humanReceptionRequired: true
-          };
+          manifest.ownerReception = {campaign:'EI-16 R7',pullRequest:245,issue:196,qualifiedWorkflows:32,humanReceptionRequired:true};
           fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
           const digest = crypto.createHash('sha256').update(fs.readFileSync(manifestPath)).digest('hex');
           fs.writeFileSync('candidate.new/PACKAGE_SHA256', digest + '\n');
           const activation = {
-            schema: 'falcon.owner-test.browser-activation.v2',
-            purpose: 'Activation locale, explicite et non commerciale réservée aux essais propriétaire de Falcon Radar 360 — Entreprise.',
-            qualifiedSourceCommit: process.env.QUALIFIED_SOURCE_SHA,
-            mergedMainCommit: process.env.MERGED_MAIN_SHA,
-            pullRequest: 245,
-            campaignIssue: 196,
-            packageManifestSha256: digest,
-            commercialRelease: false,
-            containsSecret: false,
-            storageScope: 'per-browser-per-device',
-            applicationProfile: 'Administrateur',
-            fictionalDataOnly: true,
-            humanReceptionRequired: true,
-            license: {
-              licenseId: `falcon-ei16-r7-owner-${process.env.MERGED_MAIN_SHA.slice(0,8)}`,
-              tier: 'enterprise',
-              status: 'active',
-              expiresAt: null,
-              userProfile: 'Administrateur'
-            },
-            expectedCapabilities: ['observe','analyse','arbitrate','act','report','export','admin','audit'],
-            limitations: [
-              'Ce contrat ne contient aucun secret et n’accorde aucun droit commercial.',
-              'Utiliser exclusivement des données fictives pendant la recette.',
-              'La qualification automatique ne remplace pas les constats humains PC, tablette et mobile.'
-            ]
+            schema:'falcon.owner-test.browser-activation.v2',
+            purpose:'Activation locale, explicite et non commerciale réservée aux essais propriétaire de Falcon Radar 360 — Entreprise.',
+            qualifiedSourceCommit:process.env.QUALIFIED_SOURCE_SHA,
+            mergedMainCommit:process.env.MERGED_MAIN_SHA,
+            pullRequest:245,
+            campaignIssue:196,
+            packageManifestSha256:digest,
+            commercialRelease:false,
+            containsSecret:false,
+            storageScope:'per-browser-per-device',
+            applicationProfile:'Administrateur',
+            fictionalDataOnly:true,
+            humanReceptionRequired:true,
+            license:{licenseId:`falcon-ei16-r7-owner-${process.env.MERGED_MAIN_SHA.slice(0,8)}`,tier:'enterprise',status:'active',expiresAt:null,userProfile:'Administrateur'},
+            expectedCapabilities:['observe','analyse','arbitrate','act','report','export','admin','audit'],
+            limitations:['Ce contrat ne contient aucun secret et n’accorde aucun droit commercial.','Utiliser exclusivement des données fictives pendant la recette.','La qualification automatique ne remplace pas les constats humains PC, tablette et mobile.']
           };
           fs.writeFileSync('candidate.new/owner-test-activation.json', JSON.stringify(activation, null, 2) + '\n');
           NODE
@@ -107,12 +91,12 @@ jobs:
       - name: Verify candidate integrity and R7 contract
         run: |
           node <<'NODE'
-          const fs=require('fs'); const crypto=require('crypto'); const path=require('path');
-          const root='candidate'; const manifest=JSON.parse(fs.readFileSync(path.join(root,'release-manifest.json'))); const failures=[];
-          for(const item of manifest.files||[]){const p=path.join(root,item.path);if(!fs.existsSync(p)){failures.push(`missing:${item.path}`);continue;}const b=fs.readFileSync(p);const h=crypto.createHash('sha256').update(b).digest('hex');if(b.length!==item.size)failures.push(`size:${item.path}`);if(h!==item.sha256)failures.push(`sha:${item.path}`);}
+          const fs=require('fs'),crypto=require('crypto'),path=require('path');
+          const root='candidate',manifest=JSON.parse(fs.readFileSync(path.join(root,'release-manifest.json'))),failures=[];
+          for(const item of manifest.files||[]){const p=path.join(root,item.path);if(!fs.existsSync(p)){failures.push(`missing:${item.path}`);continue;}const b=fs.readFileSync(p),h=crypto.createHash('sha256').update(b).digest('hex');if(b.length!==item.size)failures.push(`size:${item.path}`);if(h!==item.sha256)failures.push(`sha:${item.path}`);}
           if(manifest.sourceCommit!==process.env.QUALIFIED_SOURCE_SHA)failures.push('sourceCommit');
           if(manifest.mergedMainCommit!==process.env.MERGED_MAIN_SHA)failures.push('mergedMainCommit');
-          const index=fs.readFileSync(path.join(root,'index.html'),'utf8');const professional=fs.readFileSync(path.join(root,'src/app/professional-reception.js'),'utf8');const owner=fs.readFileSync(path.join(root,'src/app/owner-product-polish.js'),'utf8');
+          const index=fs.readFileSync(path.join(root,'index.html'),'utf8'),professional=fs.readFileSync(path.join(root,'src/app/professional-reception.js'),'utf8'),owner=fs.readFileSync(path.join(root,'src/app/owner-product-polish.js'),'utf8');
           if(!index.includes('src/app/professional-reception.js'))failures.push('entrypoint-professional-reception');
           if(!professional.includes('FalconProfessionalReception'))failures.push('r7-professional-contract');
           if(!owner.includes('finalizeCanonicalHome'))failures.push('canonical-home');
