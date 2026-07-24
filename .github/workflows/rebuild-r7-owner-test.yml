@@ -1,141 +1,89 @@
-name: Rebuild R7 Owner Test
+name: Qualify R7 Owner Test
 
 on:
-  push:
-    branches: [owner/r7-qualified-rebuild]
-    paths:
-      - ".github/workflows/rebuild-r7-owner-test.yml"
   pull_request:
     branches: [main]
-    paths:
-      - ".github/workflows/rebuild-r7-owner-test.yml"
+  push:
+    branches: [owner/r7-qualified-rebuild]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  rebuild:
-    if: github.actor != 'github-actions[bot]'
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     env:
       QUALIFIED_SOURCE_SHA: bc80a503ba98398a036059d8e4b7603f672f582b
       MERGED_MAIN_SHA: bb9186870da98d1c57db219d1bbae8ef3c12d827
-      ARTIFACT_SHA256: 59f06496b2d3e755a15b27b68cbda989cf911d068739156651dae9518e64f22d
-      ARTIFACT_URL: https://sdmntprnortheu.oaiusercontent.com/files/00000000-6ec0-81f4-b765-248230f843d4/raw?se=2026-07-24T16%3A52%3A48Z&sp=r&sv=2026-02-06&sr=b&scid=b2f0692f-5844-56cf-ab17-2ac89cfa64aa&skoid=b32d65cd-c8f1-46fb-90df-c208671889d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-07-24T16%3A14%3A24Z&ske=2026-07-26T16%3A14%3A24Z&sks=b&skv=2026-02-06&sig=jFQuzLd8zeVMepK77MteLQhVuLaA6RaM2tIBYKxAd0Y%3D
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: owner/r7-qualified-rebuild
 
-      - name: Download qualified R7 owner package
+      - name: Verify candidate inventory, provenance and R7 contract
         run: |
-          curl --fail --location --retry 3 --output /tmp/falcon-r7-owner.zip "$ARTIFACT_URL"
-          echo "$ARTIFACT_SHA256  /tmp/falcon-r7-owner.zip" | sha256sum --check --strict
-          rm -rf /tmp/falcon-r7-owner
-          mkdir -p /tmp/falcon-r7-owner
-          unzip -q /tmp/falcon-r7-owner.zip -d /tmp/falcon-r7-owner
-          test -f /tmp/falcon-r7-owner/build/internal-owner/application/index.html
-          test -f /tmp/falcon-r7-owner/build/internal-owner/application/src/app/professional-reception.js
-
-      - name: Rebuild candidate atomically
-        run: |
-          rm -rf candidate.new
-          cp -a /tmp/falcon-r7-owner/build/internal-owner/application candidate.new
           node <<'NODE'
           const fs = require('fs');
           const crypto = require('crypto');
-          const manifestPath = 'candidate.new/release-manifest.json';
+          const path = require('path');
+          const root = 'candidate';
+          const failures = [];
+          const manifestPath = path.join(root, 'release-manifest.json');
           const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-          manifest.sourceCommit = process.env.QUALIFIED_SOURCE_SHA;
-          manifest.mergedMainCommit = process.env.MERGED_MAIN_SHA;
-          manifest.ownerReception = {campaign:'EI-16 R7',pullRequest:245,issue:196,qualifiedWorkflows:32,humanReceptionRequired:true};
-          fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-          const digest = crypto.createHash('sha256').update(fs.readFileSync(manifestPath)).digest('hex');
-          fs.writeFileSync('candidate.new/PACKAGE_SHA256', digest + '\n');
-          const activation = {
-            schema:'falcon.owner-test.browser-activation.v2',
-            purpose:'Activation locale, explicite et non commerciale réservée aux essais propriétaire de Falcon Radar 360 — Entreprise.',
-            qualifiedSourceCommit:process.env.QUALIFIED_SOURCE_SHA,
-            mergedMainCommit:process.env.MERGED_MAIN_SHA,
-            pullRequest:245,
-            campaignIssue:196,
-            packageManifestSha256:digest,
-            commercialRelease:false,
-            containsSecret:false,
-            storageScope:'per-browser-per-device',
-            applicationProfile:'Administrateur',
-            fictionalDataOnly:true,
-            humanReceptionRequired:true,
-            license:{licenseId:`falcon-ei16-r7-owner-${process.env.MERGED_MAIN_SHA.slice(0,8)}`,tier:'enterprise',status:'active',expiresAt:null,userProfile:'Administrateur'},
-            expectedCapabilities:['observe','analyse','arbitrate','act','report','export','admin','audit'],
-            limitations:['Ce contrat ne contient aucun secret et n’accorde aucun droit commercial.','Utiliser exclusivement des données fictives pendant la recette.','La qualification automatique ne remplace pas les constats humains PC, tablette et mobile.']
-          };
-          fs.writeFileSync('candidate.new/owner-test-activation.json', JSON.stringify(activation, null, 2) + '\n');
+          for (const item of manifest.files || []) {
+            const filePath = path.join(root, item.path);
+            if (!fs.existsSync(filePath)) {
+              failures.push(`missing:${item.path}`);
+              continue;
+            }
+            const bytes = fs.readFileSync(filePath);
+            const digest = crypto.createHash('sha256').update(bytes).digest('hex');
+            if (bytes.length !== item.size) failures.push(`size:${item.path}`);
+            if (digest !== item.sha256) failures.push(`sha:${item.path}`);
+          }
+          const manifestDigest = crypto.createHash('sha256').update(fs.readFileSync(manifestPath)).digest('hex');
+          const packageDigest = fs.readFileSync(path.join(root, 'PACKAGE_SHA256'), 'utf8').trim();
+          if (manifestDigest !== packageDigest) failures.push('package-manifest-digest');
+          if (manifest.sourceCommit !== process.env.QUALIFIED_SOURCE_SHA) failures.push('qualified-source-sha');
+          if (manifest.mergedMainCommit !== process.env.MERGED_MAIN_SHA) failures.push('merged-main-sha');
+          if (manifest.demoMode !== false || manifest.environmentProfile !== 'production') failures.push('production-contract');
+          if (manifest.ownerReception?.pullRequest !== 245 || manifest.ownerReception?.issue !== 196) failures.push('owner-reception-contract');
+
+          const activation = JSON.parse(fs.readFileSync(path.join(root, 'owner-test-activation.json'), 'utf8'));
+          if (activation.qualifiedSourceCommit !== process.env.QUALIFIED_SOURCE_SHA) failures.push('activation-source');
+          if (activation.mergedMainCommit !== process.env.MERGED_MAIN_SHA) failures.push('activation-main');
+          if (activation.packageManifestSha256 !== manifestDigest) failures.push('activation-manifest-digest');
+          if (activation.fictionalDataOnly !== true || activation.humanReceptionRequired !== true) failures.push('activation-safety');
+
+          const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+          const professional = fs.readFileSync(path.join(root, 'src/app/professional-reception.js'), 'utf8');
+          const owner = fs.readFileSync(path.join(root, 'src/app/owner-product-polish.js'), 'utf8');
+          const styles = fs.readFileSync(path.join(root, 'src/app/showcase-polish.css'), 'utf8');
+          const entry = fs.readFileSync('activate.html', 'utf8');
+          if (!index.includes('src/app/professional-reception.js')) failures.push('entrypoint-professional-reception');
+          if (!professional.includes('FalconProfessionalReception')) failures.push('r7-professional-contract');
+          if (!professional.includes('data-falcon-demo-coverage')) failures.push('r7-demo-coverage');
+          if (!owner.includes('finalizeCanonicalHome')) failures.push('canonical-home');
+          if (!owner.includes('KPI_CONTEXT_REGISTRY')) failures.push('kpi-context');
+          if (!styles.includes('falcon-responsive-table')) failures.push('responsive-table');
+          if (!styles.includes('falcon-input-active')) failures.push('landscape-input');
+          if (!entry.includes('Préparer un environnement neuf') || !entry.includes('bb9186870da98d1c57db219d1bbae8ef3c12d827')) failures.push('activation-entrypoint');
+          if (failures.length) {
+            console.error(failures);
+            process.exit(1);
+          }
+          console.log(`PASS — ${manifest.files.length} fichiers déclarés, provenance R7 et sas propriétaire vérifiés.`);
           NODE
-          rm -rf candidate.previous
-          if [ -d candidate ]; then mv candidate candidate.previous; fi
-          mv candidate.new candidate
-          rm -rf candidate.previous
 
-      - name: Generate controlled activation entrypoint
-        run: |
-          cat > activate.html <<'HTML'
-          <!doctype html>
-          <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Falcon Radar 360 — Recette propriétaire R7</title>
-          <style>:root{color-scheme:dark;font-family:Inter,system-ui,sans-serif;background:#07111f;color:#e8f1ff}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at top right,#12324a 0,transparent 42%),#07111f}.card{width:min(760px,100%);border:1px solid #28445b;border-radius:24px;padding:28px;background:#0d1b2a;box-shadow:0 24px 80px #0008}h1{margin:0 0 8px;font-size:clamp(28px,5vw,46px)}p{color:#b7c8d8;line-height:1.6}.meta{display:grid;gap:8px;padding:16px;border-radius:16px;background:#091522;margin:20px 0}.meta code{overflow-wrap:anywhere}.actions{display:flex;flex-wrap:wrap;gap:12px}.btn{border:0;border-radius:14px;padding:14px 18px;font-weight:800;cursor:pointer}.primary{background:#34d3c2;color:#05211d}.secondary{background:#1d3347;color:#e8f1ff}.status{margin-top:16px;font-weight:700}.warn{color:#ffd38a}</style></head>
-          <body><main class="card"><p>ESPACE DE RECETTE CONTRÔLÉ</p><h1>Falcon Radar 360 — Entreprise</h1><p>Candidat R7 qualifié automatiquement. La recette humaine reste nécessaire et doit être consignée dans l’Issue #196.</p><div class="meta"><div>Source R7 qualifiée : <code>bc80a503ba98398a036059d8e4b7603f672f582b</code></div><div>Fusion dans main : <code>bb9186870da98d1c57db219d1bbae8ef3c12d827</code></div><div class="warn">Données réelles interdites — utilisez uniquement des données fictives.</div></div><div class="actions"><button id="fresh" class="btn primary">Préparer un environnement neuf</button><button id="open" class="btn secondary" disabled>Accéder à Falcon</button></div><div id="status" class="status">Préparation requise sur chaque navigateur et appareil.</div></main>
-          <script>const status=document.getElementById('status'),open=document.getElementById('open');document.getElementById('fresh').addEventListener('click',async()=>{localStorage.clear();sessionStorage.clear();if('caches'in window){for(const key of await caches.keys())await caches.delete(key)}const activation=await fetch('./candidate/owner-test-activation.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Contrat inaccessible');return r.json()});localStorage.setItem('falcon_owner_test_activation_v2',JSON.stringify(activation));sessionStorage.setItem('falcon_owner_test_fresh','true');status.textContent='Environnement neuf préparé. Vous pouvez accéder à Falcon.';open.disabled=false});open.addEventListener('click',()=>location.href='./candidate/index.html?ownerTest=fresh&source=bb918687');</script></body></html>
-          HTML
-
-      - name: Verify candidate integrity and R7 contract
+      - name: Verify publication metadata
         run: |
           node <<'NODE'
-          const fs=require('fs'),crypto=require('crypto'),path=require('path');
-          const root='candidate',manifest=JSON.parse(fs.readFileSync(path.join(root,'release-manifest.json'))),failures=[];
-          for(const item of manifest.files||[]){const p=path.join(root,item.path);if(!fs.existsSync(p)){failures.push(`missing:${item.path}`);continue;}const b=fs.readFileSync(p),h=crypto.createHash('sha256').update(b).digest('hex');if(b.length!==item.size)failures.push(`size:${item.path}`);if(h!==item.sha256)failures.push(`sha:${item.path}`);}
-          if(manifest.sourceCommit!==process.env.QUALIFIED_SOURCE_SHA)failures.push('sourceCommit');
-          if(manifest.mergedMainCommit!==process.env.MERGED_MAIN_SHA)failures.push('mergedMainCommit');
-          const index=fs.readFileSync(path.join(root,'index.html'),'utf8'),professional=fs.readFileSync(path.join(root,'src/app/professional-reception.js'),'utf8'),owner=fs.readFileSync(path.join(root,'src/app/owner-product-polish.js'),'utf8');
-          if(!index.includes('src/app/professional-reception.js'))failures.push('entrypoint-professional-reception');
-          if(!professional.includes('FalconProfessionalReception'))failures.push('r7-professional-contract');
-          if(!owner.includes('finalizeCanonicalHome'))failures.push('canonical-home');
-          if(failures.length){console.error(failures);process.exit(1);}console.log(`Verified ${manifest.files.length} declared files and R7 reception contract.`);
+          const fs = require('fs');
+          const pin = JSON.parse(fs.readFileSync('qualification-pin.json', 'utf8'));
+          if (pin.qualifiedSourceCommit !== process.env.QUALIFIED_SOURCE_SHA) process.exit(1);
+          if (pin.mergedMainCommit !== process.env.MERGED_MAIN_SHA) process.exit(1);
+          if (pin.automaticVerdict !== 'PASS' || pin.humanReception !== 'REQUIRED') process.exit(1);
+          const readme = fs.readFileSync('README.md', 'utf8');
+          if (!readme.includes('Falcon Radar 360 — espace de recette propriétaire R7')) process.exit(1);
+          if (!readme.includes(process.env.MERGED_MAIN_SHA)) process.exit(1);
+          console.log('PASS — métadonnées de publication cohérentes.');
           NODE
-
-      - name: Update repository contract
-        run: |
-          cat > README.md <<EOF
-          # Falcon Radar 360 — espace de recette propriétaire R7
-
-          Ce dépôt public contient uniquement le candidat navigateur destiné aux essais contrôlés du propriétaire produit.
-
-          ## Candidat actif
-
-          - produit : \`Falcon Radar 360 — Entreprise\`
-          - version applicative : \`48.0.0-rc.1 / EI-16 R7\`
-          - source R7 qualifiée : \`$QUALIFIED_SOURCE_SHA\`
-          - fusion canonique dans \`main\` : \`$MERGED_MAIN_SHA\`
-          - campagne : \`ben2flandre-coder/Falcon-Entreprise#196\`
-          - 32 workflows du SHA R7 : PASS
-          - recette humaine finale : requise
-          - données réelles : interdites
-
-          ## Point d’entrée
-
-          https://ben2flandre-coder.github.io/Falcon-Entreprise-Owner-Test/activate.html
-
-          Choisir **Préparer un environnement neuf**, puis **Accéder à Falcon** sur chaque appareil.
-          EOF
-          cat > qualification-pin.json <<EOF
-          {"schema":"falcon.owner-test.qualification-pin.v2","qualifiedSourceCommit":"$QUALIFIED_SOURCE_SHA","mergedMainCommit":"$MERGED_MAIN_SHA","sourcePullRequest":245,"campaignIssue":196,"workflowCount":32,"automaticVerdict":"PASS","humanReception":"REQUIRED"}
-          EOF
-
-      - name: Commit rebuilt candidate
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add candidate activate.html README.md qualification-pin.json
-          git commit -m "EI-16 R7 — publier le candidat propriétaire qualifié"
-          git push origin HEAD:owner/r7-qualified-rebuild
