@@ -1,0 +1,89 @@
+name: Qualify R7 Owner Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [owner/r7-qualified-rebuild]
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      QUALIFIED_SOURCE_SHA: bc80a503ba98398a036059d8e4b7603f672f582b
+      MERGED_MAIN_SHA: bb9186870da98d1c57db219d1bbae8ef3c12d827
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify candidate inventory, provenance and R7 contract
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const path = require('path');
+          const root = 'candidate';
+          const failures = [];
+          const manifestPath = path.join(root, 'release-manifest.json');
+          const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+          for (const item of manifest.files || []) {
+            const filePath = path.join(root, item.path);
+            if (!fs.existsSync(filePath)) {
+              failures.push(`missing:${item.path}`);
+              continue;
+            }
+            const bytes = fs.readFileSync(filePath);
+            const digest = crypto.createHash('sha256').update(bytes).digest('hex');
+            if (bytes.length !== item.size) failures.push(`size:${item.path}`);
+            if (digest !== item.sha256) failures.push(`sha:${item.path}`);
+          }
+          const manifestDigest = crypto.createHash('sha256').update(fs.readFileSync(manifestPath)).digest('hex');
+          const packageDigest = fs.readFileSync(path.join(root, 'PACKAGE_SHA256'), 'utf8').trim();
+          if (manifestDigest !== packageDigest) failures.push('package-manifest-digest');
+          if (manifest.sourceCommit !== process.env.QUALIFIED_SOURCE_SHA) failures.push('qualified-source-sha');
+          if (manifest.mergedMainCommit !== process.env.MERGED_MAIN_SHA) failures.push('merged-main-sha');
+          if (manifest.demoMode !== false || manifest.environmentProfile !== 'production') failures.push('production-contract');
+          if (manifest.ownerReception?.pullRequest !== 245 || manifest.ownerReception?.issue !== 196) failures.push('owner-reception-contract');
+
+          const activation = JSON.parse(fs.readFileSync(path.join(root, 'owner-test-activation.json'), 'utf8'));
+          if (activation.qualifiedSourceCommit !== process.env.QUALIFIED_SOURCE_SHA) failures.push('activation-source');
+          if (activation.mergedMainCommit !== process.env.MERGED_MAIN_SHA) failures.push('activation-main');
+          if (activation.packageManifestSha256 !== manifestDigest) failures.push('activation-manifest-digest');
+          if (activation.fictionalDataOnly !== true || activation.humanReceptionRequired !== true) failures.push('activation-safety');
+
+          const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+          const professional = fs.readFileSync(path.join(root, 'src/app/professional-reception.js'), 'utf8');
+          const owner = fs.readFileSync(path.join(root, 'src/app/owner-product-polish.js'), 'utf8');
+          const styles = fs.readFileSync(path.join(root, 'src/app/showcase-polish.css'), 'utf8');
+          const entry = fs.readFileSync('activate.html', 'utf8');
+          if (!index.includes('src/app/professional-reception.js')) failures.push('entrypoint-professional-reception');
+          if (!professional.includes('FalconProfessionalReception')) failures.push('r7-professional-contract');
+          if (!professional.includes('data-falcon-demo-coverage')) failures.push('r7-demo-coverage');
+          if (!owner.includes('finalizeCanonicalHome')) failures.push('canonical-home');
+          if (!owner.includes('KPI_CONTEXT_REGISTRY')) failures.push('kpi-context');
+          if (!styles.includes('falcon-responsive-table')) failures.push('responsive-table');
+          if (!styles.includes('falcon-input-active')) failures.push('landscape-input');
+          if (!entry.includes('Préparer un environnement neuf') || !entry.includes('bb9186870da98d1c57db219d1bbae8ef3c12d827')) failures.push('activation-entrypoint');
+          if (failures.length) {
+            console.error(failures);
+            process.exit(1);
+          }
+          console.log(`PASS — ${manifest.files.length} fichiers déclarés, provenance R7 et sas propriétaire vérifiés.`);
+          NODE
+
+      - name: Verify publication metadata
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const pin = JSON.parse(fs.readFileSync('qualification-pin.json', 'utf8'));
+          if (pin.qualifiedSourceCommit !== process.env.QUALIFIED_SOURCE_SHA) process.exit(1);
+          if (pin.mergedMainCommit !== process.env.MERGED_MAIN_SHA) process.exit(1);
+          if (pin.automaticVerdict !== 'PASS' || pin.humanReception !== 'REQUIRED') process.exit(1);
+          const readme = fs.readFileSync('README.md', 'utf8');
+          if (!readme.includes('Falcon Radar 360 — espace de recette propriétaire R7')) process.exit(1);
+          if (!readme.includes(process.env.MERGED_MAIN_SHA)) process.exit(1);
+          console.log('PASS — métadonnées de publication cohérentes.');
+          NODE

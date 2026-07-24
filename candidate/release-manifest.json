@@ -3,7 +3,7 @@
   "product": "Falcon Enterprise",
   "version": "48.0.0-rc.1",
   "channel": "release-candidate",
-  "sourceCommit": "7ceae8e235556665d7e70ab28eb5a45ec44d5257",
+  "sourceCommit": "bc80a503ba98398a036059d8e4b7603f672f582b",
   "environmentProfile": "production",
   "demoMode": false,
   "engineeringGate": "green",
@@ -100,16 +100,16 @@
     },
     {
       "path": "index.html",
-      "size": 791170,
-      "sha256": "451fe2a551cd3c299e6f861e1a1c581a3159fb85ef8627a10e3bcdb4b5689f1b",
+      "size": 791228,
+      "sha256": "5f16c91eaa0b5b955e86d014822115f873c30632960b9168db8d05701a0b1723",
       "generatedFrom": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html",
       "enterpriseBootstrap": "src/app/showcase-enterprise-bootstrap.js",
       "enterpriseStylesheet": "src/app/showcase-polish.css"
     },
     {
       "path": "package.json",
-      "size": 13821,
-      "sha256": "74d556184103f068f54892427271578c24a9d2b62320a7a19706081a6b6022f1"
+      "size": 14164,
+      "sha256": "4443d0f7d61f324c71cca938c092a02e2c723c81207ad4d33d38edcb70fa85ac"
     },
     {
       "path": "release/release-spec.json",
@@ -229,13 +229,18 @@
     },
     {
       "path": "src/app/owner-product-polish.js",
-      "size": 7913,
-      "sha256": "4f5758b332746fbd1c317a853eaf0e478a45d4a8b4eb331a194f420e2bd0e7e0"
+      "size": 18260,
+      "sha256": "4c86c1964ce674c9a07cfed3b8d02cb636570dba6d5a76113cf9d63499593c94"
     },
     {
       "path": "src/app/persistence-media-polish.js",
       "size": 18337,
       "sha256": "b9b604a06d9b8268f97f2399a58a20ce2108ce54491b6747fdaa386916bc0db6"
+    },
+    {
+      "path": "src/app/professional-reception.js",
+      "size": 42326,
+      "sha256": "30ebbb85594eeee6c84bddad072b04ad12ce4780a5811c2b8be490a23c87171c"
     },
     {
       "path": "src/app/report-delivery-help-polish.js",
@@ -249,8 +254,8 @@
     },
     {
       "path": "src/app/showcase-polish.css",
-      "size": 16736,
-      "sha256": "a584db203f16d8e6a63d7de5f985390e75891fd7c42691d4694987746709c9ed"
+      "size": 22935,
+      "sha256": "c165d8069ed1a0a5416e0fdd9748cef6d8c0629a2a1486a7e8da5c1d04d8ea21"
     },
     {
       "path": "src/app/styles.css",
@@ -597,5 +602,13 @@
       "size": 147,
       "sha256": "8d58437d102e6fb16cbdb89febeacb43739256f7f139609956671aa3a104dd1e"
     }
-  ]
+  ],
+  "mergedMainCommit": "bb9186870da98d1c57db219d1bbae8ef3c12d827",
+  "ownerReception": {
+    "campaign": "EI-16 R7",
+    "pullRequest": 245,
+    "issue": 196,
+    "qualifiedWorkflows": 32,
+    "humanReceptionRequired": true
+  }
 }
