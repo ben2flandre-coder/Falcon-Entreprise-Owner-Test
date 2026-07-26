@@ -1,0 +1,11 @@
+{
+  "schema": "falcon.owner-test.qualification-pin.v3",
+  "qualifiedSourceCommit": "1c2f1b8a17139041bfda218616a0951e23880913",
+  "mergedMainCommit": "1c2f1b8a17139041bfda218616a0951e23880913",
+  "applicableWorkflowCount": 25,
+  "browserScenarioCount": 6,
+  "automaticVerdict": "PASS",
+  "humanReception": "REQUIRED",
+  "humanVerdict": "PENDING",
+  "packageManifestSha256": "749ced9dace162f9b2063d36bf621f9a9f0ccc6f45b77da77f4795f8f0ea39fd"
+}
