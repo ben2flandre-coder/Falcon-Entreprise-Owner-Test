@@ -9,7 +9,7 @@ Ce dépôt public contient uniquement le candidat navigateur destiné aux essais
 - source et fusion canonique dans `main` : `1c2f1b8a17139041bfda218616a0951e23880913`
 - 25 workflows applicables : PASS
 - six scénarios navigateur EKI-5 : PASS
-- empreinte du paquet : `9fdefcba91153e6451221ab88358fb6e39e30027d5dda8e11b5b4ab4dca44729`
+- empreinte du paquet : `749ced9dace162f9b2063d36bf621f9a9f0ccc6f45b77da77f4795f8f0ea39fd`
 - verdict humain : en attente des essais réels
 - données réelles : interdites
 
