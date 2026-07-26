@@ -1,37 +1,34 @@
 {
-  "schema": "falcon.owner-test.browser-activation.v2",
-  "purpose": "Activation locale, explicite et non commerciale réservée aux essais propriétaire de Falcon Radar 360 — Entreprise.",
-  "qualifiedSourceCommit": "bc80a503ba98398a036059d8e4b7603f672f582b",
-  "mergedMainCommit": "bb9186870da98d1c57db219d1bbae8ef3c12d827",
-  "pullRequest": 245,
-  "campaignIssue": 196,
-  "packageManifestSha256": "b70f3dae4737debe35819d04f7ef3ca4f605ed4658a5397419a04fcc69ec2e52",
+  "schema": "falcon.owner-test.browser-activation.v3",
+  "purpose": "Essais réels contrôlés du propriétaire produit pour EKI-5 dans Falcon Radar 360 — Entreprise.",
+  "sourceCommit": "1c2f1b8a17139041bfda218616a0951e23880913",
+  "mergedMainCommit": "1c2f1b8a17139041bfda218616a0951e23880913",
+  "packageManifestSha256": "749ced9dace162f9b2063d36bf621f9a9f0ccc6f45b77da77f4795f8f0ea39fd",
   "commercialRelease": false,
   "containsSecret": false,
   "storageScope": "per-browser-per-device",
   "applicationProfile": "Administrateur",
   "fictionalDataOnly": true,
   "humanReceptionRequired": true,
+  "humanVerdict": "PENDING",
   "license": {
-    "licenseId": "falcon-ei16-r7-owner-bb918687",
+    "licenseId": "falcon-eki5-owner-1c2f1b8a",
     "tier": "enterprise",
     "status": "active",
     "expiresAt": null,
     "userProfile": "Administrateur"
   },
-  "expectedCapabilities": [
-    "observe",
-    "analyse",
-    "arbitrate",
-    "act",
-    "report",
-    "export",
-    "admin",
-    "audit"
+  "expectedScenarios": [
+    "Amiante / SS4",
+    "Électricité",
+    "Ergonomie / TMS",
+    "Risque chimique / CMR",
+    "ATEX",
+    "Levage"
   ],
   "limitations": [
-    "Ce contrat ne contient aucun secret et n’accorde aucun droit commercial.",
     "Utiliser exclusivement des données fictives pendant la recette.",
-    "La qualification automatique ne remplace pas les constats humains PC, tablette et mobile."
+    "La restitution fournit des repères, sources, limites et éléments manquants ; elle ne décide jamais à la place de l’utilisateur.",
+    "La qualification automatique ne remplace pas le verdict humain consigné dans le registre de recette privé."
   ]
 }
