@@ -5,6 +5,7 @@ export const COCKPIT_REFRESH_ZONES = Object.freeze({
   SUMMARY: "cockpit-summary",
   EXECUTIVE_DASHBOARD: "executive-dashboard",
   CAPABILITIES: "cockpit-capabilities",
+  KNOWLEDGE: "cockpit-enterprise-knowledge",
   TIMELINE: "decision-timeline",
   EVIDENCE: "evidence-panel",
   GRAPH: "decision-graph",
@@ -22,7 +23,8 @@ const TARGETS = Object.freeze({
   "Criticality.Changed": Object.freeze({ mode: "targeted", zones: Object.freeze([Z.SUMMARY, Z.EXECUTIVE_DASHBOARD, Z.TIMELINE, Z.GRAPH, Z.ARBITRATION]) }),
   "Radar.Changed": Object.freeze({ mode: "targeted", zones: Object.freeze([Z.SUMMARY, Z.EXECUTIVE_DASHBOARD, Z.TIMELINE, Z.GRAPH, Z.ARBITRATION]) }),
   "Trust.Changed": Object.freeze({ mode: "targeted", zones: Object.freeze([Z.SUMMARY, Z.EXECUTIVE_DASHBOARD, Z.TIMELINE, Z.GRAPH, Z.ARBITRATION]) }),
-  "Report.Changed": Object.freeze({ mode: "targeted", zones: Object.freeze([Z.SUMMARY, Z.EXECUTIVE_DASHBOARD, Z.CAPABILITIES, Z.TIMELINE, Z.GRAPH, Z.ARBITRATION]) })
+  "Report.Changed": Object.freeze({ mode: "targeted", zones: Object.freeze([Z.SUMMARY, Z.EXECUTIVE_DASHBOARD, Z.CAPABILITIES, Z.TIMELINE, Z.GRAPH, Z.ARBITRATION]) }),
+  "Knowledge.Changed": Object.freeze({ mode: "targeted", zones: Object.freeze([Z.KNOWLEDGE]) })
 });
 
 const NONE = Object.freeze({ mode: "none", zones: Object.freeze([]) });
