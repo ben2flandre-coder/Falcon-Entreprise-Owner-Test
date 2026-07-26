@@ -1,3 +1,5 @@
+import { projectKnowledgeReportSection } from "../knowledge/knowledge-restitution.js";
+
 export const REPORT_ENGINE_VERSION = "V48.0.0-dev";
 export const REPORT_DEFINITION_VERSION = "ReportV2@1.0";
 
@@ -57,7 +59,7 @@ function fingerprint(value) {
   return `fnv1a32-${(hash >>> 0).toString(16).padStart(8, "0")}`;
 }
 
-function normalizeInputs({ mission, radar, trust }) {
+function normalizeInputs({ mission, radar, trust, knowledgeRestitution = null }) {
   if (!mission || typeof mission !== "object") throw new ReportValidationError("Mission input is required.");
   if (!radar || typeof radar !== "object") throw new ReportValidationError("Radar input is required.");
   if (!trust || typeof trust !== "object") throw new ReportValidationError("Trust input is required.");
@@ -67,18 +69,30 @@ function normalizeInputs({ mission, radar, trust }) {
   if (normalizeId(trust.radarId, "Trust radar id") !== normalizeId(radar.id, "Radar id")) throw new ReportValidationError("Trust assessment does not reference the selected Radar assessment.");
   if (radar.status === "archived") throw new ReportValidationError("Archived Radar assessments cannot generate active reports.");
   if (trust.status === "archived") throw new ReportValidationError("Archived Trust assessments cannot generate active reports.");
-  return { mission: clone(mission), radar: clone(radar), trust: clone(trust) };
+  if (knowledgeRestitution != null) {
+    try {
+      projectKnowledgeReportSection(knowledgeRestitution);
+    } catch (error) {
+      throw new ReportValidationError(`Knowledge restitution is invalid: ${error.message || error}`);
+    }
+  }
+  return {
+    mission: clone(mission),
+    radar: clone(radar),
+    trust: clone(trust),
+    knowledgeRestitution: clone(knowledgeRestitution)
+  };
 }
 
 function buildSections(inputs) {
-  const { mission, radar, trust } = inputs;
+  const { mission, radar, trust, knowledgeRestitution } = inputs;
   const dimensions = Array.isArray(radar.result?.dimensions) ? radar.result.dimensions : [];
   const reservations = Array.isArray(radar.result?.reservations) ? radar.result.reservations : [];
   const trustReservations = Array.isArray(trust.result?.reservations) ? trust.result.reservations : [];
   const trustSignals = Array.isArray(trust.result?.signals) ? trust.result.signals : [];
   const priorities = Array.isArray(trust.result?.investigationPriorities) ? trust.result.investigationPriorities : [];
 
-  return deepFreeze([
+  const sections = [
     {
       id: "executive-summary",
       title: "Synthèse décisionnelle",
@@ -155,7 +169,11 @@ function buildSections(inputs) {
         reportDefinitionVersion: REPORT_DEFINITION_VERSION
       }
     }
-  ]);
+  ];
+  if (knowledgeRestitution) {
+    sections.splice(sections.length - 1, 0, projectKnowledgeReportSection(knowledgeRestitution));
+  }
+  return deepFreeze(sections);
 }
 
 function freezeReport(value) { return deepFreeze(clone(value)); }
@@ -187,7 +205,7 @@ export function createReportEngine({ initialReports = [], now = () => new Date()
     const id = options.id ? normalizeId(options.id, "Report id") : nextId();
     if (reports.has(id)) throw new ReportConflictError(`Report already exists: ${id}`);
     const sections = buildSections(normalized);
-    const sourceFingerprint = fingerprint({ mission: normalized.mission.id, radar: normalized.radar, trust: normalized.trust });
+    const sourceFingerprint = fingerprint({ mission: normalized.mission.id, radar: normalized.radar, trust: normalized.trust, knowledgeRestitution: normalized.knowledgeRestitution });
     const at = timestamp();
     const item = {
       id,
@@ -200,6 +218,7 @@ export function createReportEngine({ initialReports = [], now = () => new Date()
       executiveNote: normalizeText(options.executiveNote, "Executive note"),
       sections,
       sourceFingerprint,
+      knowledgeProofFingerprint: normalized.knowledgeRestitution?.proofFingerprint || null,
       status: "draft",
       createdAt: at,
       updatedAt: at,
@@ -221,7 +240,7 @@ export function createReportEngine({ initialReports = [], now = () => new Date()
       throw new ReportValidationError("A report cannot be reassigned to different source objects.");
     }
     const sections = buildSections(normalized);
-    const sourceFingerprint = fingerprint({ mission: normalized.mission.id, radar: normalized.radar, trust: normalized.trust });
+    const sourceFingerprint = fingerprint({ mission: normalized.mission.id, radar: normalized.radar, trust: normalized.trust, knowledgeRestitution: normalized.knowledgeRestitution });
     const executiveNote = Object.hasOwn(options, "executiveNote") ? normalizeText(options.executiveNote, "Executive note") : item.executiveNote;
     if (sourceFingerprint === item.sourceFingerprint && executiveNote === item.executiveNote) {
       emit("report.regeneration.skipped", item, options.origin);
@@ -229,6 +248,7 @@ export function createReportEngine({ initialReports = [], now = () => new Date()
     }
     item.sections = sections;
     item.sourceFingerprint = sourceFingerprint;
+    item.knowledgeProofFingerprint = normalized.knowledgeRestitution?.proofFingerprint || null;
     item.executiveNote = executiveNote;
     item.updatedAt = timestamp();
     item.revision += 1;
