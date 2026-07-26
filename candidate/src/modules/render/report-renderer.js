@@ -57,6 +57,25 @@ function renderReservations(title, reservations = []) {
   return `<section class="panel"><h2>${escapeHtml(title)}</h2><ul>${items}</ul></section>`;
 }
 
+function renderKnowledge(section = {}) {
+  const content = section.content || {};
+  const steps = Array.isArray(content.analysisPlan) ? content.analysisPlan : [];
+  if (!steps.length) return "";
+  const rows = steps.map((step) => `<tr>
+    <td>${escapeHtml(step.title)}</td>
+    <td>${escapeHtml(step.corpusId)}</td>
+    <td>${escapeHtml(step.status)}</td>
+    <td>${escapeHtml(step.sources?.map((source) => `${source.authority} — ${source.locator}`).join(" · "))}</td>
+  </tr>`).join("");
+  return `<section class="panel" data-falcon-knowledge-report="ready">
+    <h2>${escapeHtml(section.title || "Expertises, couverture et limites")}</h2>
+    <p>Couverture : <strong>${formatMetric(content.summary?.coverage)}</strong> ·
+      Autorité de décision : <strong>${escapeHtml(content.decisionAuthority || "human")}</strong></p>
+    <table><thead><tr><th>Expertise</th><th>Corpus</th><th>Statut</th><th>Sources</th></tr></thead><tbody>${rows}</tbody></table>
+    <p><strong>Empreinte de preuve :</strong> ${escapeHtml(content.proofFingerprint)}</p>
+  </section>`;
+}
+
 export function createReportRenderer({ templateVersion = REPORT_TEMPLATE_VERSION } = {}) {
   function renderHtml(reportInput, options = {}) {
     const report = normalizeReport(reportInput);
@@ -66,6 +85,7 @@ export function createReportRenderer({ templateVersion = REPORT_TEMPLATE_VERSION
     const reservations = sectionById(report, "reservations").content || {};
     const priorities = sectionById(report, "investigation-priorities").content?.priorities || [];
     const traceability = sectionById(report, "traceability").content || {};
+    const knowledge = sectionById(report, "enterprise-knowledge-analysis");
     const generatedAt = String(options.generatedAt || report.updatedAt || report.createdAt || "");
     const organization = escapeHtml(options.organization || "Falcon Enterprise");
     const title = escapeHtml(report.title || "Rapport Falcon");
@@ -92,6 +112,7 @@ export function createReportRenderer({ templateVersion = REPORT_TEMPLATE_VERSION
 <section class="panel"><h2>Solidité de l’interprétation</h2><p>Indice global : <strong>${formatMetric(trust.trustIndex)}</strong> · Niveau : <strong>${escapeHtml(trust.trustLevel || "low")}</strong></p>${Object.entries(trust.axes || {}).map(([key,value]) => `<span class="tag">${escapeHtml(key)} : ${formatMetric(value)}</span>`).join("")}</section>
 ${renderReservations("Réserves Radar", reservations.radar)}
 ${renderReservations("Réserves Trust", reservations.trust)}
+${renderKnowledge(knowledge)}
 <section class="panel"><h2>Priorités d’investigation</h2>${priorities.length ? `<ol>${priorities.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol>` : "<p>Aucune priorité enregistrée.</p>"}</section>
 <section class="panel"><h2>Traçabilité</h2><table><tbody><tr><th>Radar</th><td>${escapeHtml(traceability.radarId)} · révision ${escapeHtml(traceability.radarRevision)}</td></tr><tr><th>Empreinte Radar</th><td>${escapeHtml(traceability.radarCalculationKey)}</td></tr><tr><th>Trust</th><td>${escapeHtml(traceability.trustId)} · révision ${escapeHtml(traceability.trustRevision)}</td></tr><tr><th>Définition rapport</th><td>${escapeHtml(traceability.reportDefinitionVersion)}</td></tr><tr><th>Template</th><td>${escapeHtml(templateVersion)}</td></tr></tbody></table></section>
 <footer class="footer">Document généré par Falcon Enterprise. L’analyse assiste l’arbitrage humain et ne constitue pas une décision automatique.</footer>
