@@ -33,4 +33,4 @@ Le test `tests/product-language-contract-smoke.mjs` inspecte les fichiers produi
 
 Le workflow `Product Language Contract` exécute ce contrôle sur chaque Pull Request vers `main` et après chaque push sur `main`.
 
-Une réussite du contrôle constitue une preuve technique de non-régression. Elle ne remplace pas la revue visuelle PC et mobile exigée dans l’Issue #196.
+Une réussite du contrôle constitue une preuve technique de non-régression. Elle ne remplace pas la revue visuelle PC et mobile exigée par le protocole de recette.
