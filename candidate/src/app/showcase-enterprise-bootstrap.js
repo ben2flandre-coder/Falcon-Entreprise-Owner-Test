@@ -7,6 +7,7 @@ import { can as profileCan } from "../modules/security/rbac.js";
 import { createCommercialOnboardingService } from "../modules/commercial/commercial-onboarding-service.js";
 import { createCommercialProductIntegration } from "../modules/commercial/commercial-product-integration.js";
 import { createEnterpriseRuntime, ENTERPRISE_RUNTIME_VERSION } from "../modules/enterprise/enterprise-runtime.js";
+import { installEnterpriseKnowledgeOwnerTrial } from "./enterprise-knowledge-owner-trial.js";
 
 const STORAGE_PREFIX = "falcon:enterprise:v1:";
 
@@ -70,6 +71,13 @@ function boot() {
     remove: (key) => commercial.remove(key)
   });
   const runtime = createEnterpriseRuntime({ storage: runtimeStorage, authorize });
+  if (runtimeStorage.get("falcon_v48_persistence_envelope", null)) {
+    try {
+      runtime.load({ origin: "browser-bootstrap" });
+    } catch (error) {
+      console.warn("Falcon Enterprise persisted runtime could not be restored.", error);
+    }
+  }
 
   const api = Object.freeze({
     schema: "falcon.enterprise.canonical-entrypoint.v1",
@@ -78,6 +86,7 @@ function boot() {
     entrypoint: "index.html",
     ux: "showcase",
     runtime,
+    knowledge: runtime.knowledge,
     storage,
     commercial,
     onboarding,
@@ -104,6 +113,7 @@ function boot() {
   });
   document.documentElement.dataset.falconEnterpriseRuntime = "ready";
   window.dispatchEvent(new CustomEvent("falcon:enterprise:ready", { detail: api.snapshot() }));
+  installEnterpriseKnowledgeOwnerTrial();
   return api;
 }
 
