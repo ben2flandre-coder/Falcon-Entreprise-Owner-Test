@@ -1030,3 +1030,74 @@
     display: none !important;
   }
 }
+
+.falcon-eki-owner-trial {
+  display: grid;
+  gap: 1rem;
+  border-color: color-mix(in srgb, #39b8a6 45%, var(--line, #39495a));
+}
+
+.falcon-eki-scenarios {
+  align-items: stretch;
+}
+
+.falcon-eki-scenarios .btn {
+  min-height: 2.75rem;
+  white-space: normal;
+}
+
+.falcon-eki-empty,
+.falcon-eki-summary,
+.falcon-eki-result {
+  padding: 1rem;
+  border: 1px solid var(--line, #39495a);
+  border-radius: 0.8rem;
+}
+
+.falcon-eki-summary {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  background: color-mix(in srgb, #39b8a6 10%, transparent);
+}
+
+.falcon-eki-summary > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.falcon-eki-result {
+  margin-top: 0.65rem;
+}
+
+.falcon-eki-result summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.falcon-eki-result a {
+  overflow-wrap: anywhere;
+}
+
+.falcon-knowledge-panel ol {
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1.25rem;
+}
+
+.falcon-knowledge-proof {
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 620px) {
+  .falcon-eki-scenarios .btn {
+    flex: 1 1 10rem;
+  }
+}

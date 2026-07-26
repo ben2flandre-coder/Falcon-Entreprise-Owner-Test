@@ -4,9 +4,12 @@ import path from "node:path";
 
 const ROOT = process.cwd();
 const CANDIDATE = path.join(ROOT, "candidate");
-const EXPECTED_SOURCE = "7ceae8e235556665d7e70ab28eb5a45ec44d5257";
+const EXPECTED_SOURCE = "1c2f1b8a17139041bfda218616a0951e23880913";
 const EXPECTED_VERSION = "48.0.0-rc.1";
 const EXPECTED_RUNTIME_VERSION = "V48.0.0-dev";
+const EXPECTED_FILE_COUNT = 131;
+const qualificationPin = JSON.parse(fs.readFileSync(path.join(ROOT, "qualification-pin.json"), "utf8"));
+const EXPECTED_PACKAGE_SHA256 = qualificationPin.packageManifestSha256;
 
 function read(relative) {
   return fs.readFileSync(path.join(CANDIDATE, relative));
@@ -27,7 +30,6 @@ function assert(condition, message) {
 const manifestBytes = read("release-manifest.json");
 const manifest = JSON.parse(manifestBytes.toString("utf8"));
 const activation = readJson("owner-test-activation.json");
-const context = readJson("test-context.json");
 const runtimeVersion = read("src/modules/enterprise/enterprise-runtime.js").toString("utf8");
 const checksums = read("SHA256SUMS").toString("utf8").trimEnd().split("\n");
 
@@ -38,8 +40,8 @@ assert(manifest.version === EXPECTED_VERSION, "Unexpected application version.")
 assert(manifest.sourceCommit === EXPECTED_SOURCE, "Release provenance mismatch.");
 assert(manifest.environmentProfile === "production", "Candidate is not in production profile.");
 assert(manifest.demoMode === false, "Implicit demonstration mode is enabled.");
-assert(manifest.features?.externalAI === false, "External AI must remain disabled in the owner candidate.");
-assert(Array.isArray(manifest.files) && manifest.files.length === 114, "Unexpected application inventory.");
+assert(manifest.features?.externalAI === false, "External AI must remain disabled.");
+assert(Array.isArray(manifest.files) && manifest.files.length === EXPECTED_FILE_COUNT, "Unexpected application inventory.");
 
 const expectedChecksumLines = [];
 for (const record of manifest.files) {
@@ -49,29 +51,30 @@ for (const record of manifest.files) {
   assert(sha256(bytes) === record.sha256, `Digest mismatch: ${record.path}`);
   expectedChecksumLines.push(`${record.sha256}  ${record.path}`);
 }
-assert(JSON.stringify(checksums) === JSON.stringify(expectedChecksumLines), "SHA256SUMS does not match the manifest.");
-assert(read("PACKAGE_SHA256").toString("utf8").trim() === sha256(manifestBytes), "PACKAGE_SHA256 does not match the manifest.");
 
-for (const record of [activation, context]) {
-  assert(record.sourceCommit === EXPECTED_SOURCE, "Owner-test contract provenance mismatch.");
-}
-assert(activation.schema === "falcon.owner-test.browser-activation.v1", "Unsupported activation contract.");
+assert(JSON.stringify(checksums) === JSON.stringify(expectedChecksumLines), "SHA256SUMS does not match the manifest.");
+assert(read("PACKAGE_SHA256").toString("utf8").trim() === EXPECTED_PACKAGE_SHA256, "Unexpected package fingerprint.");
+assert(sha256(manifestBytes) === EXPECTED_PACKAGE_SHA256, "PACKAGE_SHA256 does not match the manifest.");
+assert(activation.schema === "falcon.owner-test.browser-activation.v3", "Unsupported activation contract.");
+assert(activation.sourceCommit === EXPECTED_SOURCE, "Owner-test contract provenance mismatch.");
 assert(activation.containsSecret === false && activation.commercialRelease === false, "Invalid activation scope.");
-assert(activation.license?.tier === "enterprise" && activation.license?.status === "active", "Invalid test entitlement.");
-assert(context.applicationVersion === EXPECTED_VERSION, "Test context version mismatch.");
-assert(context.environmentProfile === "production" && context.demoMode === false, "Invalid test context.");
+assert(activation.humanVerdict === "PENDING" && activation.humanReceptionRequired === true, "Human authority contract mismatch.");
 assert(runtimeVersion.includes(`ENTERPRISE_RUNTIME_VERSION = "${EXPECTED_RUNTIME_VERSION}"`), "Runtime version mismatch.");
-assert(read("activate.html").toString("utf8").includes(EXPECTED_SOURCE), "Activation page provenance mismatch.");
+const activationPage = read("activate.html").toString("utf8");
+assert(activationPage.includes(EXPECTED_SOURCE), "Activation page provenance mismatch.");
+assert(activationPage.includes(EXPECTED_PACKAGE_SHA256), "Activation page package fingerprint mismatch.");
 
 process.stdout.write(`${JSON.stringify({
-  schema: "falcon.owner-test.qualification.v2",
+  schema: "falcon.owner-test.qualification.v3",
   ready: true,
   sourceCommit: EXPECTED_SOURCE,
   applicationVersion: EXPECTED_VERSION,
   applicationFileCount: manifest.files.length,
-  packageSha256: sha256(manifestBytes),
+  packageSha256: EXPECTED_PACKAGE_SHA256,
+  browserScenarios: activation.expectedScenarios.length,
   productionProfile: true,
   demoMode: false,
   externalAI: false,
-  realDataAllowed: false
+  realDataAllowed: false,
+  humanVerdict: activation.humanVerdict
 }, null, 2)}\n`);

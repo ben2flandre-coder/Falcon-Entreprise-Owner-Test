@@ -1,4 +1,4 @@
-export const COCKPIT_CONTRACT_VERSION = "CockpitView@1.2";
+export const COCKPIT_CONTRACT_VERSION = "CockpitView@1.3";
 export const COCKPIT_STATES = Object.freeze(["ready", "degraded", "empty"]);
 
 const clone = (value) => value == null ? value : structuredClone(value);
@@ -69,6 +69,7 @@ export function createCockpitView(input = {}) {
     radar: clone(input.radar) || null,
     trust: clone(input.trust) || null,
     report: clone(input.report) || null,
+    knowledge: clone(input.knowledge) || null,
     capabilities: normalizeCapabilities(input.capabilities),
     sourceRevisions: {
       mission: Number.isInteger(input.sourceRevisions?.mission) ? input.sourceRevisions.mission : null,

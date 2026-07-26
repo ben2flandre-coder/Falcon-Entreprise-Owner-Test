@@ -95,6 +95,7 @@ export function createCockpitQueryService({ runtime, now = () => new Date().toIS
       .slice(0, 5)
       .map(projectAlert);
     const evidence = projectEvidence(runtime, { missionId, sessionId });
+    const knowledge = runtime.knowledge?.getCockpitPanel?.(mission.id) || null;
 
     const reasons = [];
     if (!radar) reasons.push("radar-unavailable");
@@ -116,6 +117,7 @@ export function createCockpitQueryService({ runtime, now = () => new Date().toIS
       radar,
       trust,
       report,
+      knowledge,
       capabilities,
       sourceRevisions: {
         mission: mission.revision,

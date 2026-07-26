@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Falcon — Essais réels EKI-5</title>
+  <style>
+    :root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#06101f;color:#edf6ff}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;padding:24px;display:grid;place-items:center;background:radial-gradient(circle at top right,#174260 0,transparent 42%),#06101f}
+    main{width:min(820px,100%);padding:clamp(24px,5vw,42px);border:1px solid #2a4b65;border-radius:26px;background:#0c1b2a;box-shadow:0 28px 90px #0009}
+    .eyebrow{margin:0;color:#56dfcf;font-size:.78rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase}
+    h1{margin:.5rem 0 1rem;font-size:clamp(2rem,6vw,3.3rem);line-height:1.05}p,li{color:#bfd0df;line-height:1.55}
+    .meta{display:grid;gap:8px;margin:22px 0;padding:18px;border-radius:16px;background:#071522;border:1px solid #19384f}.meta code{overflow-wrap:anywhere;color:#d9f8f4}
+    ol{padding-left:1.3rem}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+    button,a{appearance:none;border:0;border-radius:14px;padding:14px 18px;font:inherit;font-weight:850;text-decoration:none;cursor:pointer}
+    button{background:#34d3c2;color:#05211d}a{background:#1c3449;color:#edf6ff;pointer-events:none;opacity:.45}
+    a.ready{pointer-events:auto;opacity:1}.status{margin-top:16px;font-weight:750}.warn{color:#ffd28a}
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Candidat propriétaire · EKI-5</p>
+    <h1>Falcon prêt pour tes essais réels</h1>
+    <p>Le candidat est construit depuis le <code>main</code> qualifié. La décision finale reste humaine et doit être consignée dans le registre de recette privé.</p>
+    <div class="meta">
+      <div>Source et fusion : <code>1c2f1b8a17139041bfda218616a0951e23880913</code></div>
+      <div>Paquet : <code>749ced9dace162f9b2063d36bf621f9a9f0ccc6f45b77da77f4795f8f0ea39fd</code></div>
+      <div>Scénarios : amiante, électricité, TMS, CMR, ATEX, levage</div>
+      <div class="warn">Utilise uniquement des données fictives.</div>
+    </div>
+    <ol>
+      <li>Prépare un environnement neuf.</li>
+      <li>Ouvre Falcon puis utilise le panneau « Essais réels · expertises mobilisées ».</li>
+      <li>Vérifie la restitution à l’écran et dans le rapport, puis recharge la page pour contrôler la persistance.</li>
+    </ol>
+    <div class="actions">
+      <button id="fresh" type="button">Préparer un environnement neuf</button>
+      <a id="open" href="./index.html?eki5OwnerTrial=1">Accéder à Falcon</a>
+    </div>
+    <div id="status" class="status" aria-live="polite">Préparation requise sur chaque navigateur et appareil.</div>
+  </main>
+  <script>
+    const status = document.getElementById("status");
+    const open = document.getElementById("open");
+    document.getElementById("fresh").addEventListener("click", async () => {
+      localStorage.clear();
+      sessionStorage.clear();
+      if ("caches" in window) {
+        for (const key of await caches.keys()) await caches.delete(key);
+      }
+      const response = await fetch("./owner-test-activation.json", { cache: "no-store" });
+      if (!response.ok) throw new Error("Contrat d’activation inaccessible.");
+      const activation = await response.json();
+      localStorage.setItem("falcon_owner_test_activation_v3", JSON.stringify(activation));
+      sessionStorage.setItem("falcon_owner_test_fresh", "true");
+      status.textContent = "Environnement neuf préparé. Tu peux accéder à Falcon.";
+      open.classList.add("ready");
+    });
+  </script>
+</body>
+</html>

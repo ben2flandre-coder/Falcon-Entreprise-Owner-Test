@@ -4,6 +4,7 @@ import { createDecisionTimeline } from "./decision-timeline.js";
 import { createEvidencePanel } from "./evidence-panel.js";
 import { createDecisionGraph } from "./decision-graph.js";
 import { createArbitrationCenter } from "./arbitration-center.js";
+import { createKnowledgePanel } from "./knowledge-panel.js";
 
 const Z = COCKPIT_REFRESH_ZONES;
 const FACTORIES = Object.freeze({
@@ -11,6 +12,7 @@ const FACTORIES = Object.freeze({
   [Z.SUMMARY]: createSummary,
   [Z.EXECUTIVE_DASHBOARD]: createDashboardZone,
   [Z.CAPABILITIES]: createCapabilities,
+  [Z.KNOWLEDGE]: createKnowledgePanel,
   [Z.TIMELINE]: createDecisionTimeline,
   [Z.EVIDENCE]: createEvidencePanel,
   [Z.GRAPH]: createDecisionGraph,

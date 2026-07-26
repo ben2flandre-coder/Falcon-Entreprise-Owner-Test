@@ -95,7 +95,7 @@ Le premier exécute les audits de santé du code, l'intégrité de baseline, la 
 - tests et statut combiné verts sur ce SHA ;
 - construction RC réussie avec ce SHA ;
 - issue de lot mise à jour puis close ;
-- campagne #196 consolidée.
+- campagne de consolidation historique clôturée.
 
 Ne qualifiez jamais une branche seulement par son nom ou par les résultats d'un SHA antérieur.
 
@@ -187,4 +187,3 @@ La valeur courante de version provient de `package.json` et `release/release-spe
 - [Modèle de signalement](../operator/FALCON-V1-DEFECT-REPORT-TEMPLATE.md)
 - [Matrice de traçabilité EI-16.3](EI-16.3-DOCUMENTATION-TRACEABILITY.md)
 - [Contrat documentaire exécutable](ei16-documentation-contract.json)
-
