@@ -4,6 +4,7 @@ import { createDecisionTimeline } from "./decision-timeline.js";
 import { createEvidencePanel } from "./evidence-panel.js";
 import { createDecisionGraph } from "./decision-graph.js";
 import { createArbitrationCenter } from "./arbitration-center.js";
+import { createKnowledgePanel } from "./knowledge-panel.js";
 
 const STATUS_LABELS = Object.freeze({ ready: "Lecture décisionnelle à jour", degraded: "Lecture décisionnelle à consolider", empty: "Aucune analyse disponible" });
 function metric(value, fallback = "Non disponible") { return Number.isFinite(value) ? String(Math.round(value * 100) / 100) : fallback; }
@@ -25,7 +26,7 @@ export function createHeader(view) {
 
 function createNavigation() {
   const nav = document.createElement("nav"); nav.className = "falcon-cockpit-nav"; nav.setAttribute("aria-label", "Navigation du cockpit");
-  for (const [label, href] of [["Synthèse", "#cockpit-summary"], ["Mission", "#cockpit-mission"], ["Radar", "#cockpit-radar-summary"], ["Alertes", "#cockpit-critical-alerts"], ["Confiance", "#cockpit-trust-indicators"], ["Chronologie", "#cockpit-decision-timeline"], ["Preuves", "#cockpit-evidence-panel"], ["Graphe", "#cockpit-decision-graph"], ["Arbitrage", "#cockpit-arbitration-center"]]) {
+  for (const [label, href] of [["Synthèse", "#cockpit-summary"], ["Mission", "#cockpit-mission"], ["Radar", "#cockpit-radar-summary"], ["Alertes", "#cockpit-critical-alerts"], ["Confiance", "#cockpit-trust-indicators"], ["Expertises", "#cockpit-enterprise-knowledge"], ["Chronologie", "#cockpit-decision-timeline"], ["Preuves", "#cockpit-evidence-panel"], ["Graphe", "#cockpit-decision-graph"], ["Arbitrage", "#cockpit-arbitration-center"]]) {
     const link = document.createElement("a"); link.href = href; link.textContent = label; nav.append(link);
   }
   return nav;
@@ -62,5 +63,5 @@ export function createCockpitShell(view) {
   if (!view || !view.scope?.missionId) throw new TypeError("Cockpit shell requires a CockpitView.");
   const container = document.createElement("section"); container.className = "falcon-decision-cockpit"; container.dataset.state = view.state; container.setAttribute("aria-labelledby", "falcon-cockpit-title");
   const workspace = document.createElement("div"); workspace.className = "falcon-cockpit-workspace"; workspace.append(createDashboardZone(view), createCapabilities(view));
-  container.append(createHeader(view), createNavigation(), createSummary(view), workspace, createDecisionTimeline(view), createEvidencePanel(view), createDecisionGraph(view), createArbitrationCenter(view)); return container;
+  container.append(createHeader(view), createNavigation(), createSummary(view), workspace, createKnowledgePanel(view), createDecisionTimeline(view), createEvidencePanel(view), createDecisionGraph(view), createArbitrationCenter(view)); return container;
 }
