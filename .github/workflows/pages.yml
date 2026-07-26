@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   qualify:
-    name: Qualify final R6 owner candidate
+    name: Qualify EKI-5 owner candidate
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout candidate
