@@ -4,6 +4,10 @@ import { createFolderEngine } from "../folders/folder-engine.js";
 import { createMediaEngine } from "../media/media-engine.js";
 import { createMissionEngine } from "../mission/mission-engine.js";
 import { createModelRegistry } from "../models/model-registry.js";
+import {
+  createEnterpriseKnowledgeService,
+  isEnterpriseKnowledgeSnapshot
+} from "../knowledge/enterprise-knowledge-service.js";
 import { createObservationEngine } from "../observations/observation-engine.js";
 import { createPersistenceCoordinator } from "../persistence/persistence-coordinator.js";
 import { createRadarEngine } from "../radar/radar-engine.js";
@@ -63,6 +67,7 @@ export function createEnterpriseRuntime({
   models.register({ name: "RadarRegistry", version: "1.0", metadata: { owner: "RadarEngine", derived: true }, validate: isRadarSnapshot });
   models.register({ name: "TrustRegistry", version: "1.0", metadata: { owner: "TrustEngine", derived: true, source: "RadarRegistry" }, validate: isTrustSnapshot });
   models.register({ name: "ReportRegistry", version: "1.0", metadata: { owner: "ReportEngine", derived: true, sources: ["MissionRegistry", "RadarRegistry", "TrustRegistry"] }, validate: isReportSnapshot });
+  models.register({ name: "KnowledgeRegistry", version: "1.0", metadata: { owner: "EnterpriseKnowledgeService", derived: true, decisionAuthority: "human" }, validate: isEnterpriseKnowledgeSnapshot });
 
   let missions;
   let sessions;
@@ -73,6 +78,7 @@ export function createEnterpriseRuntime({
   let radar;
   let trust;
   let reports;
+  let knowledge;
 
   const emit = (type, payload, origin) => events.publish(type, payload, { origin });
   const buildMissionEngine = (snapshot = null) => createMissionEngine({ initialMissions: snapshot?.missions || [], initialActiveMissionId: snapshot?.activeMissionId || null, authorize, now, idGenerator: missionIdGenerator, onChange: (event) => emit("Mission.Changed", event, event.origin || "enterprise-runtime") });
@@ -84,6 +90,7 @@ export function createEnterpriseRuntime({
   const buildRadarEngine = (snapshot = null) => createRadarEngine({ definition: radarDefinition, initialAssessments: snapshot?.assessments || [], now, idGenerator: radarIdGenerator, onChange: (event) => emit("Radar.Changed", event, event.origin || "enterprise-runtime") });
   const buildTrustEngine = (snapshot = null) => createTrustEngine({ initialAssessments: snapshot?.assessments || [], now, idGenerator: trustIdGenerator, onChange: (event) => emit("Trust.Changed", event, event.origin || "enterprise-runtime") });
   const buildReportEngine = (snapshot = null) => createReportEngine({ initialReports: snapshot?.reports || [], now, idGenerator: reportIdGenerator, onChange: (event) => emit("Report.Changed", event, event.origin || "enterprise-runtime") });
+  const buildKnowledgeService = (snapshot = null) => createEnterpriseKnowledgeService({ initialSnapshot: snapshot, now, onChange: (event) => emit("Knowledge.Changed", event, "enterprise-runtime") });
 
   missions = buildMissionEngine();
   sessions = buildSessionEngine();
@@ -94,6 +101,7 @@ export function createEnterpriseRuntime({
   radar = buildRadarEngine();
   trust = buildTrustEngine();
   reports = buildReportEngine();
+  knowledge = buildKnowledgeService();
 
   const persistence = createPersistenceCoordinator({ storage, appVersion: ENTERPRISE_RUNTIME_VERSION, now });
   const participant = (id, order, model, validate, capture, restore) => persistence.registerParticipant({ id, version: "1.0", order, capture: () => models.validate(model, "1.0", capture()), validate, restore: (snapshot) => restore(models.validate(model, "1.0", snapshot)) });
@@ -106,6 +114,7 @@ export function createEnterpriseRuntime({
   participant("radar-registry", 70, "RadarRegistry", isRadarSnapshot, () => radar.snapshot(), (snapshot) => { radar = buildRadarEngine(snapshot); });
   participant("trust-registry", 80, "TrustRegistry", isTrustSnapshot, () => trust.snapshot(), (snapshot) => { trust = buildTrustEngine(snapshot); });
   participant("report-registry", 90, "ReportRegistry", isReportSnapshot, () => reports.snapshot(), (snapshot) => { reports = buildReportEngine(snapshot); });
+  participant("knowledge-registry", 100, "KnowledgeRegistry", isEnterpriseKnowledgeSnapshot, () => knowledge.snapshot(), (snapshot) => { knowledge = buildKnowledgeService(snapshot); });
 
   function createMission(input, options = {}) { return missions.createMission(input, options); }
 
@@ -217,7 +226,12 @@ export function createEnterpriseRuntime({
     const radarAssessment = radar.getAssessment(trustAssessment.radarId);
     const mission = missions.getMission(trustAssessment.missionId, { origin: options.origin || "enterprise-runtime" });
     if (mission.status === "archived") throw new Error("Cannot generate a report for an archived mission.");
-    return reports.generate({ mission, radar: radarAssessment, trust: trustAssessment }, options);
+    return reports.generate({
+      mission,
+      radar: radarAssessment,
+      trust: trustAssessment,
+      knowledgeRestitution: knowledge.getRestitution(mission.id)
+    }, options);
   }
 
   function regenerateReport(reportId, options = {}) {
@@ -225,7 +239,12 @@ export function createEnterpriseRuntime({
     const trustAssessment = trust.getAssessment(current.trustId);
     const radarAssessment = radar.getAssessment(current.radarId);
     const mission = missions.getMission(current.missionId, { origin: options.origin || "enterprise-runtime" });
-    return reports.regenerate(reportId, { mission, radar: radarAssessment, trust: trustAssessment }, options);
+    return reports.regenerate(reportId, {
+      mission,
+      radar: radarAssessment,
+      trust: trustAssessment,
+      knowledgeRestitution: knowledge.getRestitution(mission.id)
+    }, options);
   }
 
   function issueReport(reportId, options = {}) { return reports.issue(reportId, options); }
@@ -256,6 +275,7 @@ export function createEnterpriseRuntime({
       radar: radar.snapshot(),
       trust: trust.snapshot(),
       reports: reports.snapshot(),
+      knowledge: knowledge.snapshot(),
       models: models.manifest()
     });
   }
@@ -270,6 +290,7 @@ export function createEnterpriseRuntime({
     get radar() { return radar; },
     get trust() { return trust; },
     get reports() { return reports; },
+    get knowledge() { return knowledge; },
     events,
     models,
     persistence,
