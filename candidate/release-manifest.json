@@ -3,7 +3,7 @@
   "product": "Falcon Enterprise",
   "version": "48.0.0-rc.1",
   "channel": "release-candidate",
-  "sourceCommit": "bc80a503ba98398a036059d8e4b7603f672f582b",
+  "sourceCommit": "1c2f1b8a17139041bfda218616a0951e23880913",
   "environmentProfile": "production",
   "demoMode": false,
   "engineeringGate": "green",
@@ -25,18 +25,18 @@
   "files": [
     {
       "path": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html",
-      "size": 784705,
-      "sha256": "2716055372b53b4bc5b28d191700bdbf784590b2ac1899a53fd0e5f293f07103"
+      "size": 784759,
+      "sha256": "5328840784266597f514711113668c858ad0f9837d8918257d38fc44a07afef5"
     },
     {
       "path": "docs/developer/EI-16.3-DOCUMENTATION-TRACEABILITY.md",
-      "size": 3270,
-      "sha256": "aea2cd6500079e1f0450df45b25ee57145738287c53035d2e9291962692e1ef2"
+      "size": 3306,
+      "sha256": "52c089d267ce46b8c3154be9980087ca70fbf775eaafa7f882364d7134797d3e"
     },
     {
       "path": "docs/developer/FALCON-V1-MAINTENANCE-HANDBOOK.md",
-      "size": 10112,
-      "sha256": "d05333abecc24fff7a965c61c4998a67e2c73e5b015a1e65f80e94411e1a00d5"
+      "size": 10133,
+      "sha256": "b943dd03a2a8c0a3e1c7298aa13c62ced9f43ad02dd291d1e278f4336d5146c9"
     },
     {
       "path": "docs/developer/ei16-documentation-contract.json",
@@ -85,8 +85,8 @@
     },
     {
       "path": "docs/operator/product-language-contract.md",
-      "size": 1390,
-      "sha256": "c07c0908237e037b19d95e1b0dceefe5d2a9fd0f1ef26719bd8b88f0dfb84138"
+      "size": 1398,
+      "sha256": "de9ecafb87f5534ede9f6558080fde3fd77b8919ddde1bb02d15fdd136aed972"
     },
     {
       "path": "docs/operator/rollback.md",
@@ -100,16 +100,16 @@
     },
     {
       "path": "index.html",
-      "size": 791228,
-      "sha256": "5f16c91eaa0b5b955e86d014822115f873c30632960b9168db8d05701a0b1723",
+      "size": 791282,
+      "sha256": "03d7c5254fa97433133b492153baf7200f5183923c3894e1f947cc0d5c6d9a2c",
       "generatedFrom": "Falcon_Radar_360_V46_8_0_ENTERPRISE_SECURITY_FOUNDATION.html",
       "enterpriseBootstrap": "src/app/showcase-enterprise-bootstrap.js",
       "enterpriseStylesheet": "src/app/showcase-polish.css"
     },
     {
       "path": "package.json",
-      "size": 14164,
-      "sha256": "4443d0f7d61f324c71cca938c092a02e2c723c81207ad4d33d38edcb70fa85ac"
+      "size": 16062,
+      "sha256": "b41cf3c4431ee79b0c308d879eb0a97af8781082cc74b8251fcaafaa013cb0be"
     },
     {
       "path": "release/release-spec.json",
@@ -144,13 +144,13 @@
     },
     {
       "path": "src/app/cockpit/cockpit-incremental-renderer.js",
-      "size": 4115,
-      "sha256": "8b6a285232faf6313921d399033c85fb5318deb0f7c3199c18c628d17433f590"
+      "size": 4215,
+      "sha256": "52f2bc0b98d167088d11aa25d33d21df227b8ae18cd6815f2f429e0c59656f9a"
     },
     {
       "path": "src/app/cockpit/cockpit-shell.js",
-      "size": 6208,
-      "sha256": "52d5d2338b7b5407dfc8b0d881c4e4ea3ffdb2951d8ef7f64963e99fa69d97fd"
+      "size": 6346,
+      "sha256": "6936ca6623be420c39c7290cb097cff58190589976b7156228ad47e3d90d5289"
     },
     {
       "path": "src/app/cockpit/cockpit.css",
@@ -159,8 +159,8 @@
     },
     {
       "path": "src/app/cockpit/decision-cockpit.js",
-      "size": 6564,
-      "sha256": "db45b22710b4941c36f3e5a49465654191d01f1284697833e3f2817c5594b381"
+      "size": 6636,
+      "sha256": "d72222f1bd9d383e9e3bb4115e1ef8d88b0b4844ac90fbe91cb203ad060397d1"
     },
     {
       "path": "src/app/cockpit/decision-graph.js",
@@ -188,6 +188,11 @@
       "sha256": "65f4e623d0804a2d6d8c5659445b1d2823151ff6663820a3b49aeb72b67daece"
     },
     {
+      "path": "src/app/cockpit/knowledge-panel.js",
+      "size": 1807,
+      "sha256": "5643e8da7989bda3b48bfa5673b11f36ec1574d623d1f8143b193d871cc7d7a7"
+    },
+    {
       "path": "src/app/controllers/mission-panel.js",
       "size": 8979,
       "sha256": "f82318fac84501aa81e9435d841f1064d22843d9cb2d207a9ce781491e982f2b"
@@ -213,14 +218,19 @@
       "sha256": "0ae77a6a6ab170bb939131755276b53f826a385bebee1880c1bc380ae0d97e7c"
     },
     {
+      "path": "src/app/enterprise-knowledge-owner-trial.js",
+      "size": 6815,
+      "sha256": "8c4f587f6c032f441f7f58704c9c42c95ce14f233e5f6a37bb14f199eb1bcbf5"
+    },
+    {
       "path": "src/app/folder-workspace-polish.js",
       "size": 14329,
       "sha256": "cb038a1710aa25b1910bab3da224207de39851ceb3fcbfdd90710d0e847057a6"
     },
     {
       "path": "src/app/index.html",
-      "size": 6790,
-      "sha256": "74715c046f0fe053d3b85761aa2b89bc7dd3666a6d5f9e67189baaffa9e11d6e"
+      "size": 6839,
+      "sha256": "74dbd594b6710967371b79804ac1c99fb9c6f8996430cb93762d0bd6ea06942c"
     },
     {
       "path": "src/app/mission.css",
@@ -243,19 +253,29 @@
       "sha256": "30ebbb85594eeee6c84bddad072b04ad12ce4780a5811c2b8be490a23c87171c"
     },
     {
+      "path": "src/app/regulatory-advisor.js",
+      "size": 24693,
+      "sha256": "223cbcc2de1b7200ae3af5ab69dbedc7e1828ca4da5167ed9a45165951d6f0b5"
+    },
+    {
       "path": "src/app/report-delivery-help-polish.js",
       "size": 11927,
       "sha256": "a5f22ea60f0f4163db47e8227983e837b53a4d0fd7d98e553beb30bceeb8be49"
     },
     {
+      "path": "src/app/runtime-stability.js",
+      "size": 5288,
+      "sha256": "1fb72de93e18c54a00d537dac259723ae615ecb8a0c5b4a353fdc32d3aaec034"
+    },
+    {
       "path": "src/app/showcase-enterprise-bootstrap.js",
-      "size": 3924,
-      "sha256": "6d66a75ef8b9b2fd8851b975c8da4cf0e56411e736515777f4ae40b12511d784"
+      "size": 4347,
+      "sha256": "c69b39f579e6345cf52079ced2f1950e68ccbeaed814f9a038aebe309c8b7ea8"
     },
     {
       "path": "src/app/showcase-polish.css",
-      "size": 22935,
-      "sha256": "c165d8069ed1a0a5416e0fdd9748cef6d8c0629a2a1486a7e8da5c1d04d8ea21"
+      "size": 24084,
+      "sha256": "da8bffbcb889774c5b8d3c097e9c26046fac1a06148282c8bf1f74c0f148d8cc"
     },
     {
       "path": "src/app/styles.css",
@@ -294,8 +314,8 @@
     },
     {
       "path": "src/modules/cockpit/cockpit-contracts.js",
-      "size": 3230,
-      "sha256": "881ae0abf29f00873c71420d3e62aa406d42af92e3155ed2c1f26787fcc49872"
+      "size": 3277,
+      "sha256": "bdb7075560c0dcab05956012f4759075c9c089fe117ecfb31190dd5115fa15fa"
     },
     {
       "path": "src/modules/cockpit/cockpit-diagnostics-recovery.js",
@@ -329,13 +349,13 @@
     },
     {
       "path": "src/modules/cockpit/cockpit-query-service.js",
-      "size": 5175,
-      "sha256": "559eadccb661186dc146545d164bfa68fd981cc241da2cbfe178badab830958a"
+      "size": 5272,
+      "sha256": "5fc80ade7aea06bee9067c59b460e459ad0bd304fcede91789a7c541e502a7df"
     },
     {
       "path": "src/modules/cockpit/cockpit-refresh-contract.js",
-      "size": 2399,
-      "sha256": "d4a884705cdea466742160ccdaf021556e25b8fd8637c29d40817ba6d375457c"
+      "size": 2541,
+      "sha256": "3d01969ff09c81bcf14cee9939b3ab6bf3ce96be312299452380087a3e72c744"
     },
     {
       "path": "src/modules/cockpit/cockpit-release-readiness.js",
@@ -404,8 +424,8 @@
     },
     {
       "path": "src/modules/enterprise/enterprise-runtime.js",
-      "size": 19494,
-      "sha256": "338eefcde2ce85cf477d54dc31bd067bbfc7765d00063c1dab9349d387db5aa1"
+      "size": 20527,
+      "sha256": "a107ea76cb1d7632e135e4c845c66130d7fd9e2d4ef256e27ac845c993d7ba3f"
     },
     {
       "path": "src/modules/events/event-bus.js",
@@ -436,6 +456,66 @@
       "path": "src/modules/help/help-center-content.js",
       "size": 3730,
       "sha256": "41430bf441ec12a00fb2d36c808d9e41ba118b69ce4ee700471597d53dbe4e6b"
+    },
+    {
+      "path": "src/modules/knowledge/context-orchestrator.js",
+      "size": 12533,
+      "sha256": "5eace10f3d7da052fd1e277ca25d49a12f89c39da0a821077083ca477de0d4dc"
+    },
+    {
+      "path": "src/modules/knowledge/corpus-contract.js",
+      "size": 3335,
+      "sha256": "1878ef80beffb5d9fd3f44e1abcf8d9eed79c076d1be0c506a31eeeca7da595b"
+    },
+    {
+      "path": "src/modules/knowledge/enterprise-knowledge-service.js",
+      "size": 9425,
+      "sha256": "041e4d0b5fbba80d1b98edb0d15639170cbb2601bac721b3fdba6245b6d39e40"
+    },
+    {
+      "path": "src/modules/knowledge/knowledge-catalog.js",
+      "size": 5823,
+      "sha256": "d8ca278a2882f543c48fbc2ff574010d7f7be681fbd1a758564c774a345c3527"
+    },
+    {
+      "path": "src/modules/knowledge/knowledge-pack-contract.js",
+      "size": 9260,
+      "sha256": "d4fe08b51ab740b8e0d6fb21a8d8a6344d3a893506049a0439225df3f914f064"
+    },
+    {
+      "path": "src/modules/knowledge/knowledge-registry.js",
+      "size": 3940,
+      "sha256": "f016567419439f573c1ab34d15ecf8305192818e0e93b957c80032fdd4a28b3b"
+    },
+    {
+      "path": "src/modules/knowledge/knowledge-restitution.js",
+      "size": 9165,
+      "sha256": "e4f70d78e7cd48456ddf977506f4d26360cc42e75807c121763e842a97e21080"
+    },
+    {
+      "path": "src/modules/knowledge/packs/eki2-pilot-packs.js",
+      "size": 17181,
+      "sha256": "8286fbb15921236d3c01f32cd17586888b508fd99dc7230e6fc3c4b49926d027"
+    },
+    {
+      "path": "src/modules/knowledge/packs/eki2-priority-packs.js",
+      "size": 17561,
+      "sha256": "830080126a79c4bf97a9d41b8f7296c43f49435e7d17d619d02ff3e1eb34a845"
+    },
+    {
+      "path": "src/modules/knowledge/reference-lifecycle.js",
+      "size": 13215,
+      "sha256": "a57bb017ef642c9bf6e0791f582395864ffe19097979a1e792c7c8a3e6973bd2"
+    },
+    {
+      "path": "src/modules/knowledge/scale-skills-admission.js",
+      "size": 12336,
+      "sha256": "34a54c6be85e0daeb84e40ca311620cf0722f83ffdd2735cadef5cd5aff6277a"
+    },
+    {
+      "path": "src/modules/knowledge/skill-contract.js",
+      "size": 4070,
+      "sha256": "dbb2df6ab1609f39194e5fc4b93b5d4eef205e65d357f3c6ebf5801f5b69af55"
     },
     {
       "path": "src/modules/licensing/commercial-offer-catalog.js",
@@ -544,13 +624,13 @@
     },
     {
       "path": "src/modules/render/report-renderer.js",
-      "size": 8016,
-      "sha256": "48e8b20c2dbae71fab612305abd862712b4f63c2f82ab9f7371b40d9b93d9b88"
+      "size": 9192,
+      "sha256": "a067cc47c9e0f2dbc2c4a1ca4e9df9011b097a225f1fa2d4b5303e6cc25e94f4"
     },
     {
       "path": "src/modules/report/report-engine.js",
-      "size": 13211,
-      "sha256": "5ee4184a5132ce0998bdbbe048d3287952e21716f4e96f92abe8f4a337555be8"
+      "size": 14119,
+      "sha256": "51b9d0db3c60dda43fa3791a67bb6a50bbdcb2577836389dbd7df0e5fbd7fac4"
     },
     {
       "path": "src/modules/security/operational-security-guard.js",
@@ -602,13 +682,5 @@
       "size": 147,
       "sha256": "8d58437d102e6fb16cbdb89febeacb43739256f7f139609956671aa3a104dd1e"
     }
-  ],
-  "mergedMainCommit": "bb9186870da98d1c57db219d1bbae8ef3c12d827",
-  "ownerReception": {
-    "campaign": "EI-16 R7",
-    "pullRequest": 245,
-    "issue": 196,
-    "qualifiedWorkflows": 32,
-    "humanReceptionRequired": true
-  }
+  ]
 }
