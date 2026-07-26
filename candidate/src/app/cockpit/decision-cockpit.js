@@ -156,6 +156,7 @@ export function createDecisionCockpit({
     diagnosticsRecoverySnapshot: () => diagnosticsRecovery?.snapshot() || null,
     recoveryProcedure: (code) => diagnosticsRecovery?.procedure(code) || null,
     releaseReadinessSnapshot: () => releaseReadiness?.snapshot() || null,
+    knowledgeSnapshot: () => renderer.currentView()?.knowledge || null,
     resetObservability: () => telemetry.clear()
   });
 }
