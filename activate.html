@@ -1,5 +1,45 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Falcon Radar 360 — Recette propriétaire R7</title>
-<style>:root{color-scheme:dark;font-family:Inter,system-ui,sans-serif;background:#07111f;color:#e8f1ff}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at top right,#12324a 0,transparent 42%),#07111f}.card{width:min(760px,100%);border:1px solid #28445b;border-radius:24px;padding:28px;background:#0d1b2a;box-shadow:0 24px 80px #0008}h1{margin:0 0 8px;font-size:clamp(28px,5vw,46px)}p{color:#b7c8d8;line-height:1.6}.meta{display:grid;gap:8px;padding:16px;border-radius:16px;background:#091522;margin:20px 0}.meta code{overflow-wrap:anywhere}.actions{display:flex;flex-wrap:wrap;gap:12px}.btn{border:0;border-radius:14px;padding:14px 18px;font-weight:800;cursor:pointer}.primary{background:#34d3c2;color:#05211d}.secondary{background:#1d3347;color:#e8f1ff}.status{margin-top:16px;font-weight:700}.warn{color:#ffd38a}</style></head>
-<body><main class="card"><p>ESPACE DE RECETTE CONTRÔLÉ</p><h1>Falcon Radar 360 — Entreprise</h1><p>Candidat R7 qualifié automatiquement. La recette humaine reste nécessaire et doit être consignée dans l’Issue #196.</p><div class="meta"><div>Source R7 qualifiée : <code>bc80a503ba98398a036059d8e4b7603f672f582b</code></div><div>Fusion dans main : <code>bb9186870da98d1c57db219d1bbae8ef3c12d827</code></div><div class="warn">Données réelles interdites — utilisez uniquement des données fictives.</div></div><div class="actions"><button id="fresh" class="btn primary">Préparer un environnement neuf</button><button id="open" class="btn secondary" disabled>Accéder à Falcon</button></div><div id="status" class="status">Préparation requise sur chaque navigateur et appareil.</div></main>
-<script>const status=document.getElementById('status'),open=document.getElementById('open');document.getElementById('fresh').addEventListener('click',async()=>{localStorage.clear();sessionStorage.clear();if('caches'in window){for(const key of await caches.keys())await caches.delete(key)}const activation=await fetch('./candidate/owner-test-activation.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Contrat inaccessible');return r.json()});localStorage.setItem('falcon_owner_test_activation_v2',JSON.stringify(activation));sessionStorage.setItem('falcon_owner_test_fresh','true');status.textContent='Environnement neuf préparé. Vous pouvez accéder à Falcon.';open.disabled=false});open.addEventListener('click',()=>location.href='./candidate/index.html?ownerTest=fresh&source=bb918687');</script></body></html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <title>Falcon Radar 360 — Recette propriétaire maximale</title>
+  <style>
+    :root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#07111f;color:#e8f1ff}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;padding:24px;background:radial-gradient(circle at top right,#12324a 0,transparent 42%),#07111f}
+    main{width:min(920px,100%);margin:auto}.card{border:1px solid #28445b;border-radius:24px;padding:clamp(22px,4vw,36px);background:#0d1b2a;box-shadow:0 24px 80px #0008}
+    .eyebrow{margin:0 0 8px;color:#78e6db;font-weight:900;letter-spacing:.08em;font-size:.78rem}h1{margin:0 0 10px;font-size:clamp(30px,6vw,52px);line-height:1.05}
+    p,li{color:#c1d0dd;line-height:1.6}.lead{font-size:1.08rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:22px 0}
+    .panel{padding:17px;border:1px solid #223b50;border-radius:17px;background:#091522}.panel strong{display:block;color:#fff;margin-bottom:6px}.meta code{overflow-wrap:anywhere;color:#9ee9e1}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}.btn{border:0;border-radius:14px;padding:15px 19px;font-weight:900;cursor:pointer;font-size:1rem}.btn:disabled{opacity:.45;cursor:not-allowed}
+    .primary{background:#34d3c2;color:#05211d}.secondary{background:#1d3347;color:#e8f1ff}.status{margin-top:17px;padding:14px;border-radius:14px;background:#08131f;font-weight:800}.warn{color:#ffd38a}.ok{color:#78e6db}
+    a{color:#78e6db}details{margin-top:18px;padding:14px;border:1px solid #223b50;border-radius:14px}summary{cursor:pointer;font-weight:800}
+    @media (prefers-color-scheme:light){:root{color-scheme:light;background:#eef4f8;color:#102235}body{background:radial-gradient(circle at top right,#c7ece8 0,transparent 45%),#eef4f8}.card{background:#fff;border-color:#c7d5df;box-shadow:0 24px 70px #47607022}.panel,.status{background:#f4f8fa;border-color:#d2dde5}p,li{color:#41576a}.panel strong{color:#102235}.secondary{background:#dce8ef;color:#102235}}
+  </style>
+</head>
+<body>
+<main><section class="card">
+  <p class="eyebrow">ESPACE PUBLIC DE RECETTE CONTRÔLÉE</p>
+  <h1>Falcon Radar 360 — Entreprise</h1>
+  <p class="lead">Candidat fonctionnel GLOBAL‑6.5, qualifié par GLOBAL‑6.6. Cet accès te permet de tester le parcours le plus complet disponible sans installer Falcon.</p>
+  <div class="grid meta">
+    <div class="panel"><strong>État fonctionnel</strong><code>1c2f1b8a17139041bfda218616a0951e23880913</code></div>
+    <div class="panel"><strong>Qualification finale</strong><code>5511944e832af3e1d0ff16adc23d6353e77de110</code></div>
+    <div class="panel"><strong>Périmètre</strong>Six cas EKI, dossier, Cockpit, Report V3, persistance, import/export et responsive.</div>
+    <div class="panel"><strong>Règle absolue</strong><span class="warn">Données fictives uniquement. Aucune donnée personnelle, sensible ou confidentielle.</span></div>
+  </div>
+  <p><strong>Avant chaque nouvelle campagne :</strong> prépare un environnement neuf. Pour tester la reprise après fermeture ou rechargement, ne réinitialise pas entre les étapes concernées.</p>
+  <div class="actions">
+    <button id="fresh" class="btn primary">Préparer un environnement neuf</button>
+    <button id="open" class="btn secondary" disabled>Accéder à Falcon</button>
+  </div>
+  <div id="status" class="status">Préparation requise sur chaque navigateur et appareil.</div>
+  <details><summary>Ce que tu dois chercher</summary><ul><li>Compréhension immédiate sans vocabulaire de chantier interne.</li><li>Création, sauvegarde, fermeture et reprise d’un dossier.</li><li>Valeur distincte des six cas professionnels EKI.</li><li>Cohérence entre faits, preuves, limites, arbitrages, Cockpit et Report V3.</li><li>Rapport exploitable, thèmes clair/sombre et usages portrait/paysage.</li></ul><p><a href="./OWNER-TRIAL-MAX.md">Ouvrir le protocole complet de recette</a></p></details>
+</section></main>
+<script>
+const status=document.getElementById('status');const open=document.getElementById('open');
+document.getElementById('fresh').addEventListener('click',async()=>{try{status.textContent='Nettoyage de l’environnement…';localStorage.clear();sessionStorage.clear();if('caches'in window){for(const key of await caches.keys())await caches.delete(key)}const activation=await fetch('./candidate/owner-test-activation.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Contrat d’activation inaccessible');return r.json()});localStorage.setItem('falcon_owner_test_activation_v2',JSON.stringify(activation));localStorage.setItem('falcon_owner_test_activation_v4',JSON.stringify(activation));sessionStorage.setItem('falcon_owner_test_fresh','true');status.innerHTML='<span class="ok">Environnement neuf préparé.</span> Tu peux accéder à Falcon.';open.disabled=false}catch(error){status.textContent=`Préparation impossible : ${error.message}`;open.disabled=true}});
+open.addEventListener('click',()=>location.href='./candidate/index.html?ownerTest=fresh&qualification=5511944e');
+</script>
+</body></html>
